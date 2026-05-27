@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { ProjectsHeader } from "@/components/layout/ProjectsHeader";
 import { ProjectsHeading } from "@/components/projects/ProjectsHeading";
+import { UserStats } from "@/components/projects/UserStats";
+import { ProjectsTable } from "@/components/projects/ProjectsTable";
 
 export function ProjectsPage() {
     const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
@@ -22,6 +24,8 @@ export function ProjectsPage() {
                         </button>
                     </div>
                 )}
+                <UserStats />
+                <ProjectsTable />
             </main>
         </>
     );
