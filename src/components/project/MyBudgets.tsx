@@ -1,11 +1,9 @@
-import { useState } from "react";
-
 import { BedDouble, TrainFront, Utensils } from "lucide-react";
+import { useState } from "react";
 
 import { BudgetDialog } from "@/components/project/BudgetDialog";
 
 const budgets = [
-
 	{
 		name: "Hébergement",
 		spent: "320 €",
@@ -27,11 +25,9 @@ const budgets = [
 		icon: Utensils,
 		colorClass: "bg-orange-500",
 	},
-
 ];
 
 export function MyBudgets() {
-
 	const [isBudgetDialogOpen, setIsBudgetDialogOpen] = useState(false);
 	return (
 		<>
@@ -50,10 +46,7 @@ export function MyBudgets() {
 					{budgets.map((budget) => {
 						const Icon = budget.icon;
 						return (
-							<li
-								key={budget.name}
-								className="flex items-center gap-3 text-sm"
-							>
+							<li key={budget.name} className="flex items-center gap-3 text-sm">
 								<span
 									className={`flex size-7 shrink-0 items-center justify-center rounded-md text-white ${budget.colorClass}`}
 								>
@@ -77,5 +70,4 @@ export function MyBudgets() {
 			/>
 		</>
 	);
-
 }
