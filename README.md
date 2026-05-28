@@ -50,7 +50,7 @@
 - Calculer automatiquement les remboursements entre participants
 
 Ce repository contient exclusivement la **couche front-end** : interface utilisateur, navigation, appels API.
-Le repository back-end est disponible ici : [`la-pince.server`](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend)
+Le repository back-end est disponible ici : [`la-pince.backend`](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend)
 
 ---
 
@@ -70,7 +70,6 @@ Le front-end est une **SPA (Single Page Application)** organisée par domaine fo
 
 ```
 src/
-├── features/      → fonctionnalités découpées par domaine métier
 ├── components/    → composants React réutilisables
 ├── pages/         → pages associées aux routes React Router
 ├── services/      → appels API vers le back-end
@@ -104,7 +103,7 @@ src/
 
 ## Prérequis
 
-Avant de démarrer, assure-toi d'avoir installé :
+Avant de démarrer, assurez-vous d'avoir installé :
 
 - [Node.js 24 LTS](https://nodejs.org/)
 - [npm](https://www.npmjs.com/)
@@ -133,7 +132,7 @@ npm install
 
 ```bash
 cp .env.example .env
-# Vérifie que VITE_API_URL pointe vers ton back-end local
+# Vérifiez que VITE_API_URL pointe vers ton back-end local
 ```
 
 ### 4. Lancer l'application en développement
@@ -154,7 +153,7 @@ http://localhost:5173
 
 ## Variables d'environnement
 
-Copie `.env.example` en `.env` et renseigne les valeurs.
+Copiez `.env.example` en `.env` et renseigne les valeurs.
 
 > ⚠️ Le fichier `.env` ne doit jamais être commité — il est dans le `.gitignore`.
 
@@ -194,17 +193,12 @@ projet-cda-LaPince-frontend/
 │   ├── components/
 │   │   ├── ui/                  ← composants shadcn/ui générés
 │   │   └── shared/              ← composants métier partagés
-│   ├── features/                ← fonctionnalités par domaine métier
-│   │   ├── auth/                ← inscription, connexion
-│   │   ├── dashboard/           ← vue d'ensemble et KPIs
-│   │   ├── projects/            ← gestion des projets
-│   │   ├── operations/          ← ajout et suivi des dépenses
-│   │   ├── budgets/             ← limites budgétaires
-│   │   ├── participants/        ← gestion des participants
-│   │   └── alerts/              ← notifications de dépassement
 │   ├── hooks/                   ← hooks personnalisés (useAuth, useProject...)
 │   ├── lib/                     ← utilitaires, helpers, constantes
 │   ├── pages/                   ← pages React Router
+│   │   ├── AuthPage/            ← inscription, connexion
+│   │   ├── HomePage/            ← vue d'ensemble et KPIs
+│   │   ├── ProjectsPage/        ← gestion des projets
 │   ├── services/                ← appels API (fetch)
 │   ├── types/                   ← types TypeScript partagés
 │   ├── app.tsx                  ← configuration des routes et providers
@@ -232,8 +226,7 @@ L'application est une SPA — la navigation est gérée par **React Router 7**.
 | `/` | Redirection vers `/dashboard` ou `/login` | Public |
 | `/login` | Connexion | Public |
 | `/register` | Inscription | Public |
-| `/dashboard` | Vue d'ensemble et KPIs | Authentifié |
-| `/projects` | Liste des projets | Authentifié |
+| `/projects` | Vue d'ensemble, lite des projets et KPIs | Authentifié |
 | `/projects/:id` | Détail d'un projet | Authentifié |
 | `/projects/:id/operations` | Opérations du projet | Authentifié |
 | `/projects/:id/budgets` | Budgets du projet | Authentifié |
@@ -347,7 +340,6 @@ Frontend structure:
 
 ```
 src/
-├── features     → domain-based feature modules
 ├── components   → reusable React components
 ├── pages        → React Router pages
 ├── services     → API calls
@@ -420,8 +412,7 @@ http://localhost:5173
 |---|---|---|
 | `/login` | Login | Public |
 | `/register` | Register | Public |
-| `/dashboard` | Overview & KPIs | Auth required |
-| `/projects` | Project list | Auth required |
+| `/projects` | Overview, KPIs & Project list | Auth required |
 | `/projects/:id` | Project detail | Auth required |
 | `/alerts` | User alerts | Auth required |
 | `/profile` | Profile settings | Auth required |

@@ -1,61 +1,39 @@
-import {
+import { Cake, Home, Plane, Utensils } from "lucide-react";
 
-    Cake,
-    Home,
-    Plane,
-    Utensils,
-
-} from "lucide-react";
-
-type ProjectIcon =
-
-    | "plane"
-    | "home"
-    | "cake"
-    | "utensils";
+type ProjectIcon = "plane" | "home" | "cake" | "utensils";
 
 type ProjectDetailsProps = {
-
-    name: string;
-    expensesCount: number;
-    updatedAt: string;
-    icon: ProjectIcon;
-
+	name: string;
+	expensesCount: number;
+	updatedAt: string;
+	icon: ProjectIcon;
 };
 
 const projectIcons = {
-
-    plane: Plane,
-    home: Home,
-    cake: Cake,
-    utensils: Utensils,
-
+	plane: Plane,
+	home: Home,
+	cake: Cake,
+	utensils: Utensils,
 };
 
 export function ProjectDetails({
-
-    name,
-    expensesCount,
-    updatedAt,
-    icon,
-
+	name,
+	expensesCount,
+	updatedAt,
+	icon,
 }: ProjectDetailsProps) {
-
-    const Icon = projectIcons[icon];
-    return (
-        <div className="flex min-w-0 items-center gap-3">
-            <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-md bg-accent text-accent-foreground">
-                <Icon className="size-4" />
-            </span>
-            <div className="min-w-0">
-                <p className="truncate font-medium">
-                    {name}
-                </p>
-                <p className="mt-0.5 text-xs text-muted-foreground">
-                    {expensesCount} dépenses · {updatedAt}
-                </p>
-            </div>
-        </div>
-    );
-
+	const Icon = projectIcons[icon];
+	return (
+		<div className="flex min-w-0 items-center gap-3">
+			<span className="inline-flex size-9 shrink-0 items-center justify-center rounded-md bg-accent text-accent-foreground">
+				<Icon className="size-4" />
+			</span>
+			<div className="min-w-0">
+				<p className="truncate font-medium">{name}</p>
+				<p className="mt-0.5 text-xs text-muted-foreground">
+					{expensesCount} dépenses · {updatedAt}
+				</p>
+			</div>
+		</div>
+	);
 }
