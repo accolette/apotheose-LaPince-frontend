@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ProjectDialog } from "@/components/common/ProjectDialog";
-import { ConnectedHeader } from "@/components/layout/ConnectedHeader";
+import { ConnectedHeader } from "@/components/common/ConnectedHeader";
 import { ProjectsHeading } from "@/components/projects/ProjectsHeading";
 import { ProjectsTable } from "@/components/projects/ProjectsTable";
 import { UserStats } from "@/components/projects/UserStats";
