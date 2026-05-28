@@ -1,4 +1,4 @@
-import { LandmarkIcon, LogOutIcon, MoonIcon, UserIcon } from "lucide-react";
+import { LandmarkIcon, LogOutIcon, MoonIcon } from "lucide-react";
 
 import {
 	DropdownMenu,
@@ -34,9 +34,7 @@ export function ConnectedHeader() {
 
 						<DropdownMenuContent align="end">
 							<div className="px-2 py-1.5">
-								<p className="text-sm font-medium">
-									Steve
-								</p>
+								<p className="text-sm font-medium">Steve</p>
 							</div>
 							<DropdownMenuItem className="text-destructive">
 								<LogOutIcon className="size-4" />

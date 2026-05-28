@@ -1,11 +1,12 @@
 import { useState } from "react";
-
+import { OperationDialog } from "@/components/project/OperationDialog";
 import { TableFilters } from "@/components/project/TableFilters";
 
-import { OperationsTable } from "./OperationsTable";
+import { OperationsTable } from "../OperationsTable";
 
 export function OperationTab() {
 	const [activeFilter, setActiveFilter] = useState("all");
+	const [isOperationDialogOpen, setIsOperationDialogOpen] = useState(false);
 
 	return (
 		<div className="space-y-4">
@@ -20,10 +21,15 @@ export function OperationTab() {
 				activeValue={activeFilter}
 				onValueChange={setActiveFilter}
 				actionLabel="Nouvelle opération"
-				onActionClick={() => console.log("open modal")}
+				onActionClick={() => setIsOperationDialogOpen(true)}
 			/>
 
 			<OperationsTable />
+
+			<OperationDialog
+				open={isOperationDialogOpen}
+				onOpenChange={setIsOperationDialogOpen}
+			/>
 		</div>
 	);
 }

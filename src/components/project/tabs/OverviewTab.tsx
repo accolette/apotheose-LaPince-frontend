@@ -1,6 +1,6 @@
 import { BudgetOverview } from "@/components/project/BudgetOverview";
 import { MyBudgets } from "@/components/project/MyBudgets";
-import { BalanceCard } from "./BalanceCard";
+import { BalanceCard } from "../BalanceCard";
 
 export function OverviewTab() {
 	return (

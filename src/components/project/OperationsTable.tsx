@@ -74,7 +74,9 @@ export function OperationsTable() {
 						<TableHead>Description</TableHead>
 						<TableHead className="hidden sm:table-cell">Date</TableHead>
 						<TableHead className="hidden lg:table-cell">Payé par</TableHead>
-						<TableHead className="hidden md:table-cell">Bénéficiaires</TableHead>
+						<TableHead className="hidden md:table-cell">
+							Bénéficiaires
+						</TableHead>
 						<TableHead className="text-right">Montant</TableHead>
 					</TableRow>
 				</TableHeader>

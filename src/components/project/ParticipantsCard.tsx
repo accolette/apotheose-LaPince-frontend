@@ -1,4 +1,4 @@
-import { Plus, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -66,11 +66,6 @@ export function ParticipantsCard() {
 					))}
 				</ul>
 			</div>
-
-			<Button type="button" variant="outline" className="w-full border-dashed">
-				<Plus className="size-4" />
-				Ajouter un participant
-			</Button>
 		</div>
 	);
 }
