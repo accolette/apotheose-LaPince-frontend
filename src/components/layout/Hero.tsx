@@ -31,7 +31,7 @@ export function Hero() {
 					</div>
 				</div>
 
-				<div className="flex aspect-[4/3] items-center justify-center rounded-lg border-2 border-dashed bg-muted text-muted-foreground">
+				<div className="flex aspect-[4\/3] items-center justify-center rounded-lg border-2 border-dashed bg-muted text-muted-foreground">
 					<div className="text-center">
 						<LayoutDashboardIcon className="mx-auto mb-2 size-10" />
 						<p className="text-sm">[ aperçu dashboard ]</p>
