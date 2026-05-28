@@ -25,6 +25,9 @@
   - [Routes](#routes)
   - [Tests](#tests)
   - [Qualité de code](#qualité-de-code)
+  - [Workflow Git](#workflow-git)
+    - [Convention de nommage des branches](#convention-de-nommage-des-branches)
+    - [Convention de commits](#convention-de-commits)
   - [Documentation](#documentation)
   - [RGPD](#rgpd)
 - [La Pince — Front-end *(English version)*](#la-pince--front-end-english-version)
@@ -271,6 +274,47 @@ Le projet utilise **Biome** comme linter et formatter unifié, configuré via `b
 ```
 
 **Exécution automatique au commit** via Husky — le hook `pre-commit` lance `biome check` avant chaque commit. Si des erreurs non corrigeables sont détectées, le commit est bloqué.
+
+---
+
+## Workflow Git
+
+Le projet utilise une organisation Git basée sur :
+
+- `main` → branche de production stable
+- `dev` → branche d’intégration et de développement
+- branches par feature/fix/docs → créées depuis `dev`
+
+Aucune Pull Request directe vers `main` n’est autorisée.
+
+### Convention de nommage des branches
+
+```txt
+feature/nom-feature
+fix/nom-fix
+docs/nom-doc
+refactor/nom-refactor
+test/nom-test
+```
+
+### Convention de commits
+
+Convention inspirée de Conventional Commits :
+
+```txt
+feat: ajout authentification JWT
+fix: correction middleware erreur 404
+docs: mise à jour README
+refactor: simplification service budget
+test: ajout tests intégration auth
+chore: mise à jour dépendances
+```
+
+Chaque Pull Request doit :
+
+* cibler `dev`
+* être relue avant merge
+* passer les vérifications CI (lint / tests / build)
 
 ---
 
