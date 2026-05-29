@@ -1,38 +1,17 @@
-import {
-    ArrowDownLeft,
-    ArrowUpRight,
-    Folder,
-    Wallet,
-} from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, Folder, Wallet } from "lucide-react";
 
 import { StatCard } from "@/components/projects/StatCard";
 
 export function UserStats() {
-    return (
-        <section className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
-            <StatCard
-                icon={Folder}
-                label="Projets actifs"
-                value="3"
-            />
+	return (
+		<section className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+			<StatCard icon={Folder} label="Projets actifs" value="3" />
 
-            <StatCard
-                icon={ArrowDownLeft}
-                label="Tu dois"
-                value="45,20 €"
-            />
+			<StatCard icon={ArrowDownLeft} label="Tu dois" value="45,20 €" />
 
-            <StatCard
-                icon={ArrowUpRight}
-                label="On te doit"
-                value="128,40 €"
-            />
+			<StatCard icon={ArrowUpRight} label="On te doit" value="128,40 €" />
 
-            <StatCard
-                icon={Wallet}
-                label="Solde net"
-                value="+83,20 €"
-            />
-        </section>
-    );
+			<StatCard icon={Wallet} label="Solde net" value="+83,20 €" />
+		</section>
+	);
 }

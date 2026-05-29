@@ -46,7 +46,7 @@ export function LegalsPage() {
 							Nous collectons uniquement les données nécessaires au
 							fonctionnement de l’application.
 						</p>
-						<h4 className="font-semibold tracking-tight py-2 px-2">
+						<h4 className="font-semibold tracking-tight py-2 pt-4">
 							Données de compte
 						</h4>
 						<p>Lors de l’inscription :</p>
@@ -58,7 +58,7 @@ export function LegalsPage() {
 						<p className="pt-2">
 							Les mots de passe ne sont jamais stockés en clair.
 						</p>
-						<h4 className="font-semibold tracking-tight py-2 px-2">
+						<h4 className="font-semibold tracking-tight py-2 pt-4">
 							Données liées à l’utilisation de l’application
 						</h4>
 						<p>Dans le cadre du fonctionnement des projets et dépenses :</p>
@@ -70,7 +70,7 @@ export function LegalsPage() {
 							<li> Alertes </li>
 							<li> Catégories utilisées</li>
 						</ul>
-						<h4 className="font-semibold tracking-tight py-2 px-2">
+						<h4 className="font-semibold tracking-tight py-2 pt-4">
 							Données techniques
 						</h4>
 						<p>
@@ -135,50 +135,146 @@ export function LegalsPage() {
 						<h3 className="text-2xl text-center font-semibold tracking-tight py-6">
 							7. Sécurité des données
 						</h3>
-						Nous mettons en place plusieurs mesures de sécurité : * mots de
-						passe hachés avec Argon2 * authentification JWT * limitation du
-						nombre de requêtes (rate limiting) * protection XSS * sécurisation
-						des headers HTTP * validation des données entrantes * accès sécurisé
-						à la base de données Malgré nos efforts, aucun système n’est
-						totalement invulnérable.
+						<p>Nous mettons en place plusieurs mesures de sécurité :</p>
+						<ul className="list-disc px-4">
+							<li> mots de passe hachés avec Argon2 </li>
+							<li> authentification JWT </li>
+							<li>limitation du nombre de requêtes (rate limiting) </li>
+							<li> protection XSS</li>
+							<li> sécurisation des headers HTTP </li>
+							<li> validation des données entrantes</li>
+							<li> accès sécurisé à la base de données</li>
+						</ul>
+						<p className="pt-2">
+							Malgré nos efforts, aucun système n’est totalement invulnérable.
+						</p>
 						<h3 className="text-2xl text-center font-semibold tracking-tight py-6">
 							8. Partage des données
 						</h3>
-						Les données ne sont partagées avec aucun tiers commercial. Certaines
-						données peuvent transiter via des services techniques nécessaires au
-						fonctionnement du projet : * hébergement * base de données * outils
-						de développement et de déploiement
+						<p>Les données ne sont partagées avec aucun tiers commercial.</p>
+						<p>
+							Certaines données peuvent transiter via des services techniques
+							nécessaires au fonctionnement du projet :
+						</p>
+						<ul className="list-disc px-4">
+							<li> hébergement </li>
+							<li> base de données </li>
+							<li> outils de développement et de déploiement</li>
+						</ul>
 						<h3 className="text-2xl text-center font-semibold tracking-tight py-6">
 							9. Vos droits
 						</h3>
-						Conformément au RGPD, vous disposez des droits suivants : * droit
-						d’accès * droit de rectification * droit de suppression * droit à la
-						limitation du traitement * droit d’opposition * droit à la
-						portabilité des données Vous pouvez exercer ces droits à l’adresse
-						suivante : 📧 [EMAIL_DE_CONTACT]
+						<p>Conformément au RGPD, vous disposez des droits suivants : </p>
+						<ul className="list-disc px-4">
+							<li> droit d’accès </li>
+							<li> droit de rectification </li>
+							<li> droit de suppression </li>
+							<li>droit à la limitation du traitement </li>
+							<li> droit d’opposition </li>
+							<li> droit à la portabilité des données</li>
+						</ul>
+						<p className="pt-2">
+							Vous pouvez exercer ces droits à l’adresse suivante : 📧
+							[EMAIL_DE_CONTACT]
+						</p>
 						<h3 className="text-2xl text-center font-semibold tracking-tight py-6">
 							10. Suppression du compte
 						</h3>
-						Vous pouvez demander la suppression de votre compte et de vos
-						données associées. Certaines données techniques ou obligations
-						légales peuvent nécessiter une conservation limitée temporaire.
+						<p>
+							Vous pouvez demander la suppression de votre compte et de vos
+							données associées.
+						</p>
+						<p>
+							Certaines données techniques ou obligations légales peuvent
+							nécessiter une conservation limitée temporaire.
+						</p>
 						<h3 className="text-2xl text-center font-semibold tracking-tight py-6">
 							11. Cookies
 						</h3>
-						Actuellement, l’application n’utilise pas de cookies publicitaires
-						ni de suivi marketing. Des cookies techniques ou de session peuvent
-						être utilisés pour le fonctionnement de l’authentification.
+						<p>
+							Actuellement, l’application n’utilise pas de cookies publicitaires
+							ni de suivi marketing.
+						</p>
+						<p>
+							Des cookies techniques ou de session peuvent être utilisés pour le
+							fonctionnement de l’authentification.
+						</p>
 						<h3 className="text-2xl text-center font-semibold tracking-tight py-6">
 							12. Modification de la politique
 						</h3>
-						Cette politique peut être modifiée afin de refléter les évolutions
-						techniques, légales ou fonctionnelles du projet. La date de mise à
-						jour sera indiquée en haut de cette page.
+						<p>
+							Cette politique peut être modifiée afin de refléter les évolutions
+							techniques, légales ou fonctionnelles du projet.
+						</p>
+						<p> La date de mise à jour sera indiquée en haut de cette page.</p>
 						<h3 className="text-2xl text-center font-semibold tracking-tight py-6">
 							13. Contact
 						</h3>
-						Pour toute question concernant cette politique ou vos données
-						personnelles : 📧 [EMAIL_DE_CONTACT]
+						<p>
+							Pour toute question concernant cette politique ou vos données
+							personnelles : 📧 [EMAIL_DE_CONTACT]
+						</p>
+						<h3 className="text-2xl text-center font-semibold tracking-tight py-6">
+							{" "}
+							14. Éditeur du site
+						</h3>
+						<p>
+							Le site et l’application <b>La Pince</b> sont édités dans le cadre
+							d’un projet pédagogique réalisé durant la formation :
+						</p>
+						<p>
+							<b>Concepteur Développeur d’Applications Web — O’clock</b>
+						</p>
+						<p>
+							Projet pédagogique réalisé par l’équipe <b>La Pince</b> dans le
+							cadre de la formation CDA de O’clock.
+						</p>
+						<p>Contact : 📧 [EMAIL_DE_CONTACT]</p>
+						<h3 className="text-2xl text-center font-semibold tracking-tight py-6">
+							{" "}
+							15. Hébergement
+						</h3>
+						<p>L’application et ses données sont hébergées par :</p>
+						<p>**[NOM_HEBERGEUR]**</p>
+						<p>Adresse : [ADRESSE_HEBERGEUR]</p>
+						<p>Site web : [URL_HEBERGEUR]</p>
+						<h3 className="text-2xl text-center font-semibold tracking-tight py-6">
+							{" "}
+							16. Propriété intellectuelle
+						</h3>
+						<p>
+							L’ensemble du contenu du projet <b>La Pince</b> (code source,
+							interface, éléments graphiques, documentation, textes et logos)
+							est protégé par les règles relatives à la propriété
+							intellectuelle.
+						</p>
+						<p>
+							Sauf mention contraire, tous les droits sont réservés aux auteurs
+							du projet.
+						</p>
+						<h3 className="text-2xl text-center font-semibold tracking-tight py-6">
+							{" "}
+							17. Données collectées et finalité
+						</h3>
+						<p>
+							Les données collectées via l’application sont strictement limitées
+							aux besoins de fonctionnement du service :
+						</p>
+						<ul className="list-disc px-4">
+							<li> création et gestion des comptes utilisateurs,</li>
+							<li> gestion des projets et dépenses,</li>
+							<li> calculs de répartitions financières,</li>
+							<li> sécurité et maintenance technique.</li>
+						</ul>
+						<p className="pt-2">
+							Aucune donnée n’est vendue, cédée ou utilisée à des fins
+							commerciales ou publicitaires.
+						</p>
+						<p>
+							Les détails complets concernant les données collectées, leur
+							conservation et les droits des utilisateurs sont décrits dans la
+							présente politique de confidentialité.
+						</p>
 					</article>
 				</section>
 			</main>
