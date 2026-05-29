@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { AuthPage } from "@/pages/AuthPage";
 import { HomePage } from "@/pages/HomePage";
 import { LegalsPage } from "@/pages/LegalsPage";
+import { ProjectPage } from "@/pages/ProjectPage";
 import { ProjectsPage } from "@/pages/ProjectsPage";
 
 export function AppRouter() {
@@ -17,6 +18,7 @@ export function AppRouter() {
 						element={<AuthPage defaultMode="register" />}
 					/>
 					<Route path="/projects" element={<ProjectsPage />} />
+					<Route path="/project" element={<ProjectPage />} />
 					<Route path="/privacy-policy" element={<LegalsPage />} />
 				</Routes>
 			</BrowserRouter>
