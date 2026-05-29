@@ -1,3 +1,4 @@
+import { useParams } from "react-router";
 import { ConnectedHeader } from "@/components/common/ConnectedHeader";
 import { BudgetAlerts } from "@/components/project/BudgetAlerts";
 import { ProjectHeading } from "@/components/project/ProjectHeading";
@@ -7,6 +8,10 @@ import { OperationTab } from "@/components/project/tabs/OperationTab";
 import { OverviewTab } from "@/components/project/tabs/OverviewTab";
 
 export function ProjectPage() {
+	const params = useParams();
+	const projectId = params.id;
+
+	console.log(projectId);
 	return (
 		<>
 			<ConnectedHeader />
