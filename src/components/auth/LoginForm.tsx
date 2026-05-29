@@ -1,34 +1,33 @@
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/AuthContext";
-import { useState } from "react";
-import { useNavigate } from "react-router";
 
 type LoginFormProps = {
 	onRegisterClick: () => void;
 };
 
 export function LoginForm({ onRegisterClick }: LoginFormProps) {
+	const { login } = useAuth();
+	const navigate = useNavigate();
+	const [errorMessage, setErrorMessage] = useState("");
 
-  const { login } = useAuth()
-  const navigate = useNavigate()
-  const [errorMessage, setErrorMessage] = useState("")
+	async function handleAction(formData: FormData) {
+		setErrorMessage("");
 
-  async function handleAction(formData: FormData) {
-    setErrorMessage("")
+		const email = formData.get("email") as string;
+		const password = formData.get("password") as string;
 
-    const email = formData.get("email") as string
-    const password = formData.get("password") as string
-
-    try {
-      await login({ email, password })
-      // Login successful → redirect to projects page
-      navigate("/projects")
-    } catch {
-      setErrorMessage("Email ou mot de passe incorrect")
-    }
-  }
+		try {
+			await login({ email, password });
+			// Login successful → redirect to projects page
+			navigate("/projects");
+		} catch {
+			setErrorMessage("Email ou mot de passe incorrect");
+		}
+	}
 
 	return (
 		<form action={handleAction} className="space-y-5">
@@ -43,30 +42,31 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
 
 			<div className="space-y-2">
 				<Label htmlFor="login-email">Adresse email</Label>
-				<Input 
-          id="login-email"
-          name="email"
-          type="email" 
-          placeholder="lapince@famille.fr"
-          required />
+				<Input
+					id="login-email"
+					name="email"
+					type="email"
+					placeholder="lapince@famille.fr"
+					required
+				/>
 			</div>
 
 			<div className="space-y-2">
 				<Label htmlFor="login-password">Mot de passe</Label>
-				<Input 
-          id="login-password" 
-          name="password"
-          type="password" 
-          placeholder="••••••••" 
-          required
-          />
+				<Input
+					id="login-password"
+					name="password"
+					type="password"
+					placeholder="••••••••"
+					required
+				/>
 			</div>
 
-      {errorMessage && (
-        <p className="text-sm text-red-500">{errorMessage}</p>
-      )}
+			{errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
 
-			<Button type="submit" className="w-full">Se connecter</Button>
+			<Button type="submit" className="w-full">
+				Se connecter
+			</Button>
 
 			<p className="text-center text-sm text-muted-foreground">
 				Pas encore de compte ?{" "}
