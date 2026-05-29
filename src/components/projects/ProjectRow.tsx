@@ -1,28 +1,8 @@
 import { Bell, ChevronRight } from "lucide-react";
+import { ParticipantStack } from "@/components/common/ParticipantStack";
 import { BudgetProgress } from "@/components/projects/BudgetProgress";
-import { ParticipantStack } from "@/components/projects/ParticipantStack";
 import { ProjectDetails } from "@/components/projects/ProjectDetails";
-
-type ProjectStatus = "active" | "archived";
-
-type ProjectIcon = "plane" | "home" | "cake" | "utensils";
-
-export type Project = {
-	id: string;
-	name: string;
-	description: string;
-	expensesCount: number;
-	updatedAt: string;
-	status: ProjectStatus;
-	icon: ProjectIcon;
-	participants: string[];
-	spent: string;
-	budget: string;
-	budgetPercent: number;
-	alertsCount: number;
-	balance: string;
-	balanceStatus: "negative" | "positive" | "neutral";
-};
+import type { Project } from "@/types/project";
 
 type ProjectRowProps = {
 	project: Project;

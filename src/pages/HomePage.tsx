@@ -1,8 +1,8 @@
-import { CtaSection } from "@/components/layout/CtaSection";
-import { FeatureGrid } from "@/components/layout/FeatureGrid";
-import { Hero } from "@/components/layout/Hero";
-import { PublicFooter } from "@/components/layout/PublicFooter";
-import { PublicHeader } from "@/components/layout/PublicHeader";
+import { CtaSection } from "@/components/landingPage/CtaSection";
+import { FeatureGrid } from "@/components/landingPage/FeatureGrid";
+import { Hero } from "@/components/landingPage/Hero";
+import { PublicFooter } from "@/components/landingPage/PublicFooter";
+import { PublicHeader } from "@/components/landingPage/PublicHeader";
 
 export function HomePage() {
 	return (
