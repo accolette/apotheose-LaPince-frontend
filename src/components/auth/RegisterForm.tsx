@@ -13,8 +13,6 @@ export function RegisterForm({ onLoginClick }: RegisterFormProps) {
 	const [errorMessage, setErrorMessage] = useState("");
 
 	async function handleAction(formData: FormData) {
-		console.log("handleAction called");
-
 		setErrorMessage("");
 
 		const name = formData.get("name") as string;
