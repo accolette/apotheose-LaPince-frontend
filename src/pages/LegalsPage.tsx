@@ -1,5 +1,5 @@
-import { PublicFooter } from "@/components/layout/PublicFooter";
-import { PublicHeader } from "@/components/layout/PublicHeader";
+import { PublicFooter } from "@/components/landingPage/PublicFooter";
+import { PublicHeader } from "@/components/landingPage/PublicHeader";
 
 export function LegalsPage() {
 	return (

@@ -11,7 +11,7 @@ export function ProjectsPage() {
 		<>
 			<ConnectedHeader />
 
-			<main className="mx-auto max-w-x5xl px-6 py-10">
+			<main className="mx-auto max-w-5xl px-6 py-10">
 				<ProjectsHeading onCreateProject={() => setIsProjectModalOpen(true)} />
 
 				<UserStats />
