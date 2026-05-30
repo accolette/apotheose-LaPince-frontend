@@ -30,9 +30,14 @@ export default function ProjectsProvider({ children }: ProjectsProviderProps) {
 	const [error, setError] = useState<string | null>(null);
 
 	const getProjectById = useCallback(async (projectId: number) => {
+		const token = localStorage.getItem("token");
 		setIsLoading(true);
 		try {
-			const response = await fetch(`${BASE_URL}/api/projects/${projectId}`);
+			const response = await fetch(`${BASE_URL}/api/projects/${projectId}`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
 			const data = await response.json();
 			setProject(data.project);
 			setError(null);
