@@ -1,11 +1,11 @@
-import { useProjects } from "@/context/ProjectsContext";
 import type IProject from "@/types/project";
 import { ParticipantStack } from "../common/ParticipantStack";
 
-export function ProjectHeading() {
-	const { project } = useProjects();
-	console.log("p datas", project.name);
+interface ProjectHeadingProps {
+	project: IProject;
+}
 
+export function ProjectHeading({ project }: ProjectHeadingProps) {
 	return (
 		<div className="mb-8 flex items-end justify-between">
 			<div>

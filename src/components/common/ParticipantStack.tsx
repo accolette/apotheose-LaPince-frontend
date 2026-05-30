@@ -11,8 +11,8 @@ export function ParticipantStack({
 	maxVisible = 4,
 	size = "sm",
 }: ParticipantStackProps) {
-	console.log("1", projectParticipants);
 	const visibleParticipants = projectParticipants.slice(0, maxVisible);
+
 	const remainingCount =
 		projectParticipants.length - visibleParticipants.length;
 	const sizeClasses = {

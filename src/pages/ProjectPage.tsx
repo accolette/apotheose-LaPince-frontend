@@ -18,29 +18,22 @@ export function ProjectPage() {
 		getProjectById(projectId);
 	}, [projectId, getProjectById]);
 
-	function RequireProject({ children }: { children: React.ReactNode }) {
-		const { project, isLoading } = useProjects();
-
-		if (isLoading || !project) {
-			return <div>Loading...</div>;
-		}
-
-		return <>{children}</>;
-	}
-
-	console.log("page", project);
 	return (
 		<>
 			<ConnectedHeader />
 			<main className="mx-auto max-w-5xl px-6 py-10">
-				<RequireProject>
-					<ProjectHeading />
-					{/* <ProjectTabs />
-					<BudgetAlerts />
-					<OverviewTab />
-					<DetailsTab />
-					<OperationTab /> */}
-				</RequireProject>
+				{isLoading || !project ? (
+					<div> Loading... </div>
+				) : (
+					<>
+						<ProjectHeading project={project} />
+						<ProjectTabs />
+						{/*<BudgetAlerts />
+						<OverviewTab />
+						<DetailsTab />
+						<OperationTab /> */}
+					</>
+				)}
 			</main>
 		</>
 	);
