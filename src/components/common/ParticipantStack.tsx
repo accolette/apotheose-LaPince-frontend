@@ -11,6 +11,10 @@ export function ParticipantStack({
 	maxVisible = 3,
 	size = "sm",
 }: ParticipantStackProps) {
+	// Guard temporaire — ProjectRow passe encore des string[] (données mockées)
+	// TODO: retirer quand ProjectsTable sera branchée sur l'API (#111)
+	if (!projectParticipants) return null;
+
 	const visibleParticipants = projectParticipants.slice(0, maxVisible);
 
 	const remainingCount =
