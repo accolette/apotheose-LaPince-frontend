@@ -17,8 +17,8 @@ export function ProjectPage() {
 		isLoading: isProjectLoading,
 		getProjectById,
 		project,
+		errorCode,
 	} = useProjects();
-
 	const { user, isLoading: isAuthLoading } = useAuth();
 
 	useEffect(() => {
@@ -35,6 +35,14 @@ export function ProjectPage() {
 		return <Navigate to="/login" replace />;
 	}
 
+	if (errorCode === 403) {
+		return <div>403 : Accés refusé</div>;
+	}
+
+	if (errorCode === 404) {
+		return <div>404 : Projet introuvable</div>;
+	}
+
 	if (isProjectLoading || !project) {
 		return <div>Loading...</div>;
 	}
@@ -43,8 +51,8 @@ export function ProjectPage() {
 		<>
 			<ConnectedHeader />
 			<main className="mx-auto max-w-5xl px-6 py-10">
-				{isProjectLoading || !project ? (
-					<div> Loading... </div>
+				{user.id !== project.appUserId ? (
+					<div> seul propietaire</div>
 				) : (
 					<>
 						<ProjectHeading project={project} />

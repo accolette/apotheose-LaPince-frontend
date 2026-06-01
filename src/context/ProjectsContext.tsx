@@ -8,6 +8,7 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 interface IProjectsContexte {
 	isLoading: boolean;
 	error: string | null;
+	errorCode: number | null;
 	project: IProject | null;
 	getProjectById: (projectId: number) => void;
 }
@@ -28,6 +29,7 @@ export default function ProjectsProvider({ children }: ProjectsProviderProps) {
 	const [project, setProject] = useState<IProject | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const [errorCode, setErrorCode] = useState<number | null>(null);
 
 	//TODO : Later refactoring this part with a service handling queries
 	const getProjectById = useCallback(async (projectId: number) => {
@@ -39,23 +41,30 @@ export default function ProjectsProvider({ children }: ProjectsProviderProps) {
 					Authorization: `Bearer ${token}`,
 				},
 			});
+			if (!response.ok) {
+				setErrorCode(response.status);
+			}
 			const data = await response.json();
 			setProject(data.project);
 			setError(null);
 		} catch (error) {
+			setProject(null);
+
 			setError(
 				error instanceof Error
 					? error.message
 					: `Error fetching project: ${projectId}`,
 			);
+		} finally {
+			setIsLoading(false);
 		}
-		setIsLoading(false);
 	}, []);
 
 	const value = {
 		project,
 		isLoading,
 		error,
+		errorCode,
 		getProjectById,
 	};
 
