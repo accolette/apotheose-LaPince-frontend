@@ -21,7 +21,7 @@ interface IAppUser {
 }
 
 // Initial setup before dynamisation of page
-//TODO: Remove it when everinths is setup
+//TODO: Remove it when everythings is setup
 export type Project = {
 	id: string;
 	name: string;
