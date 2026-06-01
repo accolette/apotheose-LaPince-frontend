@@ -1,5 +1,5 @@
 import { LandmarkIcon, LogOutIcon, MoonIcon } from "lucide-react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -19,13 +19,13 @@ export function ConnectedHeader() {
 	return (
 		<header className="border-b bg-background">
 			<div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
-				<div className="flex items-center gap-2 font-semibold">
+				<Link to="/projects" className="flex items-center gap-2 font-semibold">
 					<span className="inline-flex size-7 items-center justify-center rounded bg-primary text-primary-foreground">
 						<LandmarkIcon className="size-4" />
 					</span>
 
 					<span>LaPince</span>
-				</div>
+				</Link>
 
 				<div className="flex items-center gap-2">
 					<button
