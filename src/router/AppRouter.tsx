@@ -18,7 +18,7 @@ export function AppRouter() {
 						element={<AuthPage defaultMode="register" />}
 					/>
 					<Route path="/projects" element={<ProjectsPage />} />
-					<Route path="/project" element={<ProjectPage />} />
+					<Route path="/project/:id" element={<ProjectPage />} />
 					<Route path="/privacy-policy" element={<LegalsPage />} />
 				</Routes>
 			</BrowserRouter>

@@ -1,3 +1,27 @@
+export default interface IProject {
+	id: number;
+	appUserId: number;
+	name: string;
+	description: string;
+	isArchived: boolean;
+	projectParticipants: IProjectParticipants[];
+}
+
+export interface IProjectParticipants {
+	participant: IParticipant;
+}
+
+interface IParticipant {
+	appUser: IAppUser | null;
+	name: string;
+}
+
+interface IAppUser {
+	id: number;
+}
+
+// Initial setup before dynamisation of page
+//TODO: Remove it when everythings is setup
 export type Project = {
 	id: string;
 	name: string;

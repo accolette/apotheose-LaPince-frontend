@@ -1,23 +1,31 @@
 import { LandmarkIcon, LogOutIcon, MoonIcon } from "lucide-react";
-
+import { Link, useNavigate } from "react-router";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/context/AuthContext";
 
 export function ConnectedHeader() {
+	const { logout } = useAuth();
+	const navigate = useNavigate();
+
+	async function handleLogout() {
+		await logout();
+		navigate("/login");
+	}
 	return (
 		<header className="border-b bg-background">
 			<div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
-				<div className="flex items-center gap-2 font-semibold">
+				<Link to="/projects" className="flex items-center gap-2 font-semibold">
 					<span className="inline-flex size-7 items-center justify-center rounded bg-primary text-primary-foreground">
 						<LandmarkIcon className="size-4" />
 					</span>
 
 					<span>LaPince</span>
-				</div>
+				</Link>
 
 				<div className="flex items-center gap-2">
 					<button
@@ -36,7 +44,10 @@ export function ConnectedHeader() {
 							<div className="px-2 py-1.5">
 								<p className="text-sm font-medium">Steve</p>
 							</div>
-							<DropdownMenuItem className="text-destructive">
+							<DropdownMenuItem
+								className="text-destructive"
+								onClick={handleLogout}
+							>
 								<LogOutIcon className="size-4" />
 								Déconnexion
 							</DropdownMenuItem>
