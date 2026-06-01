@@ -9,10 +9,10 @@ export function DetailsTab() {
 			<div className="flex-1 space-y-6">
 				<ProjectDetailsForm />
 			</div>
-			<div className="flex-1">
+			{/* <div className="flex-1">
 				<ParticipantsCard />
-				{/* TODO: créer un contexte pour partager le state qui gère la modale du projet 
-				/Users/w0dr/Oclock/apo/projet-cda-LaPince-frontend/src/components/common/ProjectDialog.tsx*/}
+				TODO: créer un contexte pour partager le state qui gère la modale du projet 
+				/Users/w0dr/Oclock/apo/projet-cda-LaPince-frontend/src/components/common/ProjectDialog.tsx
 				<Button
 					type="button"
 					variant="outline"
@@ -21,7 +21,7 @@ export function DetailsTab() {
 					<Plus className="size-4" />
 					Modifier
 				</Button>
-			</div>
+			</div> */}
 		</div>
 	);
 }

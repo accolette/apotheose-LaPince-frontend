@@ -30,7 +30,7 @@ export function ProjectDetailsForm() {
 				/>
 			</div>
 
-			<div className="space-y-2">
+			{/* <div className="space-y-2">
 				<Label>Type</Label>
 				<Select defaultValue="travel">
 					<SelectTrigger>
@@ -45,7 +45,7 @@ export function ProjectDetailsForm() {
 						<SelectItem value="other">Autre</SelectItem>
 					</SelectContent>
 				</Select>
-			</div>
+			</div> */}
 
 			<div className="space-y-2">
 				<Label htmlFor="project-budget">

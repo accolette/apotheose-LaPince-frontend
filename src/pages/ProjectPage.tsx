@@ -53,10 +53,10 @@ export function ProjectPage() {
 			<main className="mx-auto max-w-5xl px-6 py-10">
 				<ProjectHeading project={project} />
 				<ProjectTabs />
-				{/*<BudgetAlerts />
-						<OverviewTab />
-						<DetailsTab />
-						<OperationTab /> */}
+				{/*<BudgetAlerts />*/}
+				{/* <OverviewTab /> */}
+				<DetailsTab />
+				{/* <OperationTab />  */}
 			</main>
 		</>
 	);
