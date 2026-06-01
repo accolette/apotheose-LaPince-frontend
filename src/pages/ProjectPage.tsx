@@ -51,18 +51,12 @@ export function ProjectPage() {
 		<>
 			<ConnectedHeader />
 			<main className="mx-auto max-w-5xl px-6 py-10">
-				{user.id !== project.appUserId ? (
-					<div> seul propietaire</div>
-				) : (
-					<>
-						<ProjectHeading project={project} />
-						<ProjectTabs />
-						{/*<BudgetAlerts />
+				<ProjectHeading project={project} />
+				<ProjectTabs />
+				{/*<BudgetAlerts />
 						<OverviewTab />
 						<DetailsTab />
 						<OperationTab /> */}
-					</>
-				)}
 			</main>
 		</>
 	);
