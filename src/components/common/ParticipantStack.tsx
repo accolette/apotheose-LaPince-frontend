@@ -8,7 +8,7 @@ type ParticipantStackProps = {
 
 export function ParticipantStack({
 	projectParticipants,
-	maxVisible = 4,
+	maxVisible = 3,
 	size = "sm",
 }: ParticipantStackProps) {
 	const visibleParticipants = projectParticipants.slice(0, maxVisible);
@@ -28,7 +28,7 @@ export function ParticipantStack({
 						key={projectParticipants.participant.name}
 						className={sizeClasses[size]}
 					>
-						{projectParticipants.participant.name}
+						{projectParticipants.participant.name.slice(0, 2).toUpperCase()}
 					</span>
 				))}
 				{remainingCount > 0 && (

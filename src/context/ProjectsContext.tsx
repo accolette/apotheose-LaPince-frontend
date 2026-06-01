@@ -29,6 +29,7 @@ export default function ProjectsProvider({ children }: ProjectsProviderProps) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
+	//TODO : Later refactoring this part with a service handling queries
 	const getProjectById = useCallback(async (projectId: number) => {
 		const token = localStorage.getItem("token");
 		setIsLoading(true);
