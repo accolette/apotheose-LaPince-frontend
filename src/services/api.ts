@@ -1,4 +1,4 @@
-import type { LoginResponse, UserResponse } from "@/types";
+import type { CategoriesResponse, ICategories, LoginResponse, UserResponse } from "@/types";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -81,4 +81,17 @@ export async function apiMe(): Promise<UserResponse> {
 		headers: buildHeaders(true),
 	});
 	return handleResponse(res);
+}
+
+
+// ── Category endpoints ───────────────────────────────────────────────────────────
+
+export async function apiGetCategories(): Promise<ICategories[]> {
+	const res = await fetch(`${BASE_URL}/api/categories`, {
+		method: "GET",
+		headers: buildHeaders(false),
+	});
+	const data = await handleResponse<CategoriesResponse>(res);
+	return data.categories;
+
 }
