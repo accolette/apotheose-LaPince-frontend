@@ -6,9 +6,8 @@ import { ProjectHeading } from "@/components/project/ProjectHeading";
 import { ProjectTabs } from "@/components/project/ProjectTabs";
 import { DetailsTab } from "@/components/project/tabs/DetailsTab";
 import { OperationTab } from "@/components/project/tabs/OperationTab";
-import { OverviewTab } from "@/components/project/tabs/OverviewTab";
 import { useAuth } from "@/context/AuthContext";
-import { useProjects } from "@/context/ProjectsContext";
+import { useProject } from "@/context/ProjectContext";
 
 export function ProjectPage() {
 	const params = useParams();
@@ -18,7 +17,7 @@ export function ProjectPage() {
 		getProjectById,
 		project,
 		errorCode,
-	} = useProjects();
+	} = useProject();
 	const { user, isLoading: isAuthLoading } = useAuth();
 
 	useEffect(() => {
@@ -53,13 +52,9 @@ export function ProjectPage() {
 			<main className="mx-auto max-w-5xl px-6 py-10">
 				<ProjectHeading project={project} />
 				<ProjectTabs />
-				<h1>Ici ma table de projet
-				</h1>
+				<BudgetAlerts />
+				<DetailsTab />
 				<OperationTab />
-				{/*<BudgetAlerts />
-						<OverviewTab />
-						<DetailsTab />
-						*/}
 			</main>
 		</>
 	);

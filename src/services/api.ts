@@ -1,3 +1,6 @@
+import type { LoginResponse, UserResponse } from "@/types";
+import type { BudgetSummary } from "@/types/budget";
+import type { ParticipantBalance } from "@/types/reimbursement";
 import type { CategoriesResponse, ICategories, LoginResponse, UserResponse } from "@/types";
 import type { IOperation, IOperationsResponse } from "@/types/operations";
 
@@ -84,6 +87,27 @@ export async function apiMe(): Promise<UserResponse> {
 	return handleResponse(res);
 }
 
+// ── Budget endpoints ─────────────────────────────────────────────────────────
+
+export async function apiGetBudgets(projectId: number): Promise<BudgetSummary> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}/budgets`, {
+		method: "GET",
+		headers: buildHeaders(true),
+	});
+	return handleResponse<BudgetSummary>(res);
+}
+
+// ── Balance endpoints ────────────────────────────────────────────────────────
+
+export async function apiGetBalance(
+	projectId: number,
+): Promise<ParticipantBalance[]> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}/balance`, {
+		method: "GET",
+		headers: buildHeaders(true),
+	});
+	return handleResponse<ParticipantBalance[]>(res);
+}
 
 // ── Category endpoints ───────────────────────────────────────────────────────────
 
