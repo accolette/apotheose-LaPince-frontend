@@ -6,7 +6,6 @@ import { ProjectHeading } from "@/components/project/ProjectHeading";
 import { ProjectTabs } from "@/components/project/ProjectTabs";
 import { DetailsTab } from "@/components/project/tabs/DetailsTab";
 import { OperationTab } from "@/components/project/tabs/OperationTab";
-import { OverviewTab } from "@/components/project/tabs/OverviewTab";
 import { useAuth } from "@/context/AuthContext";
 import { useProjects } from "@/context/ProjectsContext";
 
@@ -54,7 +53,6 @@ export function ProjectPage() {
 				<ProjectHeading project={project} />
 				<ProjectTabs />
 				<BudgetAlerts />
-				<OverviewTab />
 				<DetailsTab />
 				<OperationTab />
 			</main>
