@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
 import ProjectsProvider from "./context/ProjectsContext.tsx";
+import CategoriesProvider from "./context/CategoriesContext.tsx";
 
 const rootElement = document.getElementById("root");
 
@@ -14,9 +15,11 @@ if (!rootElement) {
 createRoot(rootElement).render(
 	<StrictMode>
 		<AuthProvider>
-			<ProjectsProvider>
-				<App />
-			</ProjectsProvider>
+			<CategoriesProvider>
+				<ProjectsProvider>
+					<App />
+				</ProjectsProvider>
+			</CategoriesProvider>
 		</AuthProvider>
 	</StrictMode>,
 );

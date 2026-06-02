@@ -1,7 +1,8 @@
 import type { IProjectParticipants } from "@/types/project";
+import type { IOperationParticipant } from "@/types/operations";
 
 type ParticipantStackProps = {
-	projectParticipants: IProjectParticipants[];
+	projectParticipants: IProjectParticipants[] | IOperationParticipant[];
 	size?: "sm" | "md";
 	maxVisible?: number;
 };

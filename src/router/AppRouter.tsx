@@ -6,6 +6,7 @@ import { HomePage } from "@/pages/HomePage";
 import { LegalsPage } from "@/pages/LegalsPage";
 import { ProjectPage } from "@/pages/ProjectPage";
 import { ProjectsPage } from "@/pages/ProjectsPage";
+import { CategoriesPage } from "@/pages/CategoriesPage";
 
 export function AppRouter() {
 	return (
@@ -18,6 +19,7 @@ export function AppRouter() {
 						path="/register"
 						element={<AuthPage defaultMode="register" />}
 					/>
+					<Route path="/testcategories" element={<CategoriesPage />} />
 					<Route path="/projects" element={<ProjectsPage />} />
 					<Route
 						path="/project/:id"
