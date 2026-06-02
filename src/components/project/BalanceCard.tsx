@@ -1,14 +1,14 @@
 import { ArrowRight } from "lucide-react";
-import type { Reimbursement } from "@/types/reimbursement";
-
-const mockReimbursements: Reimbursement[] = [
-	{ from: "Steve", to: "Alice", amount: 45.2 },
-	{ from: "Chloé", to: "Bob", amount: 120.78 },
-	{ from: "Chloé", to: "Steve", amount: 60.0 },
-];
+import { useProject } from "@/context/ProjectContext";
+import type { ParticipantBalance } from "@/types/reimbursement";
 
 export function BalanceCard() {
-	const reimbursements = mockReimbursements;
+	const { reimbursements } = useProject();
+	// TODO: replace with reimbursements when greedy algorithm is implemented server-side
+	// For now, display raw balances from GET /api/projects/:id/balance
+	// reimbursements contains ParticipantBalance[] temporarily
+
+	if (!reimbursements.length) return null;
 
 	return (
 		<div className="overflow-hidden rounded-lg border border-border bg-card">
@@ -22,18 +22,19 @@ export function BalanceCard() {
 			</div>
 
 			<ul className="divide-y divide-border">
-				{reimbursements.map((reimbursement) => (
+				{reimbursements.map((participant: ParticipantBalance) => (
 					<li
-						key={`${reimbursement.from}-${reimbursement.to}`}
+						key={`${participant.participantId}`}
 						className="flex items-center gap-3 px-6 py-4"
 					>
 						<div className="flex flex-1 items-center gap-1.5 text-sm">
-							<span className="font-medium">{reimbursement.from}</span>
+							<span className="font-medium">{participant.name}</span>
 							<ArrowRight className="size-3.5 text-muted-foreground" />
-							<span className="font-medium">{reimbursement.to}</span>
+							{/* TODO mettre le nom du partcipant a remboursé avec glouton */}
+							<span className="font-medium">{participant.name}</span>
 						</div>
 						<span className="tabular-nums text-sm font-semibold">
-							{reimbursement.amount.toLocaleString("fr-FR", {
+							{participant.balance.toLocaleString("fr-FR", {
 								style: "currency",
 								currency: "EUR",
 							})}

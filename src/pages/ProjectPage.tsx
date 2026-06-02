@@ -7,7 +7,7 @@ import { ProjectTabs } from "@/components/project/ProjectTabs";
 import { DetailsTab } from "@/components/project/tabs/DetailsTab";
 import { OperationTab } from "@/components/project/tabs/OperationTab";
 import { useAuth } from "@/context/AuthContext";
-import { useProjects } from "@/context/ProjectsContext";
+import { useProject } from "@/context/ProjectContext";
 
 export function ProjectPage() {
 	const params = useParams();
@@ -17,7 +17,7 @@ export function ProjectPage() {
 		getProjectById,
 		project,
 		errorCode,
-	} = useProjects();
+	} = useProject();
 	const { user, isLoading: isAuthLoading } = useAuth();
 
 	useEffect(() => {

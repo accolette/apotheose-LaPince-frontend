@@ -7,7 +7,7 @@ import {
 	TrainFront,
 	Utensils,
 } from "lucide-react";
-import type { BudgetSummary } from "@/types/budget";
+import { useProject } from "@/context/ProjectContext";
 
 // Front-only map — category name → Lucide icon
 const categoryIconMap: Record<string, LucideIcon> = {
@@ -19,71 +19,13 @@ const categoryIconMap: Record<string, LucideIcon> = {
 	Loisir: Ticket,
 };
 
-// Mock — will be replaced by API data from ProjectsContext
-const mockBudgetSummary: BudgetSummary = {
-	totalSpent: 847.5,
-	totalLimit: 1000,
-	budgets: [
-		{
-			id: 1,
-			categoryId: 1,
-			categoryName: "Divers",
-			color: "#A9A9A9",
-			spent: 48.6,
-			limit: 200,
-			alertThreshold: 80,
-		},
-		{
-			id: 2,
-			categoryId: 2,
-			categoryName: "Restaurants",
-			color: "#228B22",
-			spent: 128.4,
-			limit: 150,
-			alertThreshold: 80,
-		},
-		{
-			id: 3,
-			categoryId: 3,
-			categoryName: "Hébergement",
-			color: "#1E90FF",
-			spent: 320,
-			limit: 400,
-			alertThreshold: 80,
-		},
-		{
-			id: 4,
-			categoryId: 4,
-			categoryName: "Transport",
-			color: "#FF8C00",
-			spent: 240,
-			limit: 250,
-			alertThreshold: 80,
-		},
-		{
-			id: 5,
-			categoryId: 5,
-			categoryName: "Courses",
-			color: "#6B8E23",
-			spent: 42.1,
-			limit: 200,
-			alertThreshold: 80,
-		},
-		{
-			id: 6,
-			categoryId: 6,
-			categoryName: "Loisir",
-			color: "#9370DB",
-			spent: 68,
-			limit: 400,
-			alertThreshold: 80,
-		},
-	],
-};
-
 export function BudgetOverview() {
-	const { totalSpent, totalLimit, budgets } = mockBudgetSummary;
-	const usedPercent = Math.round((totalSpent / totalLimit) * 100);
+	const { budgetSummary } = useProject();
+	if (!budgetSummary) return null;
+	const { totalSpent, totalLimit, spentByCategory } = budgetSummary;
+	const usedPercent = totalLimit
+		? Math.round((totalSpent / totalLimit) * 100)
+		: null;
 
 	return (
 		<div className="rounded-lg border border-border p-6 mb-6 bg-card">
@@ -95,43 +37,45 @@ export function BudgetOverview() {
 							currency: "EUR",
 						})}
 					</span>
-
-					<span className="text-sm text-muted-foreground tabular-nums">
-						/{" "}
-						{totalLimit.toLocaleString("fr-FR", {
-							style: "currency",
-							currency: "EUR",
-						})}
-					</span>
+					{totalLimit && (
+						<span className="text-sm text-muted-foreground tabular-nums">
+							/{" "}
+							{totalLimit.toLocaleString("fr-FR", {
+								style: "currency",
+								currency: "EUR",
+							})}
+						</span>
+					)}
 				</div>
-
-				<span className="text-xs font-medium text-muted-foreground">
-					{usedPercent}% utilisé
-				</span>
+				{usedPercent !== null && (
+					<span className="text-xs font-medium text-muted-foreground">
+						{usedPercent}% utilisé
+					</span>
+				)}
 			</div>
 
 			<div className="mb-4 flex h-2.5 overflow-hidden rounded-full bg-muted">
-				{budgets.map((budget) => (
+				{spentByCategory.map((category) => (
 					<div
-						key={budget.id}
+						key={category.categoryId}
 						style={{
-							width: `${(budget.spent / totalLimit) * 100}%`,
-							backgroundColor: budget.color,
+							width: `${totalLimit ? (category.spent / totalLimit) * 100 : 0}%`,
+							backgroundColor: category.color,
 						}}
 					/>
 				))}
 			</div>
 
 			<div className="flex flex-wrap items-center gap-2">
-				{budgets.map((budget) => {
-					const Icon = categoryIconMap[budget.categoryName] ?? Tag;
+				{spentByCategory.map((category) => {
+					const Icon = categoryIconMap[category.categoryName] ?? Tag;
 
 					return (
 						<span
-							key={budget.id}
-							title={`${budget.categoryName} · ${budget.spent.toLocaleString("fr-FR", { style: "currency", currency: "EUR" })}`}
+							key={category.categoryId}
+							title={`${category.categoryName} · ${category.spent.toLocaleString("fr-FR", { style: "currency", currency: "EUR" })}`}
 							className="flex size-8 cursor-help items-center justify-center rounded-md text-white"
-							style={{ backgroundColor: budget.color }}
+							style={{ backgroundColor: category.color }}
 						>
 							<Icon className="size-4" />
 						</span>

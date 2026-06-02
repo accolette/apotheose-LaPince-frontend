@@ -1,5 +1,5 @@
 import { BudgetOverview } from "@/components/project/BudgetOverview";
-import { MyBudgets } from "@/components/project/MyBudgets";
+import { MyBudgets } from "@/components/project/SpendingByCategory";
 import { BalanceCard } from "../BalanceCard";
 
 export function OverviewTab() {
