@@ -46,7 +46,7 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 		const token = localStorage.getItem("token");
 		setIsLoading(true);
 		try {
-			// TODO: replace with apiGetProjectById when Aurore's PR is merged
+			// TODO: replace with apiGetProjectById
 			const response = await fetch(`${BASE_URL}/api/projects/${projectId}`, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
