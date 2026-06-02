@@ -1,20 +1,19 @@
-import type { IProjectParticipants } from "@/types/project";
+import type { IDashboardParticipant } from "@/types/project";
 
 type ParticipantStackProps = {
-	projectParticipants: IProjectParticipants[];
+	participants: IDashboardParticipant[];
 	size?: "sm" | "md";
 	maxVisible?: number;
 };
 
 export function ParticipantStack({
-	projectParticipants,
+	participants = [],
 	maxVisible = 3,
 	size = "sm",
 }: ParticipantStackProps) {
-	const visibleParticipants = projectParticipants.slice(0, maxVisible);
+	const visible = participants.slice(0, maxVisible);
+	const remaining = participants.length - visible.length;
 
-	const remainingCount =
-		projectParticipants.length - visibleParticipants.length;
 	const sizeClasses = {
 		sm: "size-6 text-[10px] flex items-center justify-center rounded-full border-2 border-background bg-muted font-medium text-foreground",
 		md: "size-9 text-xs flex items-center justify-center rounded-full border-2 border-background bg-muted font-medium text-foreground",
@@ -23,20 +22,17 @@ export function ParticipantStack({
 	return (
 		<div className="flex items-center gap-2">
 			<div className="flex -space-x-1.5">
-				{visibleParticipants.map((projectParticipants) => (
-					<span
-						key={projectParticipants.participant.name}
-						className={sizeClasses[size]}
-					>
-						{projectParticipants.participant.name.slice(0, 2).toUpperCase()}
+				{visible.map((p) => (
+					<span key={p.id} className={sizeClasses[size]}>
+						{p.name.slice(0, 2).toUpperCase()}
 					</span>
 				))}
-				{remainingCount > 0 && (
-					<span className={sizeClasses[size]}>+{remainingCount}</span>
+				{remaining > 0 && (
+					<span className={sizeClasses[size]}>+{remaining}</span>
 				)}
 			</div>
 			<span className="text-xs text-muted-foreground">
-				{projectParticipants.length}
+				{participants.length}
 			</span>
 		</div>
 	);

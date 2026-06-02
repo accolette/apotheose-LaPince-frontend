@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useProjectsQuery } from "@/lib/useProjectsQuery";
 import { ProjectRow } from "@/components/projects/ProjectRow";
 import {
 	Table,
@@ -7,9 +7,40 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { projects } from "@/types/project";
 
 export function ProjectsTable() {
+	const {
+		data,
+		isLoading,
+		isError,
+		hasNextPage,
+		fetchNextPage,
+		isFetchingNextPage,
+	} = useProjectsQuery();
+
+	// Flatten all pages into a single array
+	const projects = data?.pages.flatMap((page) => page.projects) ?? [];
+
+	if (isLoading) {
+		return (
+			<section className="overflow-hidden rounded-lg border border-border">
+				<p className="px-6 py-8 text-center text-sm text-muted-foreground">
+					Chargement...
+				</p>
+			</section>
+		);
+	}
+
+	if (isError) {
+		return (
+			<section className="overflow-hidden rounded-lg border border-border">
+				<p className="px-6 py-8 text-center text-sm text-destructive">
+					Une erreur est survenue lors du chargement des projets.
+				</p>
+			</section>
+		);
+	}
+
 	return (
 		<section className="overflow-hidden rounded-lg border border-border">
 			<Table>
@@ -33,6 +64,19 @@ export function ProjectsTable() {
 					))}
 				</TableBody>
 			</Table>
+
+			{hasNextPage && (
+				<div className="flex justify-center border-t border-border py-3">
+					<button
+						type="button"
+						onClick={() => fetchNextPage()}
+						disabled={isFetchingNextPage}
+						className="text-sm text-muted-foreground hover:text-foreground disabled:opacity-50"
+					>
+						{isFetchingNextPage ? "Chargement..." : "Afficher plus"}
+					</button>
+				</div>
+			)}
 		</section>
 	);
 }

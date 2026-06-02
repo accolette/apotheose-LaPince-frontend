@@ -1,6 +1,6 @@
-import { Cake, Home, Plane, Utensils } from "lucide-react";
+import { Briefcase, Cake, FolderOpen, Home, Plane, Utensils } from "lucide-react";
 
-type ProjectIcon = "plane" | "home" | "cake" | "utensils";
+type ProjectIcon = "plane" | "home" | "cake" | "utensils" | "briefcase" | "folder";
 
 type ProjectDetailsProps = {
 	name: string;
@@ -14,6 +14,8 @@ const projectIcons = {
 	home: Home,
 	cake: Cake,
 	utensils: Utensils,
+	briefcase: Briefcase,
+	folder: FolderOpen,
 };
 
 export function ProjectDetails({
