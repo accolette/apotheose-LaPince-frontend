@@ -1,7 +1,4 @@
-import {
-	type Expense,
-	OperationsRow,
-} from "@/components/project/OperationsRow";
+import { OperationsRow } from "@/components/project/OperationsRow";
 import {
 	Table,
 	TableBody,
@@ -11,62 +8,38 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { useProjects } from "@/context/ProjectsContext";
+import { apiGetOperations } from "@/services/api";
+import type { IOperation } from "@/types/operations";
+import { useEffect, useState } from "react";
 
-const expenses: Expense[] = [
-	{
-		id: "1",
-		description: "Dîner Time Out Market",
-		date: "17 mai",
-		paidBy: "Alice",
-		paidByInitials: "AL",
-		beneficiaries: ["SL", "AL", "BO", "CH"],
-		amount: "128,40 €",
-		category: "restauration",
-	},
-	{
-		id: "2",
-		description: "Airbnb 2 nuits",
-		date: "16 mai",
-		paidBy: "Steve",
-		paidByInitials: "SL",
-		beneficiaries: ["SL", "AL", "BO", "CH"],
-		amount: "320,00 €",
-		category: "hebergement",
-	},
-	{
-		id: "3",
-		description: "Train aller-retour",
-		date: "16 mai",
-		paidBy: "Bob",
-		paidByInitials: "BO",
-		beneficiaries: ["SL", "AL", "BO"],
-		amount: "240,00 €",
-		category: "transport",
-	},
-	{
-		id: "4",
-		description: "Courses petit-déjeuner",
-		date: "17 mai",
-		paidBy: "Chloé",
-		paidByInitials: "CH",
-		beneficiaries: ["SL", "AL", "BO", "CH"],
-		amount: "42,10 €",
-		category: "courses",
-	},
-	{
-		id: "5",
-		description: "Tickets musée + tram",
-		date: "17 mai",
-		paidBy: "Alice",
-		paidByInitials: "AL",
-		beneficiaries: ["AL", "BO"],
-		amount: "68,00 €",
-		category: "activites",
-	},
-];
 
 export function OperationsTable() {
-	return (
+	const { project } = useProjects();
+	const [operations, setOperations] = useState<IOperation[]>([]);
+	const [isLoading, setIsLoading] = useState(false);
+
+	useEffect(() => {
+
+		const projectId = project?.id;
+		if (projectId === undefined) return;
+
+		async function loadOperations(projectId: number) {
+			setIsLoading(true);
+			try {
+				const data = await apiGetOperations(projectId);
+				setOperations(data);
+			} finally {
+				setIsLoading(false);
+			}
+		}
+		loadOperations(projectId);
+
+	}, [project?.id]);
+
+	return isLoading ? (
+		<div>Loading...</div>
+	) : (
 		<section className="overflow-hidden rounded-lg border border-border bg-card">
 			<Table>
 				<TableHeader>
@@ -82,7 +55,7 @@ export function OperationsTable() {
 				</TableHeader>
 
 				<TableBody>
-					{expenses.map((operation) => (
+					{operations.map((operation) => (
 						<OperationsRow key={operation.id} operation={operation} />
 					))}
 				</TableBody>
@@ -92,7 +65,9 @@ export function OperationsTable() {
 						<TableCell colSpan={4} className="text-right">
 							Total
 						</TableCell>
-						<TableCell className="text-right tabular-nums">798,50 €</TableCell>
+						<TableCell className="text-right tabular-nums">
+							798,50 €
+						</TableCell>
 					</TableRow>
 				</TableFooter>
 			</Table>
