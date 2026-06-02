@@ -1,4 +1,7 @@
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DetailsTab } from "./tabs/DetailsTab";
+import { OperationTab } from "./tabs/OperationTab";
+import { OverviewTab } from "./tabs/OverviewTab";
 
 export function ProjectTabs() {
 	return (
@@ -9,6 +12,15 @@ export function ProjectTabs() {
 					<TabsTrigger value="details">Détails</TabsTrigger>
 					<TabsTrigger value="expenses">Opérations</TabsTrigger>
 				</TabsList>
+				<TabsContent value="overview">
+					<OverviewTab />
+				</TabsContent>
+				<TabsContent value="details">
+					<DetailsTab />
+				</TabsContent>
+				<TabsContent value="operations">
+					<OperationTab />
+				</TabsContent>
 			</div>
 		</Tabs>
 	);

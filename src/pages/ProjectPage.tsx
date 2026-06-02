@@ -54,9 +54,6 @@ export function ProjectPage() {
 				<ProjectHeading project={project} />
 				<ProjectTabs />
 				{/*<BudgetAlerts />*/}
-				{/* <OverviewTab /> */}
-				<DetailsTab />
-				{/* <OperationTab />  */}
 			</main>
 		</>
 	);
