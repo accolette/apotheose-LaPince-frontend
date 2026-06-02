@@ -62,7 +62,7 @@ export function OperationsRow({ operation }: { operation: Expense }) {
 			</TableCell>
 
 			<TableCell className="hidden md:table-cell">
-				<ParticipantStack participants={operation.beneficiaries} />
+				<ParticipantStack projectParticipants={[]} />
 			</TableCell>
 
 			<TableCell className="text-right font-medium tabular-nums">

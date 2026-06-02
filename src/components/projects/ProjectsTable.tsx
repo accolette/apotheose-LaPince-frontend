@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { ProjectRow } from "@/components/projects/ProjectRow";
 import {
 	Table,
@@ -7,8 +8,6 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { projects } from "@/types/project";
-
-// todo pour la dynamisation de la table essayer d'utiliser tanstack query comme recommandé dans https://ui.shadcn.com/docs/components/base/data-table
 
 export function ProjectsTable() {
 	return (
