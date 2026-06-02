@@ -10,7 +10,6 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { useCategories } from "@/context/CategoriesContext";
 import type { IOperation } from "@/types/operations";
 
-
 type OperationsRowProps = {
 	operation: IOperation;
 };
@@ -22,20 +21,26 @@ const icons = [
 	{ name: "Divers", icon: Utensils },
 	{ name: "Transport", icon: TrainFront },
 	{ name: "Restauration", icon: Utensils },
-]
-
+];
 
 export function OperationsRow({ operation }: OperationsRowProps) {
 	const { categories } = useCategories();
-	const Icon = icons.find((cat) => cat.name === categories.find((c) => c.id === operation.categoryId)?.name)?.icon || BedDouble;
+	const Icon =
+		icons.find(
+			(cat) =>
+				cat.name ===
+				categories.find((c) => c.id === operation.categoryId)?.name,
+		)?.icon || BedDouble;
 	const category = categories.find((cat) => cat.id === operation.categoryId);
 
 	return (
 		<TableRow>
 			<TableCell>
 				<div className="flex items-center gap-3">
-
-					<span style={{ backgroundColor: category?.color }} className="inline-flex size-8 shrink-0 items-center justify-center rounded-md text-primary-foreground">
+					<span
+						style={{ backgroundColor: category?.color }}
+						className="inline-flex size-8 shrink-0 items-center justify-center rounded-md text-primary-foreground"
+					>
 						<Icon className="size-4" />
 					</span>
 					<p className="font-medium">{operation.name}</p>
@@ -56,7 +61,9 @@ export function OperationsRow({ operation }: OperationsRowProps) {
 			</TableCell>
 
 			<TableCell className="hidden md:table-cell">
-				<ParticipantStack projectParticipants={operation.operationParticipants} />
+				<ParticipantStack
+					projectParticipants={operation.operationParticipants}
+				/>
 			</TableCell>
 
 			<TableCell className="text-right font-medium tabular-nums">

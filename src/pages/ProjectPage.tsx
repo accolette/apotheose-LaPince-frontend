@@ -53,8 +53,7 @@ export function ProjectPage() {
 			<main className="mx-auto max-w-5xl px-6 py-10">
 				<ProjectHeading project={project} />
 				<ProjectTabs />
-				<h1>Ici ma table de projet
-				</h1>
+				<h1>Ici ma table de projet</h1>
 				<OperationTab />
 				{/*<BudgetAlerts />
 						<OverviewTab />
