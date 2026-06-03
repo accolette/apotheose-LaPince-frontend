@@ -13,7 +13,11 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useProject } from "@/context/ProjectContext";
 
-export function ProjectDetailsForm() {
+type ProjectDetailsFormProps = {
+	isEditing: boolean;
+};
+
+export function ProjectDetailsForm({ isEditing }: ProjectDetailsFormProps) {
 	const { isLoading: isProjectLoading, project } = useProject();
 	const [alertThreshold, setAlertThreshold] = useState<number[]>([80]);
 	const hasBudget = Boolean(project?.budget);
@@ -30,10 +34,18 @@ export function ProjectDetailsForm() {
 		return <div>Loading...</div>;
 	}
 	return (
-		<form className="space-y-5 rounded-lg border border-border bg-card p-6">
+		<form
+			className={`space-y-5 rounded-lg border bg-card p-6 ${
+				isEditing ? "border-amber-400" : "border-border"
+			}`}
+		>
 			<div className="space-y-2">
 				<Label htmlFor="project-name">Nom du projet</Label>
-				<Input id="project-name" defaultValue={project.name} />
+				<Input
+					id="project-name"
+					defaultValue={project.name}
+					disabled={!isEditing}
+				/>
 			</div>
 
 			<div className="space-y-2">
@@ -44,12 +56,13 @@ export function ProjectDetailsForm() {
 					id="project-description"
 					defaultValue={project.description}
 					rows={3}
+					disabled={!isEditing}
 				/>
 			</div>
 
 			<div className="space-y-2">
 				<Label>Type</Label>
-				<Select defaultValue={project.type}>
+				<Select defaultValue={project.type} disabled={!isEditing}>
 					<SelectTrigger>
 						<SelectValue placeholder="Choisir un type" />
 					</SelectTrigger>
@@ -75,6 +88,7 @@ export function ProjectDetailsForm() {
 						type="number"
 						defaultValue={project.budget?.amount?.toString() ?? ""}
 						className="pr-8"
+						disabled={!isEditing}
 					/>
 					<span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
 						€
@@ -88,6 +102,7 @@ export function ProjectDetailsForm() {
 						id="budget-alert"
 						checked={isBudgetEnabled}
 						onCheckedChange={setIsBudgetEnabled}
+						disabled={!isEditing}
 					/>
 					<Label htmlFor="budget-alert">Activer un seuil d’alerte</Label>
 				</div>
@@ -100,6 +115,7 @@ export function ProjectDetailsForm() {
 							}}
 							max={100}
 							step={1}
+							disabled={!isEditing}
 						/>
 						<span className="w-12 text-right text-xs font-medium tabular-nums">
 							{alertThreshold[0]} %
