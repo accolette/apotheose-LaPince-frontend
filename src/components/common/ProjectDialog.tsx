@@ -1,6 +1,5 @@
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { useCreateProjectMutation } from "@/lib/useProjectsQuery";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -21,8 +20,9 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { useCreateProjectMutation } from "@/lib/useProjectsQuery";
 
-type Participant = { name: string };
+type Participant = { id: number; name: string };
 
 type ProjectDialogProps = {
 	open: boolean;
@@ -40,7 +40,7 @@ export function ProjectDialog({
 	const { mutate: createProject, isPending } = useCreateProjectMutation();
 
 	const [name, setName] = useState("");
-	const [description, setDescription] = useState("")
+	const [description, setDescription] = useState("");
 	const [type, setType] = useState("Voyage");
 	const [budgetAmount, setBudgetAmount] = useState("");
 	const [alertEnabled, setAlertEnabled] = useState(false);
@@ -60,13 +60,13 @@ export function ProjectDialog({
 
 	// Adds an empty participant slot to the list
 	function handleAddParticipant() {
-		setParticipants((prev) => [...prev, { name: "" }]);
+		setParticipants((prev) => [...prev, { id: Date.now(), name: "" }]);
 	}
 
 	// Updates a participant name at a given index
 	function handleParticipantChange(index: number, value: string) {
 		setParticipants((prev) =>
-			prev.map((p, i) => (i === index ? { name: value } : p)),
+			prev.map((p, i) => (i === index ? { ...p, name: value } : p)),
 		);
 	}
 
@@ -86,10 +86,10 @@ export function ProjectDialog({
 				type,
 				budget: budgetAmount
 					? {
-						amount: Number(budgetAmount),
-						alertEnabled,
-						limitCriteria,
-					}
+							amount: Number(budgetAmount),
+							alertEnabled,
+							limitCriteria,
+						}
 					: undefined,
 				participants: participants.filter((p) => p.name.trim() !== ""),
 			},
@@ -101,7 +101,6 @@ export function ProjectDialog({
 			},
 		);
 	}
-
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
@@ -138,7 +137,10 @@ export function ProjectDialog({
 
 					<div className="space-y-2">
 						<Label>Type</Label>
-						<Select value={type} onValueChange={(value) => setType(value ?? "Voyage")}>
+						<Select
+							value={type}
+							onValueChange={(value) => setType(value ?? "Voyage")}
+						>
 							<SelectTrigger>
 								<SelectValue placeholder="Choisir un type" />
 							</SelectTrigger>
@@ -186,11 +188,7 @@ export function ProjectDialog({
 
 						{alertEnabled && (
 							<div className="flex items-center gap-3">
-								<Slider
-									value={[limitCriteria]}
-									max={100}
-									step={1}
-								/>
+								<Slider value={[limitCriteria]} max={100} step={1} />
 								<span className="w-12 text-right text-xs font-medium tabular-nums">
 									{limitCriteria} %
 								</span>
@@ -205,7 +203,12 @@ export function ProjectDialog({
 								<span className="text-muted-foreground">(optionnel)</span>
 							</Label>
 
-							<Button type="button" variant="ghost" size="sm" onClick={handleAddParticipant}>
+							<Button
+								type="button"
+								variant="ghost"
+								size="sm"
+								onClick={handleAddParticipant}
+							>
 								<Plus className="size-4" />
 								Ajouter
 							</Button>
@@ -213,7 +216,7 @@ export function ProjectDialog({
 
 						<ul className="space-y-2">
 							{participants.map((p, index) => (
-								<li key={index} className="flex items-center gap-2">
+								<li key={p.id} className="flex items-center gap-2">
 									<Input
 										placeholder="Nom du participant"
 										value={p.name}
