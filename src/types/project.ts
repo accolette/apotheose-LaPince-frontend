@@ -2,7 +2,7 @@ export default interface IProject {
 	id: number;
 	appUserId: number;
 	name: string;
-	description: string;
+	description?: string;
 	isArchived: boolean;
 	projectParticipants: IProjectParticipants[];
 }

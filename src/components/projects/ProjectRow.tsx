@@ -2,6 +2,7 @@ import { Bell, ChevronRight } from "lucide-react";
 import { ParticipantStack } from "@/components/common/ParticipantStack";
 import { BudgetProgress } from "@/components/projects/BudgetProgress";
 import { ProjectDetails } from "@/components/projects/ProjectDetails";
+import { useNavigate } from "react-router";
 import type { IDashboardProject } from "@/types/project";
 
 const typeToIcon = {
@@ -35,9 +36,10 @@ export function ProjectRow({ project }: ProjectRowProps) {
 	const percent =
 		limit > 0 ? Math.min(Math.round((spent / limit) * 100), 100) : 0;
 	const alertsCount = project.budget?.unreadAlertsCount ?? 0;
+	const navigate = useNavigate();
 
 	return (
-		<tr className="cursor-pointer transition hover:bg-muted/60">
+		<tr className="cursor-pointer transition hover:bg-muted/60" onClick={() => navigate(`/project/${project.id}`)}>
 			<td className="px-6 py-4">
 				<ProjectDetails
 					name={project.name}

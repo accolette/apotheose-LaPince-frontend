@@ -86,10 +86,10 @@ export function ProjectDialog({
 				type,
 				budget: budgetAmount
 					? {
-						amount: Number(budgetAmount),
-						alertEnabled,
-						limitCriteria,
-					}
+							amount: Number(budgetAmount),
+							alertEnabled,
+							limitCriteria,
+						}
 					: undefined,
 				participants: participants.filter((p) => p.name.trim() !== ""),
 			},

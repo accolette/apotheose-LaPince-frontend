@@ -17,7 +17,7 @@ export function ProjectHeading({ project }: ProjectHeadingProps) {
 				</p>
 			</div>
 			<ParticipantStack
-				projectParticipants={project.projectParticipants}
+				participants={project.projectParticipants}
 				size="md"
 			/>
 		</div>
