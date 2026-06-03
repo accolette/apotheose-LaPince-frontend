@@ -5,12 +5,12 @@ import { ProjectDetails } from "@/components/projects/ProjectDetails";
 import type { IDashboardProject } from "@/types/project";
 
 const typeToIcon = {
-	"Voyage": "plane",
-	"Maison / Coloc": "home",
-	"Anniversaire": "cake",
-	"Repas / Sortie": "utensils",
-	"Pro / Travail": "briefcase",
-	"Autre": "folder",
+	Voyage: "plane",
+	Maison_Coloc: "home",
+	Anniversaire: "cake",
+	Repas_Sortie: "utensils",
+	Pro_Travail: "briefcase",
+	Autre: "folder",
 } as const;
 
 // Formats ISO date to relative string
@@ -32,7 +32,8 @@ export function ProjectRow({ project }: ProjectRowProps) {
 	const icon = typeToIcon[project.type as keyof typeof typeToIcon] ?? "folder";
 	const spent = project.budget?.spent ?? 0;
 	const limit = project.budget?.limit ?? 0;
-	const percent = limit > 0 ? Math.min(Math.round((spent / limit) * 100), 100) : 0;
+	const percent =
+		limit > 0 ? Math.min(Math.round((spent / limit) * 100), 100) : 0;
 	const alertsCount = project.budget?.unreadAlertsCount ?? 0;
 
 	return (

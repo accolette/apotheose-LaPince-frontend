@@ -1,4 +1,3 @@
-import { useProjectsQuery } from "@/lib/useProjectsQuery";
 import { ProjectRow } from "@/components/projects/ProjectRow";
 import {
 	Table,
@@ -7,6 +6,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { useProjectsQuery } from "@/lib/useProjectsQuery";
 
 export function ProjectsTable() {
 	const {

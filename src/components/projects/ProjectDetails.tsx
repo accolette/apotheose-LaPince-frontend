@@ -1,6 +1,19 @@
-import { Briefcase, Cake, FolderOpen, Home, Plane, Utensils } from "lucide-react";
+import {
+	Briefcase,
+	Cake,
+	FolderOpen,
+	Home,
+	Plane,
+	Utensils,
+} from "lucide-react";
 
-type ProjectIcon = "plane" | "home" | "cake" | "utensils" | "briefcase" | "folder";
+type ProjectIcon =
+	| "plane"
+	| "home"
+	| "cake"
+	| "utensils"
+	| "briefcase"
+	| "folder";
 
 type ProjectDetailsProps = {
 	name: string;
