@@ -4,7 +4,9 @@ import type {
 	LoginResponse,
 	UserResponse,
 } from "@/types";
+import type { BudgetSummary } from "@/types/budget";
 import type { IOperation, IOperationsResponse } from "@/types/operations";
+import type { ParticipantBalance } from "@/types/reimbursement";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -87,6 +89,28 @@ export async function apiMe(): Promise<UserResponse> {
 		headers: buildHeaders(true),
 	});
 	return handleResponse(res);
+}
+
+// ── Budget endpoints ─────────────────────────────────────────────────────────
+
+export async function apiGetBudgets(projectId: number): Promise<BudgetSummary> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}/budgets`, {
+		method: "GET",
+		headers: buildHeaders(true),
+	});
+	return handleResponse<BudgetSummary>(res);
+}
+
+// ── Balance endpoints ────────────────────────────────────────────────────────
+
+export async function apiGetBalance(
+	projectId: number,
+): Promise<ParticipantBalance[]> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}/balance`, {
+		method: "GET",
+		headers: buildHeaders(true),
+	});
+	return handleResponse<ParticipantBalance[]>(res);
 }
 
 // ── Category endpoints ───────────────────────────────────────────────────────────
