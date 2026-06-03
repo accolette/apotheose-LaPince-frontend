@@ -1,6 +1,5 @@
 import { StrictMode } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
-import { ProjectProvider } from "@/context/ProjectContext";
 import { AuthPage } from "@/pages/AuthPage";
 import { CategoriesPage } from "@/pages/CategoriesPage";
 import { HomePage } from "@/pages/HomePage";
@@ -21,14 +20,7 @@ export function AppRouter() {
 					/>
 					<Route path="/testcategories" element={<CategoriesPage />} />
 					<Route path="/projects" element={<ProjectsPage />} />
-					<Route
-						path="/project/:id"
-						element={
-							<ProjectProvider>
-								<ProjectPage />
-							</ProjectProvider>
-						}
-					/>
+					<Route path="/project/:id" element={<ProjectPage />} />
 					<Route path="/privacy-policy" element={<LegalsPage />} />
 				</Routes>
 			</BrowserRouter>
