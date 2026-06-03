@@ -1,9 +1,13 @@
-import type { LoginResponse, UserResponse } from "@/types";
 import type {
-	CreateProjectPayload,
-	IDashboardProject,
-	IProjectsDashboardResponse,
-} from "@/types/project";
+	CategoriesResponse,
+	ICategories,
+	LoginResponse,
+	UserResponse,
+} from "@/types";
+import type { BudgetSummary } from "@/types/budget";
+import type { IOperation, IOperationsResponse } from "@/types/operations";
+import type { CreateProjectPayload, IDashboardProject, IProjectsDashboardResponse } from "@/types/project"
+import type { ParticipantBalance } from "@/types/reimbursement";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -113,4 +117,50 @@ export async function apiCreateProject(
 		body: JSON.stringify(payload),
 	});
 	return handleResponse(res);
+}
+
+// ── Budget endpoints ─────────────────────────────────────────────────────────
+
+export async function apiGetBudgets(projectId: number): Promise<BudgetSummary> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}/budgets`, {
+		method: "GET",
+		headers: buildHeaders(true),
+	});
+	return handleResponse<BudgetSummary>(res);
+}
+
+// ── Balance endpoints ────────────────────────────────────────────────────────
+
+export async function apiGetBalance(
+	projectId: number,
+): Promise<ParticipantBalance[]> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}/balance`, {
+		method: "GET",
+		headers: buildHeaders(true),
+	});
+	return handleResponse<ParticipantBalance[]>(res);
+}
+
+// ── Category endpoints ───────────────────────────────────────────────────────────
+
+export async function apiGetCategories(): Promise<ICategories[]> {
+	const res = await fetch(`${BASE_URL}/api/categories`, {
+		method: "GET",
+		headers: buildHeaders(false),
+	});
+	const data = await handleResponse<CategoriesResponse>(res);
+	return data.categories;
+}
+
+// ── Operation endpoints ───────────────────────────────────────────────────────────
+
+export async function apiGetOperations(
+	projectId: number,
+): Promise<IOperation[]> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}/operations`, {
+		method: "GET",
+		headers: buildHeaders(true),
+	});
+	const data = await handleResponse<IOperationsResponse>(res);
+	return data.operations;
 }

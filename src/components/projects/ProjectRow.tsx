@@ -48,7 +48,10 @@ export function ProjectRow({ project }: ProjectRowProps) {
 			</td>
 
 			<td className="hidden px-6 py-4 md:table-cell">
-				<ParticipantStack participants={project.participants} />
+				<ParticipantStack participants={project.participants.map((p) => ({
+					participant: { name: p.name, appUser: null },
+				}))}
+				/>
 			</td>
 
 			<td className="hidden px-6 py-4 lg:table-cell">

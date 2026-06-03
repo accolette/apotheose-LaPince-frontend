@@ -1,7 +1,9 @@
-import type { IDashboardParticipant } from "@/types/project";
+import type { IOperationParticipant } from "@/types/operations";
+import type { IProjectParticipants } from "@/types/project";
+import { getAvatarColor } from "@/utils/avatarColors";
 
 type ParticipantStackProps = {
-	participants: IDashboardParticipant[];
+	participants: IProjectParticipants[] | IOperationParticipant[];
 	size?: "sm" | "md";
 	maxVisible?: number;
 };
@@ -11,20 +13,27 @@ export function ParticipantStack({
 	maxVisible = 3,
 	size = "sm",
 }: ParticipantStackProps) {
-	const visible = participants.slice(0, maxVisible);
-	const remaining = participants.length - visible.length;
+	if (!participants) return null;
+
+	const visibleParticipants = participants.slice(0, maxVisible);
+	const remaining = participants.length - visibleParticipants.length;
 
 	const sizeClasses = {
-		sm: "size-6 text-[10px] flex items-center justify-center rounded-full border-2 border-background bg-muted font-medium text-foreground",
-		md: "size-9 text-xs flex items-center justify-center rounded-full border-2 border-background bg-muted font-medium text-foreground",
+		sm: "size-6 text-[10px] flex items-center justify-center rounded-full border-2 border-background font-medium text-foreground",
+		md: "size-9 text-xs flex items-center justify-center rounded-full border-2 border-background font-medium text-foreground",
 	};
 
 	return (
 		<div className="flex items-center gap-2">
 			<div className="flex -space-x-1.5">
-				{visible.map((p) => (
-					<span key={p.id} className={sizeClasses[size]}>
-						{p.name.slice(0, 2).toUpperCase()}
+				{visibleParticipants.map((p) => (
+					<span
+						key={p.participant.name}
+						className={`${sizeClasses[size]} ${getAvatarColor(
+							p.participant.name,
+						)} text-white`}
+					>
+						{p.participant.name.slice(0, 2).toUpperCase()}
 					</span>
 				))}
 				{remaining > 0 && (

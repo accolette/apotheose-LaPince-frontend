@@ -4,6 +4,8 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
+import CategoriesProvider from "./context/CategoriesContext.tsx";
+import { ProjectProvider } from "./context/ProjectContext.tsx";
 import ProjectsProvider from "./context/ProjectsContext.tsx";
 
 const queryClient = new QueryClient();
@@ -18,9 +20,13 @@ createRoot(rootElement).render(
 	<StrictMode>
 		<QueryClientProvider client={queryClient}>
 			<AuthProvider>
-				<ProjectsProvider>
-					<App />
-				</ProjectsProvider>
+				<CategoriesProvider>
+					<ProjectsProvider>
+						<ProjectProvider>
+							<App />
+						</ProjectProvider>
+					</ProjectsProvider>
+				</CategoriesProvider>
 			</AuthProvider>
 		</QueryClientProvider>
 	</StrictMode>,
