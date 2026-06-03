@@ -1,4 +1,4 @@
-import type { Dispatch, SetStateAction } from "react";
+import { type Dispatch, type SetStateAction, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,7 +12,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useProject } from "@/context/ProjectContext";
-import type { ProjectType, UpdateProjectPayload } from "@/types/project";
+import type { UpdateProjectPayload } from "@/types/project";
 
 type ProjectDetailsFormProps = {
 	formData: UpdateProjectPayload;
@@ -25,13 +25,21 @@ export function ProjectDetailsForm({
 	setFormData,
 	isEditing,
 }: ProjectDetailsFormProps) {
+	useEffect(() => {
+		console.log("FORM DATA CHANGED");
+		console.log(formData);
+		console.log(typeof formData.budget?.amount);
+		console.log(typeof formData.budget?.limitCriteria);
+	}, [formData]);
+
 	const { isLoading: isProjectLoading, project } = useProject();
 	const hasBudget = Boolean(project?.budget);
 	const isBudgetEnabled = Boolean(formData.budget?.amount);
-
+	console.log(formData);
 	if (isProjectLoading || !project) {
 		return <div>Loading...</div>;
 	}
+
 	return (
 		<form
 			className={`space-y-5 rounded-lg border bg-card p-6 ${

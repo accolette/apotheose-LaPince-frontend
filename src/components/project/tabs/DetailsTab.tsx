@@ -54,7 +54,7 @@ export function DetailsTab() {
 				<Button
 					type="button"
 					variant="outline"
-					className="w-full border-dashed"
+					className={`w-full border-dashed ${isEditing && "bg-yellow-400"}`}
 					onClick={handleClick}
 				>
 					{isEditing ? (
