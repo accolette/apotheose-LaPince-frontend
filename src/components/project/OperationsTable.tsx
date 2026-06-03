@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { OperationsRow } from "@/components/project/OperationsRow";
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableFooter,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
 import { useProject } from "@/context/ProjectContext";
 import { apiGetOperations } from "@/services/api";
 import type { IOperation } from "@/types/operations";
@@ -56,12 +64,13 @@ export function OperationsTable() {
 							<TableCell colSpan={4} className="text-right">
 								Total
 							</TableCell>
-							<TableCell className="text-right tabular-nums">798,50 €</TableCell>
+							<TableCell className="text-right tabular-nums">
+								798,50 €
+							</TableCell>
 						</TableRow>
 					</TableFooter>
 				</Table>
 			</section>
 		</>
-
 	);
 }

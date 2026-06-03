@@ -6,7 +6,11 @@ import type {
 } from "@/types";
 import type { BudgetSummary } from "@/types/budget";
 import type { IOperation, IOperationsResponse } from "@/types/operations";
-import type { CreateProjectPayload, IDashboardProject, IProjectsDashboardResponse } from "@/types/project"
+import type {
+	CreateProjectPayload,
+	IDashboardProject,
+	IProjectsDashboardResponse,
+} from "@/types/project";
 import type { ParticipantBalance } from "@/types/reimbursement";
 
 const BASE_URL = import.meta.env.VITE_API_URL;

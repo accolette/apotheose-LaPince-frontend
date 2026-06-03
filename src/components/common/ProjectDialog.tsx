@@ -86,10 +86,10 @@ export function ProjectDialog({
 				type,
 				budget: budgetAmount
 					? {
-							amount: Number(budgetAmount),
-							alertEnabled,
-							limitCriteria,
-						}
+						amount: Number(budgetAmount),
+						alertEnabled,
+						limitCriteria,
+					}
 					: undefined,
 				participants: participants.filter((p) => p.name.trim() !== ""),
 			},
@@ -146,10 +146,10 @@ export function ProjectDialog({
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="Voyage">Voyage</SelectItem>
-								<SelectItem value="Maison / Coloc">Maison / Coloc</SelectItem>
+								<SelectItem value="Maison_Coloc">Maison / Coloc</SelectItem>
 								<SelectItem value="Anniversaire">Anniversaire</SelectItem>
-								<SelectItem value="Repas / Sortie">Repas / Sortie</SelectItem>
-								<SelectItem value="Pro / Travail">Pro / Travail</SelectItem>
+								<SelectItem value="Repas_Sortie">Repas / Sortie</SelectItem>
+								<SelectItem value="Pro_Travail">Pro / Travail</SelectItem>
 								<SelectItem value="Autre">Autre</SelectItem>
 							</SelectContent>
 						</Select>
