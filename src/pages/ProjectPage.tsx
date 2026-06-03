@@ -4,8 +4,6 @@ import { ConnectedHeader } from "@/components/common/ConnectedHeader";
 import { BudgetAlerts } from "@/components/project/BudgetAlerts";
 import { ProjectHeading } from "@/components/project/ProjectHeading";
 import { ProjectTabs } from "@/components/project/ProjectTabs";
-import { DetailsTab } from "@/components/project/tabs/DetailsTab";
-import { OperationTab } from "@/components/project/tabs/OperationTab";
 import { useAuth } from "@/context/AuthContext";
 import { useProject } from "@/context/ProjectContext";
 
@@ -51,10 +49,8 @@ export function ProjectPage() {
 			<ConnectedHeader />
 			<main className="mx-auto max-w-5xl px-6 py-10">
 				<ProjectHeading project={project} />
-				<ProjectTabs />
 				<BudgetAlerts />
-				<DetailsTab />
-				<OperationTab />
+				<ProjectTabs />
 			</main>
 		</>
 	);
