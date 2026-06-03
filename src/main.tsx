@@ -3,8 +3,9 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
-import ProjectsProvider from "./context/ProjectsContext.tsx";
 import CategoriesProvider from "./context/CategoriesContext.tsx";
+import { ProjectProvider } from "./context/ProjectContext.tsx";
+import ProjectsProvider from "./context/ProjectsContext.tsx";
 
 const rootElement = document.getElementById("root");
 
@@ -17,7 +18,9 @@ createRoot(rootElement).render(
 		<AuthProvider>
 			<CategoriesProvider>
 				<ProjectsProvider>
-					<App />
+					<ProjectProvider>
+						<App />
+					</ProjectProvider>
 				</ProjectsProvider>
 			</CategoriesProvider>
 		</AuthProvider>

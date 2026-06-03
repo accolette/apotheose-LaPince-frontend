@@ -1,8 +1,12 @@
-import type { LoginResponse, UserResponse } from "@/types";
+import type {
+	CategoriesResponse,
+	ICategories,
+	LoginResponse,
+	UserResponse,
+} from "@/types";
 import type { BudgetSummary } from "@/types/budget";
-import type { ParticipantBalance } from "@/types/reimbursement";
-import type { CategoriesResponse, ICategories, LoginResponse, UserResponse } from "@/types";
 import type { IOperation, IOperationsResponse } from "@/types/operations";
+import type { ParticipantBalance } from "@/types/reimbursement";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -118,13 +122,13 @@ export async function apiGetCategories(): Promise<ICategories[]> {
 	});
 	const data = await handleResponse<CategoriesResponse>(res);
 	return data.categories;
-
 }
-
 
 // ── Operation endpoints ───────────────────────────────────────────────────────────
 
-export async function apiGetOperations(projectId: number): Promise<IOperation[]> {
+export async function apiGetOperations(
+	projectId: number,
+): Promise<IOperation[]> {
 	const res = await fetch(`${BASE_URL}/api/projects/${projectId}/operations`, {
 		method: "GET",
 		headers: buildHeaders(true),

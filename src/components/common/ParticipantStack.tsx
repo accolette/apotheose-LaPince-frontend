@@ -1,5 +1,5 @@
-import type { IProjectParticipants } from "@/types/project";
 import type { IOperationParticipant } from "@/types/operations";
+import type { IProjectParticipants } from "@/types/project";
 
 type ParticipantStackProps = {
 	projectParticipants: IProjectParticipants[] | IOperationParticipant[];
