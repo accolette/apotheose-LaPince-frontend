@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,23 +12,22 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useProject } from "@/context/ProjectContext";
+import type { ProjectType, UpdateProjectPayload } from "@/types/project";
 
 type ProjectDetailsFormProps = {
+	formData: UpdateProjectPayload;
+	setFormData: Dispatch<SetStateAction<UpdateProjectPayload>>;
 	isEditing: boolean;
 };
 
-export function ProjectDetailsForm({ isEditing }: ProjectDetailsFormProps) {
+export function ProjectDetailsForm({
+	formData,
+	setFormData,
+	isEditing,
+}: ProjectDetailsFormProps) {
 	const { isLoading: isProjectLoading, project } = useProject();
-	const [alertThreshold, setAlertThreshold] = useState<number[]>([80]);
 	const hasBudget = Boolean(project?.budget);
-	const [isBudgetEnabled, setIsBudgetEnabled] = useState(hasBudget);
-
-	useEffect(() => {
-		if (project?.budget) {
-			setIsBudgetEnabled(true);
-			setAlertThreshold([Number(project.budget.limitCriteria)]);
-		}
-	}, [project]);
+	const isBudgetEnabled = Boolean(formData.budget?.amount);
 
 	if (isProjectLoading || !project) {
 		return <div>Loading...</div>;
@@ -43,7 +42,13 @@ export function ProjectDetailsForm({ isEditing }: ProjectDetailsFormProps) {
 				<Label htmlFor="project-name">Nom du projet</Label>
 				<Input
 					id="project-name"
-					defaultValue={project.name}
+					value={formData.name ?? ""}
+					onChange={(e) =>
+						setFormData((prev) => ({
+							...prev,
+							name: e.target.value,
+						}))
+					}
 					disabled={!isEditing}
 				/>
 			</div>
@@ -54,15 +59,31 @@ export function ProjectDetailsForm({ isEditing }: ProjectDetailsFormProps) {
 				</Label>
 				<Textarea
 					id="project-description"
-					defaultValue={project.description}
-					rows={3}
+					value={formData.description ?? ""}
+					onChange={(e) =>
+						setFormData((prev) => ({
+							...prev,
+							description: e.target.value,
+						}))
+					}
 					disabled={!isEditing}
 				/>
 			</div>
 
 			<div className="space-y-2">
 				<Label>Type</Label>
-				<Select defaultValue={project.type} disabled={!isEditing}>
+				<Select
+					value={formData.type ?? project.type}
+					onValueChange={(value) => {
+						if (!value) return;
+
+						setFormData((prev) => ({
+							...prev,
+							type: value,
+						}));
+					}}
+					disabled={!isEditing}
+				>
 					<SelectTrigger>
 						<SelectValue placeholder="Choisir un type" />
 					</SelectTrigger>
@@ -86,9 +107,19 @@ export function ProjectDetailsForm({ isEditing }: ProjectDetailsFormProps) {
 					<Input
 						id="project-budget"
 						type="number"
-						defaultValue={project.budget?.amount?.toString() ?? ""}
-						className="pr-8"
 						disabled={!isEditing}
+						value={formData.budget?.amount ?? ""}
+						onChange={(e) =>
+							setFormData((prev) => ({
+								...prev,
+								budget: {
+									...prev.budget,
+									id: prev.budget?.id ?? 0,
+									amount: Number(e.target.value),
+									limitCriteria: prev.budget?.limitCriteria ?? 80,
+								},
+							}))
+						}
 					/>
 					<span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
 						€
@@ -101,7 +132,18 @@ export function ProjectDetailsForm({ isEditing }: ProjectDetailsFormProps) {
 					<Switch
 						id="budget-alert"
 						checked={isBudgetEnabled}
-						onCheckedChange={setIsBudgetEnabled}
+						onCheckedChange={(checked) =>
+							setFormData((prev) => ({
+								...prev,
+								budget: checked
+									? {
+											id: prev.budget?.id ?? 0,
+											amount: prev.budget?.amount ?? 0,
+											limitCriteria: prev.budget?.limitCriteria ?? 80,
+										}
+									: undefined,
+							}))
+						}
 						disabled={!isEditing}
 					/>
 					<Label htmlFor="budget-alert">Activer un seuil d’alerte</Label>
@@ -109,16 +151,24 @@ export function ProjectDetailsForm({ isEditing }: ProjectDetailsFormProps) {
 				{isBudgetEnabled && (
 					<div className="flex items-center gap-3">
 						<Slider
-							value={alertThreshold}
-							onValueChange={(value) => {
-								setAlertThreshold(Array.isArray(value) ? [...value] : [value]);
-							}}
+							disabled={!isEditing}
 							max={100}
 							step={1}
-							disabled={!isEditing}
+							value={[formData.budget?.limitCriteria ?? 80]}
+							onValueChange={(value) =>
+								setFormData((prev) => ({
+									...prev,
+									budget: {
+										...prev.budget,
+										id: prev.budget?.id ?? 0,
+										amount: prev.budget?.amount ?? 0,
+										limitCriteria: Array.isArray(value) ? value[0] : value,
+									},
+								}))
+							}
 						/>
 						<span className="w-12 text-right text-xs font-medium tabular-nums">
-							{alertThreshold[0]} %
+							{formData.budget?.limitCriteria} %
 						</span>
 					</div>
 				)}

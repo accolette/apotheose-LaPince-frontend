@@ -6,7 +6,7 @@ export default interface IProject {
 	isArchived: boolean;
 	projectParticipants: IProjectParticipants[];
 	budget: IBudget;
-	type: string;
+	type: ProjectType;
 }
 
 export interface IProjectParticipants {
@@ -24,10 +24,41 @@ interface IAppUser {
 }
 
 interface IBudget {
-	id: number;
+	id?: number;
 	amount: number;
 	limitCriteria: number;
 }
+
+export type UpdateProjectPayload = {
+	name?: string;
+	description?: string;
+	type?: ProjectType;
+	isArchived?: boolean;
+	budget?: {
+		id?: number;
+		amount?: number;
+		limitCriteria?: number;
+	};
+	participants?: IParticipant[];
+};
+
+export type UpdateProjectResponse = {
+	projectUpdate: {
+		project: IProject;
+		budget: {
+			amount: number;
+			limitCriteria: number;
+		};
+	};
+};
+
+export type ProjectType =
+	| "Voyage"
+	| "Maison_Coloc"
+	| "Anniversaire"
+	| "Repas_Sortie"
+	| "Pro_Travail"
+	| "Autre";
 
 // Initial setup before dynamisation of page
 //TODO: Remove it when everythings is setup
