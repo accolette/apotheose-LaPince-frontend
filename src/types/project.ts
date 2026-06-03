@@ -94,3 +94,45 @@ export const projects: Project[] = [
 		balanceStatus: "neutral",
 	},
 ];
+
+// DASHBOARD
+export interface IDashboardParticipant {
+	id: number;
+	name: string;
+	appUserId: number | null;
+}
+
+export interface IDashboardBudget {
+	limit: number;
+	limitCriteria: number;
+	spent: number;
+	unreadAlertsCount: number;
+}
+
+export interface IDashboardProject {
+	id: number;
+	name: string;
+	type: string;
+	updatedAt: string;
+	operationsCount: number;
+	participants: IDashboardParticipant[];
+	budget: IDashboardBudget | null;
+}
+
+export interface IProjectsDashboardResponse {
+	projects: IDashboardProject[];
+	nextCursor: number | null;
+	hasMore: boolean;
+}
+
+export type CreateProjectPayload = {
+	name: string;
+	description?: string;
+	type?: string;
+	budget?: {
+		amount: number;
+		alertEnabled: boolean;
+		limitCriteria: number;
+	};
+	participants?: { name: string }[];
+};

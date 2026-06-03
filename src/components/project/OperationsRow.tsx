@@ -61,7 +61,7 @@ export function OperationsRow({ operation }: OperationsRowProps) {
 			</TableCell>
 			<TableCell className="hidden md:table-cell">
 				<ParticipantStack
-					projectParticipants={operation.operationParticipants}
+					participants={operation.operationParticipants}
 				/>
 			</TableCell>
 			<TableCell className="text-right font-medium tabular-nums">
