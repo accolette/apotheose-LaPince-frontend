@@ -10,7 +10,7 @@ export interface IOperation {
 	appUserId: number;
 	name: string;
 	categoryId: number;
-	amount: string;
+	amount: number;
 	date: string;
 	payerParticipantId: number;
 	appUser: {
