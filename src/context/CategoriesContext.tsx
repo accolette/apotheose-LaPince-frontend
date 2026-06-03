@@ -21,7 +21,9 @@ interface CategoriesProviderProps {
 
 // ── Categories provider ─────────────────────────────────────────────────────────────
 
-export default function CategoriesProvider({ children }: CategoriesProviderProps) {
+export default function CategoriesProvider({
+	children,
+}: CategoriesProviderProps) {
 	const [categories, setCategories] = useState<ICategories[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 

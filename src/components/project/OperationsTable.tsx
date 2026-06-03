@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { OperationsRow } from "@/components/project/OperationsRow";
 import {
 	Table,
@@ -11,8 +12,6 @@ import {
 import { useProjects } from "@/context/ProjectsContext";
 import { apiGetOperations } from "@/services/api";
 import type { IOperation } from "@/types/operations";
-import { useEffect, useState } from "react";
-
 
 export function OperationsTable() {
 	const { project } = useProjects();
@@ -20,7 +19,6 @@ export function OperationsTable() {
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
-
 		const projectId = project?.id;
 		if (projectId === undefined) return;
 
@@ -34,7 +32,6 @@ export function OperationsTable() {
 			}
 		}
 		loadOperations(projectId);
-
 	}, [project?.id]);
 
 	return isLoading ? (
@@ -65,9 +62,7 @@ export function OperationsTable() {
 						<TableCell colSpan={4} className="text-right">
 							Total
 						</TableCell>
-						<TableCell className="text-right tabular-nums">
-							798,50 €
-						</TableCell>
+						<TableCell className="text-right tabular-nums">798,50 €</TableCell>
 					</TableRow>
 				</TableFooter>
 			</Table>
