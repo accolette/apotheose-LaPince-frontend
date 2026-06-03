@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -16,11 +16,19 @@ import { useProject } from "@/context/ProjectContext";
 export function ProjectDetailsForm() {
 	const { isLoading: isProjectLoading, project } = useProject();
 	const [alertThreshold, setAlertThreshold] = useState<number[]>([80]);
+	const hasBudget = Boolean(project?.budget);
+	const [isBudgetEnabled, setIsBudgetEnabled] = useState(hasBudget);
+
+	useEffect(() => {
+		if (project?.budget) {
+			setIsBudgetEnabled(true);
+			setAlertThreshold([Number(project.budget.limitCriteria)]);
+		}
+	}, [project]);
 
 	if (isProjectLoading || !project) {
 		return <div>Loading...</div>;
 	}
-
 	return (
 		<form className="space-y-5 rounded-lg border border-border bg-card p-6">
 			<div className="space-y-2">
@@ -76,23 +84,28 @@ export function ProjectDetailsForm() {
 
 			<div className="space-y-3">
 				<div className="flex items-center gap-2">
-					<Switch id="budget-alert" defaultChecked />
+					<Switch
+						id="budget-alert"
+						checked={isBudgetEnabled}
+						onCheckedChange={setIsBudgetEnabled}
+					/>
 					<Label htmlFor="budget-alert">Activer un seuil d’alerte</Label>
 				</div>
-
-				<div className="flex items-center gap-3">
-					<Slider
-						value={alertThreshold}
-						onValueChange={(value) => {
-							setAlertThreshold(Array.isArray(value) ? [...value] : [value]);
-						}}
-						max={100}
-						step={1}
-					/>
-					<span className="w-12 text-right text-xs font-medium tabular-nums">
-						{alertThreshold[0]} %
-					</span>
-				</div>
+				{isBudgetEnabled && (
+					<div className="flex items-center gap-3">
+						<Slider
+							value={alertThreshold}
+							onValueChange={(value) => {
+								setAlertThreshold(Array.isArray(value) ? [...value] : [value]);
+							}}
+							max={100}
+							step={1}
+						/>
+						<span className="w-12 text-right text-xs font-medium tabular-nums">
+							{alertThreshold[0]} %
+						</span>
+					</div>
+				)}
 			</div>
 		</form>
 	);
