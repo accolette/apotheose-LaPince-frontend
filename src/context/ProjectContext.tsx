@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useState } from "react";
 import { apiGetBalance, apiGetBudgets } from "@/services/api";
 import type { BudgetSummary } from "@/types/budget";
 import type IProject from "@/types/project";
-import type { ParticipantBalance } from "@/types/reimbursement";
+import type { Reimbursement } from "@/types/reimbursement";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -14,7 +14,7 @@ type ProjectContextType = {
 	errorCode: number | null;
 	project: IProject | null;
 	budgetSummary: BudgetSummary | null;
-	reimbursements: ParticipantBalance[];
+	reimbursements: Reimbursement[];
 	getProjectById: (projectId: number) => void;
 };
 
@@ -35,9 +35,7 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 	const [budgetSummary, setBudgetSummary] = useState<BudgetSummary | null>(
 		null,
 	);
-	const [reimbursements, setReimbursements] = useState<ParticipantBalance[]>(
-		[],
-	);
+	const [reimbursements, setReimbursements] = useState<Reimbursement[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [errorCode, setErrorCode] = useState<number | null>(null);
