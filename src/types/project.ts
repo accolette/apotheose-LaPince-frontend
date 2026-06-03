@@ -5,6 +5,8 @@ export default interface IProject {
 	description: string;
 	isArchived: boolean;
 	projectParticipants: IProjectParticipants[];
+	budget: IBudget;
+	type: string;
 }
 
 export interface IProjectParticipants {
@@ -19,6 +21,12 @@ interface IParticipant {
 
 interface IAppUser {
 	id: number;
+}
+
+interface IBudget {
+	id: number;
+	amount: number;
+	limitCriteria: number;
 }
 
 // Initial setup before dynamisation of page
