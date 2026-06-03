@@ -1,7 +1,12 @@
+import type {
+	CategoriesResponse,
+	ICategories,
+	LoginResponse,
+	UserResponse,
+} from "@/types";
 import type { BudgetSummary } from "@/types/budget";
-import type { ParticipantBalance } from "@/types/reimbursement";
-import type { CategoriesResponse, ICategories, LoginResponse, UserResponse } from "@/types";
 import type { IOperation, IOperationsResponse } from "@/types/operations";
+import type { ParticipantBalance } from "@/types/reimbursement";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -131,4 +136,3 @@ export async function apiGetOperations(
 	const data = await handleResponse<IOperationsResponse>(res);
 	return data.operations;
 }
-
