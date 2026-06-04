@@ -1,9 +1,12 @@
-import { CircleFadingArrowUpIcon, Plus, Save } from "lucide-react";
+import { CircleFadingArrowUpIcon, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { useProject } from "@/context/ProjectContext";
-import type { UpdateProjectPayload } from "@/types/project";
+import type {
+	IProjectParticipants,
+	UpdateProjectPayload,
+} from "@/types/project";
 import { ParticipantsCard } from "../ParticipantsCard";
 import { ProjectDetailsForm } from "../ProjectDetailsForm";
 
@@ -22,7 +25,8 @@ export function DetailsTab() {
 		description: "",
 		type: undefined,
 	});
-	const [participantsFormData, setParticipantsFormData] = useState();
+	const [participantsFormData, setParticipantsFormData] =
+		useState<IProjectParticipants>();
 
 	useEffect(() => {
 		// Wait until project data has been loaded
@@ -59,7 +63,7 @@ export function DetailsTab() {
 		// When already in edit mode:
 		// save current form data before returning to read-only mode
 		if (isEditingParticipants) {
-			updateProjectParticipantsById();
+			// updateProjectParticipantsById();
 		}
 		// Toggle edit mode
 		setIsEditingParticipants(!isEditingParticipants);
@@ -98,7 +102,11 @@ export function DetailsTab() {
 			</div>
 
 			<div className="flex-1 space-y-6">
-				<ParticipantsCard // Controls disabled/enabled state of inputs
+				<ParticipantsCard // Current form values
+					participantsFormData={participantsFormData}
+					// State updater passed to child component
+					setParticipantsFormData={setParticipantsFormData}
+					// Controls disabled/enabled state of inputs
 					isEditingParticipants={isEditingParticipants}
 				/>
 				<Button
@@ -114,7 +122,7 @@ export function DetailsTab() {
 						</>
 					) : (
 						<>
-							<Plus className="size-4" />
+							<CircleFadingArrowUpIcon className="size-4" />
 							Modifier
 						</>
 					)}
