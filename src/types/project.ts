@@ -2,7 +2,7 @@ export default interface IProject {
 	id: number;
 	appUserId: number;
 	name: string;
-	description: string;
+	description?: string;
 	isArchived: boolean;
 	projectParticipants: IProjectParticipants[];
 	budget: IBudget;
@@ -163,6 +163,7 @@ export interface IProjectsDashboardResponse {
 	projects: IDashboardProject[];
 	nextCursor: number | null;
 	hasMore: boolean;
+	total: number;
 }
 
 export type CreateProjectPayload = {
