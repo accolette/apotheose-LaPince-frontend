@@ -9,7 +9,7 @@ import {
 import { useAuth } from "@/context/AuthContext";
 
 export function ConnectedHeader() {
-	const { logout } = useAuth();
+	const { logout, user } = useAuth();
 	const navigate = useNavigate();
 
 	async function handleLogout() {
@@ -37,12 +37,13 @@ export function ConnectedHeader() {
 
 					<DropdownMenu>
 						<DropdownMenuTrigger className="flex size-8 items-center justify-center rounded-full border border-border bg-muted text-xs font-medium transition hover:border-foreground">
-							SL
+							{/* User's initials */}
+							{user?.name.slice(0, 2).toUpperCase()}
 						</DropdownMenuTrigger>
 
 						<DropdownMenuContent align="end">
 							<div className="px-2 py-1.5">
-								<p className="text-sm font-medium">Steve</p>
+								<p className="text-sm font-medium">{user?.name}</p>
 							</div>
 							<DropdownMenuItem
 								className="text-destructive"

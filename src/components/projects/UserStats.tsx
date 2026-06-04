@@ -1,11 +1,18 @@
 import { ArrowDownLeft, ArrowUpRight, Folder, Wallet } from "lucide-react";
-
 import { StatCard } from "@/components/projects/StatCard";
+import { useProjectsQuery } from "@/lib/useProjectsQuery";
 
 export function UserStats() {
+	const { data } = useProjectsQuery();
+	const activeProjectsCount = data?.pages[0]?.total ?? 0;
+
 	return (
 		<section className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
-			<StatCard icon={Folder} label="Projets actifs" value="3" />
+			<StatCard
+				icon={Folder}
+				label="Projets actifs"
+				value={String(activeProjectsCount)}
+			/>
 
 			<StatCard icon={ArrowDownLeft} label="Tu dois" value="45,20 €" />
 

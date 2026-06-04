@@ -1,25 +1,116 @@
-import { Plus } from "lucide-react";
+import { CircleFadingArrowUpIcon, Plus, Save } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import { Button } from "@/components/ui/button";
+import { useProject } from "@/context/ProjectContext";
+import type { UpdateProjectPayload } from "@/types/project";
 import { ParticipantsCard } from "../ParticipantsCard";
 import { ProjectDetailsForm } from "../ProjectDetailsForm";
 
 export function DetailsTab() {
+	const params = useParams();
+	const projectId = Number(params.id);
+	// Controls whether the form is editable or read-only
+	const [isEditingDetails, setIsEditingDetails] = useState(false);
+	const [isEditingParticipants, setIsEditingParticipants] = useState(false);
+	// Access project data and update function from context
+	const { updateProjectById, project } = useProject();
+
+	// Local form state used by controlled inputs
+	const [formData, setFormData] = useState<UpdateProjectPayload>({
+		name: "",
+		description: "",
+		type: undefined,
+	});
+
+	useEffect(() => {
+		// Wait until project data has been loaded
+		if (!project) return;
+
+		// Initialize form state from project data
+		// This runs when the project is fetched or updated
+		setFormData({
+			name: project.name,
+			description: project.description,
+			type: project.type,
+			budget: project.budget
+				? {
+						id: project.budget.id,
+						amount: Number(project.budget.amount),
+						limitCriteria: Number(project.budget.limitCriteria),
+					}
+				: undefined,
+		});
+	}, [project]);
+
+	function handleClickDetailsForm() {
+		// When already in edit mode:
+		// save current form data before returning to read-only mode
+		if (isEditingDetails) {
+			updateProjectById(projectId, formData);
+		}
+
+		// Toggle edit mode
+		setIsEditingDetails(!isEditingDetails);
+	}
+
+	function handleClickParticipantsForm() {
+		// When already in edit mode:
+		// save current form data before returning to read-only mode
+		// Toggle edit mode
+	}
+
 	return (
 		<div className="flex flex-col gap-6 md:flex-row">
 			<div className="flex-1 space-y-6">
-				<ProjectDetailsForm />
-			</div>
-			<div className="flex-1">
-				<ParticipantsCard />
-				{/* TODO: créer un contexte pour partager le state qui gère la modale du projet 
-				/Users/w0dr/Oclock/apo/projet-cda-LaPince-frontend/src/components/common/ProjectDialog.tsx*/}
+				<ProjectDetailsForm
+					// Current form values
+					formData={formData}
+					// State updater passed to child component
+					setFormData={setFormData}
+					// Controls disabled/enabled state of inputs
+					isEditingDetails={isEditingDetails}
+				/>
+
 				<Button
 					type="button"
 					variant="outline"
-					className="w-full border-dashed"
+					className={`w-full border-dashed ${isEditingDetails && "bg-yellow-400"}`}
+					onClick={handleClickDetailsForm}
 				>
-					<Plus className="size-4" />
-					Modifier
+					{isEditingDetails ? (
+						<>
+							<Save className="size-4" />
+							Sauvegarder
+						</>
+					) : (
+						<>
+							<CircleFadingArrowUpIcon className="size-4" />
+							Modifier
+						</>
+					)}
+				</Button>
+			</div>
+
+			<div className="flex-1">
+				<ParticipantsCard />
+				<Button
+					type="button"
+					variant="outline"
+					className={`w-full border-dashed ${isEditingParticipants && "bg-yellow-400"}`}
+					onClick={handleClickParticipantsForm}
+				>
+					{isEditingParticipants ? (
+						<>
+							<Save className="size-4" />
+							Sauvegarder
+						</>
+					) : (
+						<>
+							<Plus className="size-4" />
+							Modifier
+						</>
+					)}
 				</Button>
 			</div>
 		</div>

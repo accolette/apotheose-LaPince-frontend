@@ -6,7 +6,13 @@ import type {
 } from "@/types";
 import type { BudgetSummary } from "@/types/budget";
 import type { IOperation, IOperationsResponse } from "@/types/operations";
-import type { CreateProjectPayload, IDashboardProject, IProjectsDashboardResponse } from "@/types/project"
+import type {
+	CreateProjectPayload,
+	IDashboardProject,
+	IProjectsDashboardResponse,
+	UpdateProjectPayload,
+	UpdateProjectResponse,
+} from "@/types/project";
 import type { Reimbursement } from "@/types/reimbursement";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
@@ -117,6 +123,18 @@ export async function apiCreateProject(
 		body: JSON.stringify(payload),
 	});
 	return handleResponse(res);
+}
+
+export async function apiUpdateProject(
+	projectId: number,
+	payload: UpdateProjectPayload,
+): Promise<UpdateProjectResponse> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}`, {
+		method: "PATCH",
+		headers: buildHeaders(true),
+		body: JSON.stringify(payload),
+	});
+	return handleResponse<UpdateProjectResponse>(res);
 }
 
 // ── Budget endpoints ─────────────────────────────────────────────────────────
