@@ -1,34 +1,40 @@
-import { useEffect, useState } from "react";
 import { OperationsRow } from "@/components/project/OperationsRow";
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useProject } from "@/context/ProjectContext";
-import { apiGetOperations } from "@/services/api";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableFooter,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
 import type { IOperation } from "@/types/operations";
 
-export function OperationsTable() {
-	const { project } = useProject();
-	const [operations, setOperations] = useState<IOperation[]>([]);
-	const [isLoading, setIsLoading] = useState(false);
+type OperationsTableProps = {
+	operations: IOperation[];
+	isLoading: boolean;
+	error: string | null;
+	setSelectedOperation: (operation: IOperation | null) => void;
+	setIsOperationDialogOpen: (open: boolean) => void;
+};
 
-	useEffect(() => {
-		const projectId = project?.id;
-		if (projectId === undefined) return;
+export function OperationsTable({
+	operations,
+	isLoading,
+	error,
+	setSelectedOperation,
+	setIsOperationDialogOpen,
+}: OperationsTableProps) {
+	const totalAmount = operations.reduce(
+		(total, op) => total + Number(op.amount),
+		0,
+	);
 
-		async function loadOperations(projectId: number) {
-			setIsLoading(true);
-			try {
-				const data = await apiGetOperations(projectId);
-				setOperations(data);
-			} finally {
-				setIsLoading(false);
-			}
-		}
-		loadOperations(projectId);
-	}, [project?.id]);
+	if (isLoading) return <div>Loading...</div>;
 
-	return isLoading ? (
-		<div>Loading...</div>
-	) : (
+	if (error) return <div>{error}</div>;
+
+	return (
 		<>
 			<p>{operations.length} opérations</p>
 			<section className="overflow-hidden rounded-lg border border-border bg-card">
@@ -47,7 +53,12 @@ export function OperationsTable() {
 
 					<TableBody>
 						{operations.map((operation) => (
-							<OperationsRow key={operation.id} operation={operation} />
+							<OperationsRow
+								key={operation.id}
+								operation={operation}
+								setSelectedOperation={setSelectedOperation}
+								setIsOperationDialogOpen={setIsOperationDialogOpen}
+							/>
 						))}
 					</TableBody>
 
@@ -56,12 +67,16 @@ export function OperationsTable() {
 							<TableCell colSpan={4} className="text-right">
 								Total
 							</TableCell>
-							<TableCell className="text-right tabular-nums">798,50 €</TableCell>
+							<TableCell className="text-right tabular-nums">
+								{totalAmount.toLocaleString("fr-FR", {
+									style: "currency",
+									currency: "EUR",
+								})}
+							</TableCell>
 						</TableRow>
 					</TableFooter>
 				</Table>
 			</section>
 		</>
-
 	);
 }
