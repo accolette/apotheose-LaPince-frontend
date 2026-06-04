@@ -68,6 +68,8 @@ export function BudgetOverview() {
 
 			<div className="flex flex-wrap items-center gap-2">
 				{spentByCategory.map((category) => {
+					// TODO: replace categoryIconMap with category.icon from useCategories() and API is merged
+
 					const Icon = categoryIconMap[category.categoryName] ?? Tag;
 
 					return (

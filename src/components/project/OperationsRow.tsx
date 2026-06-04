@@ -73,9 +73,7 @@ export function OperationsRow({
 				</div>
 			</TableCell>
 			<TableCell className="hidden md:table-cell">
-				<ParticipantStack
-					projectParticipants={operation.operationParticipants}
-				/>
+				<ParticipantStack participants={operation.operationParticipants} />
 			</TableCell>
 			<TableCell className="text-right font-medium tabular-nums">
 				{amount.toLocaleString("fr-FR", {

@@ -2,6 +2,8 @@ import { BalanceCard } from "@/components/project/BalanceCard";
 import { BudgetOverview } from "@/components/project/BudgetOverview";
 import { SpendingByCategory } from "@/components/project/SpendingByCategory";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DetailsTab } from "./tabs/DetailsTab";
+import { OperationTab } from "./tabs/OperationTab";
 
 export function ProjectTabs() {
 	return (
@@ -25,9 +27,13 @@ export function ProjectTabs() {
 				</div>
 			</TabsContent>
 
-			<TabsContent value="details">{/* DetailsTab — à venir */}</TabsContent>
+			<TabsContent value="details">
+				<DetailsTab />
+			</TabsContent>
 
-			<TabsContent value="expenses">{/* OperationTab — à venir */}</TabsContent>
+			<TabsContent value="expenses">
+				<OperationTab />
+			</TabsContent>
 		</Tabs>
 	);
 }

@@ -6,6 +6,13 @@ import type {
 } from "@/types";
 import type { BudgetSummary } from "@/types/budget";
 import type { IOperation, IOperationsResponse } from "@/types/operations";
+import type {
+	CreateProjectPayload,
+	IDashboardProject,
+	IProjectsDashboardResponse,
+	UpdateProjectPayload,
+	UpdateProjectResponse,
+} from "@/types/project";
 import type { ParticipantBalance } from "@/types/reimbursement";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
@@ -89,6 +96,45 @@ export async function apiMe(): Promise<UserResponse> {
 		headers: buildHeaders(true),
 	});
 	return handleResponse(res);
+}
+
+// ── Projects endpoints ───────────────────────────────────────────────────────
+
+export async function apiGetProjects(
+	cursor?: number,
+): Promise<IProjectsDashboardResponse> {
+	const url = cursor
+		? `${BASE_URL}/api/projects?cursor=${cursor}`
+		: `${BASE_URL}/api/projects`;
+
+	const res = await fetch(url, {
+		method: "GET",
+		headers: buildHeaders(true),
+	});
+	return handleResponse(res);
+}
+
+export async function apiCreateProject(
+	payload: CreateProjectPayload,
+): Promise<{ project: IDashboardProject }> {
+	const res = await fetch(`${BASE_URL}/api/projects`, {
+		method: "POST",
+		headers: buildHeaders(true),
+		body: JSON.stringify(payload),
+	});
+	return handleResponse(res);
+}
+
+export async function apiUpdateProject(
+	projectId: number,
+	payload: UpdateProjectPayload,
+): Promise<UpdateProjectResponse> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}`, {
+		method: "PATCH",
+		headers: buildHeaders(true),
+		body: JSON.stringify(payload),
+	});
+	return handleResponse<UpdateProjectResponse>(res);
 }
 
 // ── Budget endpoints ─────────────────────────────────────────────────────────
