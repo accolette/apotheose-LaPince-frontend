@@ -13,7 +13,7 @@ import type {
 	UpdateProjectPayload,
 	UpdateProjectResponse,
 } from "@/types/project";
-import type { ParticipantBalance } from "@/types/reimbursement";
+import type { Reimbursement } from "@/types/reimbursement";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -151,12 +151,12 @@ export async function apiGetBudgets(projectId: number): Promise<BudgetSummary> {
 
 export async function apiGetBalance(
 	projectId: number,
-): Promise<ParticipantBalance[]> {
+): Promise<Reimbursement[]> {
 	const res = await fetch(`${BASE_URL}/api/projects/${projectId}/balance`, {
 		method: "GET",
 		headers: buildHeaders(true),
 	});
-	return handleResponse<ParticipantBalance[]>(res);
+	return handleResponse<Reimbursement[]>(res);
 }
 
 // ── Category endpoints ───────────────────────────────────────────────────────────
