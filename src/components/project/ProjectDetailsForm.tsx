@@ -19,23 +19,14 @@ type ProjectDetailsFormProps = {
 	setFormData: Dispatch<SetStateAction<UpdateProjectPayload>>;
 	isEditing: boolean;
 };
-
 export function ProjectDetailsForm({
 	formData,
 	setFormData,
 	isEditing,
 }: ProjectDetailsFormProps) {
-	useEffect(() => {
-		console.log("FORM DATA CHANGED");
-		console.log(formData);
-		console.log(typeof formData.budget?.amount);
-		console.log(typeof formData.budget?.limitCriteria);
-	}, [formData]);
-
 	const { isLoading: isProjectLoading, project } = useProject();
-	const hasBudget = Boolean(project?.budget);
-	const isBudgetEnabled = Boolean(formData.budget?.amount);
-	console.log(formData);
+
+	// Wait until project data is available before rendering the form
 	if (isProjectLoading || !project) {
 		return <div>Loading...</div>;
 	}
@@ -51,6 +42,7 @@ export function ProjectDetailsForm({
 				<Input
 					id="project-name"
 					value={formData.name ?? ""}
+					// Controlled input: every keystroke updates formData
 					onChange={(e) =>
 						setFormData((prev) => ({
 							...prev,
@@ -81,6 +73,7 @@ export function ProjectDetailsForm({
 			<div className="space-y-2">
 				<Label>Type</Label>
 				<Select
+					// Use form value if modified, otherwise fallback to project value
 					value={formData.type ?? project.type}
 					onValueChange={(value) => {
 						if (!value) return;
@@ -106,43 +99,17 @@ export function ProjectDetailsForm({
 				</Select>
 			</div>
 
-			<div className="space-y-2">
-				<Label htmlFor="project-budget">
-					Budget global{" "}
-					<span className="text-muted-foreground">(optionnel)</span>
-				</Label>
-				<div className="relative">
-					<Input
-						id="project-budget"
-						type="number"
-						disabled={!isEditing}
-						value={formData.budget?.amount ?? ""}
-						onChange={(e) =>
-							setFormData((prev) => ({
-								...prev,
-								budget: {
-									...prev.budget,
-									id: prev.budget?.id ?? 0,
-									amount: Number(e.target.value),
-									limitCriteria: prev.budget?.limitCriteria ?? 80,
-								},
-							}))
-						}
-					/>
-					<span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-						€
-					</span>
-				</div>
-			</div>
-
 			<div className="space-y-3">
 				<div className="flex items-center gap-2">
 					<Switch
 						id="budget-alert"
-						checked={isBudgetEnabled}
+						// Budget existence drives the switch state
+						checked={!!formData.budget}
 						onCheckedChange={(checked) =>
 							setFormData((prev) => ({
 								...prev,
+								// ON => create budget object if needed
+								// OFF => remove budget from payload
 								budget: checked
 									? {
 											id: prev.budget?.id ?? 0,
@@ -156,29 +123,62 @@ export function ProjectDetailsForm({
 					/>
 					<Label htmlFor="budget-alert">Activer un seuil d’alerte</Label>
 				</div>
-				{isBudgetEnabled && (
-					<div className="flex items-center gap-3">
-						<Slider
-							disabled={!isEditing}
-							max={100}
-							step={1}
-							value={[formData.budget?.limitCriteria ?? 80]}
-							onValueChange={(value) =>
-								setFormData((prev) => ({
-									...prev,
-									budget: {
-										...prev.budget,
-										id: prev.budget?.id ?? 0,
-										amount: prev.budget?.amount ?? 0,
-										limitCriteria: Array.isArray(value) ? value[0] : value,
-									},
-								}))
-							}
-						/>
-						<span className="w-12 text-right text-xs font-medium tabular-nums">
-							{formData.budget?.limitCriteria} %
-						</span>
-					</div>
+
+				{/* Budget fields are rendered only when a budget exists */}
+				{formData.budget && (
+					<>
+						<div className="space-y-2">
+							<Label htmlFor="project-budget">Budget global</Label>
+							<div className="relative">
+								<Input
+									id="project-budget"
+									type="number"
+									disabled={!isEditing}
+									value={formData.budget?.amount ?? ""}
+									onChange={(e) =>
+										setFormData((prev) => ({
+											...prev,
+											budget: {
+												...prev.budget,
+												id: prev.budget?.id ?? 0,
+												// Convert input string to number
+												amount: Number(e.target.value),
+												limitCriteria: prev.budget?.limitCriteria ?? 80,
+											},
+										}))
+									}
+								/>
+								<span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+									€
+								</span>
+							</div>
+						</div>
+
+						<div className="flex items-center gap-3">
+							<Slider
+								disabled={!isEditing}
+								max={100}
+								step={1}
+								// Slider expects an array value
+								value={[formData.budget?.limitCriteria ?? 80]}
+								onValueChange={(value) =>
+									setFormData((prev) => ({
+										...prev,
+										budget: {
+											...prev.budget,
+											id: prev.budget?.id ?? 0,
+											amount: prev.budget?.amount ?? 0,
+											// Slider returns an array, keep only the first value
+											limitCriteria: Array.isArray(value) ? value[0] : value,
+										},
+									}))
+								}
+							/>
+							<span className="w-12 text-right text-xs font-medium tabular-nums">
+								{formData.budget?.limitCriteria} %
+							</span>
+						</div>
+					</>
 				)}
 			</div>
 		</form>
