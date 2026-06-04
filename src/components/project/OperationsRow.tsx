@@ -13,6 +13,8 @@ import { getAvatarColor } from "@/utils/avatarColors";
 
 type OperationsRowProps = {
 	operation: IOperation;
+	setSelectedOperation: (operation: IOperation | null) => void;
+	setIsOperationDialogOpen: (open: boolean) => void;
 };
 
 const icons = [
@@ -24,14 +26,24 @@ const icons = [
 	{ name: "Restauration", icon: Utensils },
 ];
 
-export function OperationsRow({ operation }: OperationsRowProps) {
+export function OperationsRow({
+	operation,
+	setSelectedOperation,
+	setIsOperationDialogOpen,
+}: OperationsRowProps) {
 	const { categories } = useCategories();
 	const category = categories.find((cat) => cat.id === operation.categoryId);
 	const Icon =
 		icons.find((icon) => icon.name === category?.name)?.icon ?? BedDouble;
 	const amount = Number(operation.amount);
+
+	function openOperationDialog() {
+		setSelectedOperation(operation);
+		setIsOperationDialogOpen(true);
+	}
+
 	return (
-		<TableRow>
+		<TableRow className="hover:bg-muted/50" onClick={openOperationDialog}>
 			<TableCell>
 				<div className="flex items-center gap-3">
 					<span
