@@ -6,8 +6,6 @@ export interface IOperationParticipant {
 	};
 }
 
-export type OpreationsTotalAmout = {};
-
 export interface IOperation {
 	id: number;
 	appUserId: number;

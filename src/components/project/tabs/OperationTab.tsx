@@ -60,14 +60,12 @@ export function OperationTab() {
 	// ── Total opérations ──────────────────────────────────────
 
 	const buildDialogParticipants = useCallback(
-
 		(operation: IOperation | null = null) => {
 			if (!project) return [];
 			return project.projectParticipants.map((projectParticipant) => {
 				const participant = projectParticipant.participant;
 				const operationParticipant = operation?.operationParticipants.find(
-					(opParticipant) =>
-						opParticipant.participant.id === participant.id,
+					(opParticipant) => opParticipant.participant.id === participant.id,
 				);
 				return {
 					participantId: participant.id,
@@ -128,8 +126,8 @@ export function OperationTab() {
 		activeFilter === "all"
 			? operations
 			: operations.filter(
-				(operation) => String(operation.categoryId) === activeFilter,
-			);
+					(operation) => String(operation.categoryId) === activeFilter,
+				);
 
 	return (
 		<div className="space-y-4">

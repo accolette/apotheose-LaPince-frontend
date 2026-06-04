@@ -34,9 +34,7 @@ export function OperationDialog({
 	const { categories } = useCategories();
 	const dialogMode = operationDialogState?.mode ?? "create";
 
-	function updateOperationDialogState(
-		updates: Partial<IOperationDialogState>,
-	) {
+	function updateOperationDialogState(updates: Partial<IOperationDialogState>) {
 		if (!operationDialogState) return;
 
 		setOperationDialogState({
@@ -172,15 +170,15 @@ export function OperationDialog({
 											checked={participant.isSelected}
 											onChange={(event) =>
 												updateOperationDialogState({
-													participants:
-														operationDialogState.participants.map((item) =>
+													participants: operationDialogState.participants.map(
+														(item) =>
 															item.participantId === participant.participantId
 																? {
 																		...item,
 																		isSelected: event.target.checked,
 																	}
 																: item,
-														),
+													),
 												})
 											}
 											className="size-4"
@@ -192,9 +190,7 @@ export function OperationDialog({
 											{participant.initials}
 										</span>
 
-										<span className="truncate text-sm">
-											{participant.name}
-										</span>
+										<span className="truncate text-sm">{participant.name}</span>
 									</label>
 
 									<div className="relative w-28 shrink-0">
@@ -206,15 +202,15 @@ export function OperationDialog({
 											value={participant.repartitionAmount}
 											onChange={(event) =>
 												updateOperationDialogState({
-													participants:
-														operationDialogState.participants.map((item) =>
+													participants: operationDialogState.participants.map(
+														(item) =>
 															item.participantId === participant.participantId
 																? {
 																		...item,
 																		repartitionAmount: event.target.value,
 																	}
 																: item,
-														),
+													),
 												})
 											}
 										/>
