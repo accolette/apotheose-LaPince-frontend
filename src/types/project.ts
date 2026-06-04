@@ -11,10 +11,10 @@ export default interface IProject {
 
 export interface IProjectParticipants {
 	id?: number;
-	participant: IParticipant;
+	participant?: IParticipant;
 }
 
-interface IParticipant {
+export interface IParticipant {
 	id: number;
 	appUser: IAppUser | null;
 	name: string;

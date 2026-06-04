@@ -3,10 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { useProject } from "@/context/ProjectContext";
-import type {
-	IProjectParticipants,
-	UpdateProjectPayload,
-} from "@/types/project";
+import type { IParticipant, UpdateProjectPayload } from "@/types/project";
 import { ParticipantsCard } from "../ParticipantsCard";
 import { ProjectDetailsForm } from "../ProjectDetailsForm";
 
@@ -25,8 +22,9 @@ export function DetailsTab() {
 		description: "",
 		type: undefined,
 	});
-	const [participantsFormData, setParticipantsFormData] =
-		useState<IProjectParticipants>();
+	const [participantsFormData, setParticipantsFormData] = useState<
+		IParticipant[]
+	>([]);
 
 	useEffect(() => {
 		// Wait until project data has been loaded
@@ -46,6 +44,15 @@ export function DetailsTab() {
 					}
 				: undefined,
 		});
+
+		setParticipantsFormData(
+			project.projectParticipants
+				.map((pp) => pp.participant)
+				.filter(
+					(participant): participant is IParticipant =>
+						participant !== undefined,
+				),
+		);
 	}, [project]);
 
 	function handleClickDetailsForm() {

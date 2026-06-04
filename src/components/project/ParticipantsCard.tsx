@@ -3,11 +3,11 @@ import type { Dispatch, SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useProject } from "@/context/ProjectContext";
-import type { UpdateProjectPayload } from "@/types/project";
+import type { IParticipant } from "@/types/project";
 
 type ProjectParticipantsFormProps = {
-	participantsFormData: UpdateProjectPayload;
-	setParticipantsFormDat: Dispatch<SetStateAction<UpdateProjectPayload>>;
+	participantsFormData: IParticipant[];
+	setParticipantsFormData: Dispatch<SetStateAction<IParticipant[]>>;
 	isEditingParticipants: boolean;
 };
 
@@ -23,12 +23,16 @@ export function ParticipantsCard({
 		return <div>Loading...</div>;
 	}
 
-	// To have a better view of data provided by api
-	const participants = project.projectParticipants.map((pp) => pp.participant);
-
 	// Adds an empty participant slot to the list
 	function handleAddParticipant() {
-		setParticipantsFormData((prev) => [...prev, { id: Date.now(), name: "" }]);
+		setParticipantsFormData((prev) => [
+			...prev,
+			{
+				id: Date.now(),
+				appUser: null,
+				name: "",
+			},
+		]);
 	}
 
 	return (
@@ -53,10 +57,20 @@ export function ParticipantsCard({
 				</div>
 
 				<ul className="space-y-2">
-					{participants.map((participant) => (
+					{participantsFormData.map((participant) => (
 						<li key={participant.id} className="flex items-center gap-2">
 							<Input
-								defaultValue={participant.name}
+								value={participant.name ?? ""}
+								// Controlled input: every keystroke updates formData
+								onChange={(e) =>
+									setParticipantsFormData((prev) =>
+										prev.map((p) =>
+											p.id === participant.id
+												? { ...p, name: e.target.value }
+												: p,
+										),
+									)
+								}
 								className="flex-1"
 								disabled={!isEditingParticipants}
 							/>
