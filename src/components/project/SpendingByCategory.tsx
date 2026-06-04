@@ -22,7 +22,17 @@ const categoryIconMap: Record<string, LucideIcon> = {
 export function SpendingByCategory() {
 	const { budgetSummary } = useProject();
 
-	if (!budgetSummary) return null;
+	if (!budgetSummary || budgetSummary.spentByCategory.length === 0) {
+		return (
+			<div className="rounded-lg border border-dashed border-border p-6 text-center">
+				<p className="text-sm font-medium">Aucune catégorie</p>
+				<p className="text-xs text-muted-foreground mt-1">
+					Les dépenses par catégorie apparaîtront ici.
+				</p>
+			</div>
+		);
+	}
+
 	const { spentByCategory } = budgetSummary;
 
 	return (
