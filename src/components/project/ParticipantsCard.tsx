@@ -25,14 +25,20 @@ const participants = [
 	},
 ];
 
-export function ParticipantsCard() {
-	type ProjectParticipantsFormProps = {
-		isEditingParticipants: boolean;
-	};
+type ProjectParticipantsFormProps = {
+	isEditingParticipants: boolean;
+};
 
+export function ParticipantsCard({
+	isEditingParticipants,
+}: ProjectParticipantsFormProps) {
 	return (
 		<div className="space-y-3">
-			<div className="rounded-lg border border-border bg-card p-6">
+			<div
+				className={`space-y-5 rounded-lg border bg-card p-6 ${
+					isEditingParticipants ? "border-amber-400" : "border-border"
+				}`}
+			>
 				<div className="mb-4 flex items-center justify-between">
 					<h2 className="text-sm font-medium">Participants</h2>
 
@@ -45,18 +51,6 @@ export function ParticipantsCard() {
 					{participants.map((participant) => (
 						<li key={participant.id} className="flex items-center gap-2">
 							<Input defaultValue={participant.name} className="flex-1" />
-
-							<div className="relative w-32 shrink-0">
-								<Input
-									type="number"
-									defaultValue={participant.budget}
-									className="pr-7 text-right tabular-nums"
-								/>
-
-								<span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-									€
-								</span>
-							</div>
 
 							<Button
 								type="button"

@@ -22,6 +22,7 @@ export function DetailsTab() {
 		description: "",
 		type: undefined,
 	});
+	const [participantsFormData, setParticipantsFormData] = useState();
 
 	useEffect(() => {
 		// Wait until project data has been loaded
@@ -58,8 +59,10 @@ export function DetailsTab() {
 		// When already in edit mode:
 		// save current form data before returning to read-only mode
 		if (isEditingParticipants) {
+			updateProjectParticipantsById();
 		}
 		// Toggle edit mode
+		setIsEditingParticipants(!isEditingParticipants);
 	}
 
 	return (
@@ -94,8 +97,10 @@ export function DetailsTab() {
 				</Button>
 			</div>
 
-			<div className="flex-1">
-				<ParticipantsCard />
+			<div className="flex-1 space-y-6">
+				<ParticipantsCard // Controls disabled/enabled state of inputs
+					isEditingParticipants={isEditingParticipants}
+				/>
 				<Button
 					type="button"
 					variant="outline"
