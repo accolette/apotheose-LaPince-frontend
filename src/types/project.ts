@@ -123,6 +123,7 @@ export interface IProjectsDashboardResponse {
 	projects: IDashboardProject[];
 	nextCursor: number | null;
 	hasMore: boolean;
+	total: number;
 }
 
 export type CreateProjectPayload = {

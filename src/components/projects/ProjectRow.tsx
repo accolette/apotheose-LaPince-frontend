@@ -1,8 +1,8 @@
 import { Bell, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router";
 import { ParticipantStack } from "@/components/common/ParticipantStack";
 import { BudgetProgress } from "@/components/projects/BudgetProgress";
 import { ProjectDetails } from "@/components/projects/ProjectDetails";
-import { useNavigate } from "react-router";
 import type { IDashboardProject } from "@/types/project";
 
 const typeToIcon = {
@@ -39,7 +39,10 @@ export function ProjectRow({ project }: ProjectRowProps) {
 	const navigate = useNavigate();
 
 	return (
-		<tr className="cursor-pointer transition hover:bg-muted/60" onClick={() => navigate(`/project/${project.id}`)}>
+		<tr
+			className="cursor-pointer transition hover:bg-muted/60"
+			onClick={() => navigate(`/project/${project.id}`)}
+		>
 			<td className="px-6 py-4">
 				<ProjectDetails
 					name={project.name}
