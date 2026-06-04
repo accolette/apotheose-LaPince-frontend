@@ -57,6 +57,8 @@ export function DetailsTab() {
 	function handleClickParticipantsForm() {
 		// When already in edit mode:
 		// save current form data before returning to read-only mode
+		if (isEditingParticipants) {
+		}
 		// Toggle edit mode
 	}
 
