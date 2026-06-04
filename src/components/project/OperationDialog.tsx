@@ -1,20 +1,8 @@
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCategories } from "@/context/CategoriesContext";
 import type { IOperationDialogState } from "@/types/operations";
 
@@ -33,6 +21,22 @@ export function OperationDialog({
 }: OperationDialogProps) {
 	const { categories } = useCategories();
 	const dialogMode = operationDialogState?.mode ?? "create";
+
+	const selectedCategory = categories.find(
+		(category) => category.id === operationDialogState?.categoryId,);
+
+	const selectedPayerParticipant =
+		operationDialogState?.participants.find(
+			(participant) =>
+				participant.participantId ===
+				operationDialogState.payerParticipantId,
+		);
+
+	function handleSubmit(event: React.SyntheticEvent) {
+		event.preventDefault();
+		console.log(operationDialogState);
+	}
+
 
 	function updateOperationDialogState(updates: Partial<IOperationDialogState>) {
 		if (!operationDialogState) return;
@@ -54,7 +58,7 @@ export function OperationDialog({
 					</DialogTitle>
 				</DialogHeader>
 
-				<form className="space-y-5">
+				<form className="space-y-5" onSubmit={handleSubmit}>
 					<div className="grid grid-cols-5 gap-3">
 						<div className="col-span-3 space-y-2">
 							<Label htmlFor="operation-description">Description</Label>
@@ -79,7 +83,7 @@ export function OperationDialog({
 									className="pr-8 text-right font-medium"
 									value={operationDialogState?.amount ?? ""}
 									onChange={(event) =>
-										updateOperationDialogState({ amount: event.target.value })
+										updateOperationDialogState({ amount: Number(event.target.value) })
 									}
 								/>
 								<span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
@@ -94,15 +98,19 @@ export function OperationDialog({
 							<Label>Catégorie</Label>
 
 							<Select
-								value={operationDialogState?.categoryId}
-								onValueChange={(categoryId) =>
-									updateOperationDialogState({ categoryId })
+
+								value={String(operationDialogState?.categoryId ?? "")}
+								onValueChange={(value) =>
+									updateOperationDialogState({
+										categoryId: Number(value),
+									})
 								}
 							>
 								<SelectTrigger className="w-full">
-									<SelectValue placeholder="Catégorie" />
+									<SelectValue placeholder="Catégorie">
+										{selectedCategory?.name ?? "Catégorie"}
+									</SelectValue>
 								</SelectTrigger>
-
 								<SelectContent>
 									{categories.map((category) => (
 										<SelectItem key={category.id} value={String(category.id)}>
@@ -110,6 +118,7 @@ export function OperationDialog({
 										</SelectItem>
 									))}
 								</SelectContent>
+
 							</Select>
 						</div>
 
@@ -131,15 +140,17 @@ export function OperationDialog({
 						<Label>Payé par</Label>
 
 						<Select
-							value={operationDialogState?.payerParticipantId}
+
+							value={String(operationDialogState?.payerParticipantId ?? "")}
 							onValueChange={(payerParticipantId) =>
-								updateOperationDialogState({ payerParticipantId })
+								updateOperationDialogState({
+									payerParticipantId: Number(payerParticipantId),
+								})
 							}
 						>
 							<SelectTrigger className="w-full">
-								<SelectValue placeholder="Participant" />
+								<span>{selectedPayerParticipant?.name ?? "Participant"}</span>
 							</SelectTrigger>
-
 							<SelectContent>
 								{operationDialogState?.participants.map((participant) => (
 									<SelectItem
@@ -150,6 +161,7 @@ export function OperationDialog({
 									</SelectItem>
 								))}
 							</SelectContent>
+
 						</Select>
 					</div>
 
@@ -174,9 +186,9 @@ export function OperationDialog({
 														(item) =>
 															item.participantId === participant.participantId
 																? {
-																		...item,
-																		isSelected: event.target.checked,
-																	}
+																	...item,
+																	isSelected: event.target.checked,
+																}
 																: item,
 													),
 												})
@@ -197,6 +209,7 @@ export function OperationDialog({
 										<Input
 											type="number"
 											min="0"
+											step="0.01"
 											placeholder="auto"
 											className="h-8 pr-6 text-right text-xs tabular-nums placeholder:italic"
 											value={participant.repartitionAmount}
@@ -206,9 +219,9 @@ export function OperationDialog({
 														(item) =>
 															item.participantId === participant.participantId
 																? {
-																		...item,
-																		repartitionAmount: event.target.value,
-																	}
+																	...item,
+																	repartitionAmount: event.target.value,
+																}
 																: item,
 													),
 												})
@@ -233,7 +246,9 @@ export function OperationDialog({
 							Annuler
 						</Button>
 
-						<Button type="submit">
+						<Button
+							type="submit"
+						>
 							{dialogMode === "edit" ? "Modifier" : "Créer"}
 						</Button>
 					</DialogFooter>
