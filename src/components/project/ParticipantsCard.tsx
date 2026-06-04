@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useProject } from "@/context/ProjectContext";
 import type { IParticipant } from "@/types/project";
 
+// Props received from the parent component (DetailsTab)
 type ProjectParticipantsFormProps = {
 	participantsFormData: IParticipant[];
 	setParticipantsFormData: Dispatch<SetStateAction<IParticipant[]>>;
@@ -16,25 +17,28 @@ export function ParticipantsCard({
 	setParticipantsFormData,
 	isEditingParticipants,
 }: ProjectParticipantsFormProps) {
-	const { isLoading: isProjectLoading, project } = useProject();
-
-	// Wait until project data is available before rendering the form
-	if (isProjectLoading || !project) {
-		return <div>Loading...</div>;
-	}
-
-	// Removes a participant from the list by index
+	// Removes a participant from the local state
+	// The participant is identified here by its position in the array
 	function handleRemoveParticipant(index: number) {
-		setParticipantsFormData((prev) => prev.filter((_, i) => i !== index));
+		setParticipantsFormData((prev) =>
+			// Keep all items except the one at the selected index
+			prev.filter((_, i) => i !== index),
+		);
 	}
 
-	// Adds an empty participant slot to the list
+	// Adds a new empty participant to the local state
 	function handleAddParticipant() {
 		setParticipantsFormData((prev) => [
+			// Keep existing participants
 			...prev,
+
+			// Add a new empty participant at the end
 			{
+				// Temporary id used by React as a key (not yet persisted in database)
 				id: Date.now(),
+				// New participants are not linked to an app user yet
 				appUser: null,
+				// Empty name waiting for user input
 				name: "",
 			},
 		]);
@@ -47,8 +51,11 @@ export function ParticipantsCard({
 					isEditingParticipants ? "border-amber-400" : "border-border"
 				}`}
 			>
+				{/* Header section */}
 				<div className="mb-4 flex items-center justify-between">
 					<h2 className="text-sm font-medium">Participants</h2>
+
+					{/* Add participant button */}
 					<Button
 						type="button"
 						variant="ghost"
@@ -61,24 +68,32 @@ export function ParticipantsCard({
 					</Button>
 				</div>
 
+				{/* Participants list */}
 				<ul className="space-y-2">
 					{participantsFormData.map((participant, index) => (
 						<li key={participant.id} className="flex items-center gap-2">
 							<Input
+								// Controlled input:
+								// value always comes from React state
 								value={participant.name ?? ""}
-								// Controlled input: every keystroke updates formData
 								onChange={(e) =>
 									setParticipantsFormData((prev) =>
+										// Create a new array
 										prev.map((p) =>
+											// Find the participant currently being edited
 											p.id === participant.id
-												? { ...p, name: e.target.value }
-												: p,
+												? // Update only its name
+													{ ...p, name: e.target.value }
+												: // Keep all other participants unchanged
+													p,
 										),
 									)
 								}
 								className="flex-1"
 								disabled={!isEditingParticipants}
 							/>
+
+							{/* Delete participant button */}
 							<Button
 								type="button"
 								variant="ghost"
