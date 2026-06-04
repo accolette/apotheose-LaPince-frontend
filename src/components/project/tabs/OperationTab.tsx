@@ -59,25 +59,26 @@ export function OperationTab() {
 
 	// ── Total opérations ──────────────────────────────────────
 
-	const buildDialogParticipants = useCallback((operation: IOperation | null = null) => {
-		if (!project) return [];
-		return project.projectParticipants.map((projectParticipant) => {
-			const participant = projectParticipant.participant;
-			const operationParticipant = operation?.operationParticipants.find(
-				(opParticipant) => opParticipant.participant.id === participant.id,
-			);
-			return {
-				participantId: participant.id,
-				name: participant.name,
-				initials: participant.name.slice(0, 2).toUpperCase(),
-				avatarColor: getAvatarColor(participant.name),
-				isSelected: Boolean(operationParticipant),
-				repartitionAmount: operationParticipant?.repartitionAmount
-					? String(operationParticipant.repartitionAmount)
-					: "",
-			};
-		});
-	},
+	const buildDialogParticipants = useCallback(
+		(operation: IOperation | null = null) => {
+			if (!project) return [];
+			return project.projectParticipants.map((projectParticipant) => {
+				const participant = projectParticipant.participant;
+				const operationParticipant = operation?.operationParticipants.find(
+					(opParticipant) => opParticipant.participant.id === participant.id,
+				);
+				return {
+					participantId: participant.id,
+					name: participant.name,
+					initials: participant.name.slice(0, 2).toUpperCase(),
+					avatarColor: getAvatarColor(participant.name),
+					isSelected: Boolean(operationParticipant),
+					repartitionAmount: operationParticipant?.repartitionAmount
+						? String(operationParticipant.repartitionAmount)
+						: "",
+				};
+			});
+		},
 		[project],
 	);
 
@@ -125,8 +126,8 @@ export function OperationTab() {
 		activeFilter === "all"
 			? operations
 			: operations.filter(
-				(operation) => String(operation.categoryId) === activeFilter,
-			);
+					(operation) => String(operation.categoryId) === activeFilter,
+				);
 
 	return (
 		<div className="space-y-4">
