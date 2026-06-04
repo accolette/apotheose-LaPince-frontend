@@ -5,6 +5,8 @@ export default interface IProject {
 	description: string;
 	isArchived: boolean;
 	projectParticipants: IProjectParticipants[];
+	budget: IBudget;
+	type: ProjectType;
 }
 
 export interface IProjectParticipants {
@@ -21,6 +23,43 @@ interface IAppUser {
 	id: number;
 }
 
+interface IBudget {
+	id?: number;
+	amount: number;
+	limitCriteria: number;
+}
+
+export type UpdateProjectPayload = {
+	name?: string;
+	description?: string;
+	type?: ProjectType;
+	isArchived?: boolean;
+	budget?: {
+		id?: number;
+		amount?: number;
+		limitCriteria?: number;
+	};
+	participants?: IParticipant[];
+};
+
+export type UpdateProjectResponse = {
+	projectUpdate: {
+		project: IProject;
+		budget: {
+			amount: number;
+			limitCriteria: number;
+		};
+	};
+};
+
+export type ProjectType =
+	| "Voyage"
+	| "Maison_Coloc"
+	| "Anniversaire"
+	| "Repas_Sortie"
+	| "Pro_Travail"
+	| "Autre";
+
 // Initial setup before dynamisation of page
 //TODO: Remove it when everythings is setup
 export type Project = {
@@ -33,7 +72,7 @@ export type Project = {
 	icon: ProjectIcon;
 	participants: string[];
 	spent: string;
-	budget: string;
+	budget: number;
 	budgetPercent: number;
 	alertsCount: number;
 	balance: string;
@@ -55,7 +94,7 @@ export const projects: Project[] = [
 		icon: "plane",
 		participants: ["SL", "AL", "BO", "CH"],
 		spent: "847,50 €",
-		budget: "1 000 €",
+		budget: 10,
 		budgetPercent: 85,
 		alertsCount: 1,
 		balance: "−45,20 €",
@@ -71,7 +110,7 @@ export const projects: Project[] = [
 		icon: "home",
 		participants: ["SL", "MA", "JU"],
 		spent: "2 340 €",
-		budget: "2 000 €",
+		budget: 2000,
 		budgetPercent: 100,
 		alertsCount: 2,
 		balance: "+128,40 €",
@@ -87,7 +126,7 @@ export const projects: Project[] = [
 		icon: "cake",
 		participants: ["SL", "LE", "PA", "+3"],
 		spent: "180 €",
-		budget: "500 €",
+		budget: 500,
 		budgetPercent: 36,
 		alertsCount: 0,
 		balance: "Équilibré",

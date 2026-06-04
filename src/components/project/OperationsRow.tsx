@@ -25,7 +25,6 @@ const icons = [
 ];
 
 export function OperationsRow({ operation }: OperationsRowProps) {
-
 	const { categories } = useCategories();
 	const category = categories.find((cat) => cat.id === operation.categoryId);
 	const Icon =
@@ -53,16 +52,16 @@ export function OperationsRow({ operation }: OperationsRowProps) {
 			</TableCell>
 			<TableCell className="hidden lg:table-cell">
 				<div className="flex items-center gap-2">
-					<span className={`flex size-6 items-center justify-center rounded-full text-[10px] font-medium text-white ${getAvatarColor(operation.appUser.name)}`}>
+					<span
+						className={`flex size-6 items-center justify-center rounded-full text-[10px] font-medium text-white ${getAvatarColor(operation.appUser.name)}`}
+					>
 						{operation.appUser.name.slice(0, 2).toUpperCase()}
 					</span>
 					<span className="text-xs">{operation.appUser.name}</span>
 				</div>
 			</TableCell>
 			<TableCell className="hidden md:table-cell">
-				<ParticipantStack
-					participants={operation.operationParticipants}
-				/>
+				<ParticipantStack participants={operation.operationParticipants} />
 			</TableCell>
 			<TableCell className="text-right font-medium tabular-nums">
 				{amount.toLocaleString("fr-FR", {
@@ -72,5 +71,4 @@ export function OperationsRow({ operation }: OperationsRowProps) {
 			</TableCell>
 		</TableRow>
 	);
-
 }
