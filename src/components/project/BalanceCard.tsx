@@ -1,12 +1,9 @@
 import { ArrowRight } from "lucide-react";
 import { useProject } from "@/context/ProjectContext";
-import type { ParticipantBalance } from "@/types/reimbursement";
+import type { Reimbursement } from "@/types/reimbursement";
 
 export function BalanceCard() {
 	const { reimbursements } = useProject();
-	// TODO: replace with reimbursements when greedy algorithm is implemented server-side
-	// For now, display raw balances from GET /api/projects/:id/balance
-	// reimbursements contains ParticipantBalance[] temporarily
 
 	if (!reimbursements.length) return null;
 
@@ -22,19 +19,18 @@ export function BalanceCard() {
 			</div>
 
 			<ul className="divide-y divide-border">
-				{reimbursements.map((participant: ParticipantBalance) => (
+				{reimbursements.map((reimbursement: Reimbursement) => (
 					<li
-						key={`${participant.participantId}`}
+						key={`${reimbursement.from}-${reimbursement.to}`}
 						className="flex items-center gap-3 px-6 py-4"
 					>
 						<div className="flex flex-1 items-center gap-1.5 text-sm">
-							<span className="font-medium">{participant.name}</span>
+							<span className="font-medium">{reimbursement.from}</span>
 							<ArrowRight className="size-3.5 text-muted-foreground" />
-							{/* TODO mettre le nom du partcipant a remboursé avec glouton */}
-							<span className="font-medium">{participant.name}</span>
+							<span className="font-medium">{reimbursement.to}</span>
 						</div>
 						<span className="tabular-nums text-sm font-semibold">
-							{participant.balance.toLocaleString("fr-FR", {
+							{reimbursement.amount.toLocaleString("fr-FR", {
 								style: "currency",
 								currency: "EUR",
 							})}

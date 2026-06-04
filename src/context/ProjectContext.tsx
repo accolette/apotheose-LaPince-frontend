@@ -8,6 +8,7 @@ import {
 import { apiGetBalance, apiGetBudgets, apiUpdateProject } from "@/services/api";
 import type { BudgetSummary } from "@/types/budget";
 import type IProject from "@/types/project";
+import type { Reimbursement } from "@/types/reimbursement";
 import type { UpdateProjectPayload } from "@/types/project";
 import type { ParticipantBalance } from "@/types/reimbursement";
 
@@ -21,7 +22,7 @@ type ProjectContextType = {
 	errorCode: number | null;
 	project: IProject | null;
 	budgetSummary: BudgetSummary | null;
-	reimbursements: ParticipantBalance[];
+	reimbursements: Reimbursement[];
 	getProjectById: (projectId: number) => void;
 	updateProjectById: (projectId: number, data: UpdateProjectPayload) => void;
 };
@@ -43,9 +44,7 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 	const [budgetSummary, setBudgetSummary] = useState<BudgetSummary | null>(
 		null,
 	);
-	const [reimbursements, setReimbursements] = useState<ParticipantBalance[]>(
-		[],
-	);
+	const [reimbursements, setReimbursements] = useState<Reimbursement[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [errorCode, setErrorCode] = useState<number | null>(null);
