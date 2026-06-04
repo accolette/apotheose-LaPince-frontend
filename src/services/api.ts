@@ -10,6 +10,8 @@ import type {
 	CreateProjectPayload,
 	IDashboardProject,
 	IProjectsDashboardResponse,
+	UpdateProjectPayload,
+	UpdateProjectResponse,
 } from "@/types/project";
 import type { ParticipantBalance } from "@/types/reimbursement";
 
@@ -121,6 +123,18 @@ export async function apiCreateProject(
 		body: JSON.stringify(payload),
 	});
 	return handleResponse(res);
+}
+
+export async function apiUpdateProject(
+	projectId: number,
+	payload: UpdateProjectPayload,
+): Promise<UpdateProjectResponse> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}`, {
+		method: "PATCH",
+		headers: buildHeaders(true),
+		body: JSON.stringify(payload),
+	});
+	return handleResponse<UpdateProjectResponse>(res);
 }
 
 // ── Budget endpoints ─────────────────────────────────────────────────────────
