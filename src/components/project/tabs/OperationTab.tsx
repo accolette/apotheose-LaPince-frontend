@@ -88,6 +88,7 @@ export function OperationTab() {
 
 		setOperationDialogState({
 			mode: "edit",
+			projectId: project.id,
 			operationId: selectedOperation.id,
 			name: selectedOperation.name,
 			amount: selectedOperation.amount,
@@ -107,6 +108,7 @@ export function OperationTab() {
 
 		setOperationDialogState({
 			mode: "create",
+			projectId: project.id,
 			operationId: null,
 			name: "",
 			amount: 0,

@@ -38,6 +38,7 @@ export interface IOperationDialogParticipant {
 
 export interface IOperationDialogState {
 	mode: OperationDialogMode;
+	projectId: number;
 	operationId: number | null;
 	name: string;
 	amount: number;
@@ -46,3 +47,16 @@ export interface IOperationDialogState {
 	payerParticipantId: number | undefined;
 	participants: IOperationDialogParticipant[];
 }
+
+export type CreateOperationPayload = {
+	name: string;
+	amount: number;
+	date: string;
+	categoryId: number;
+	projectId: number;
+	payerParticipantId: number;
+	operationParticipants: {
+		participantId: number;
+		repartitionAmount: number;
+	}[];
+};

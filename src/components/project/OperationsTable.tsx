@@ -8,8 +8,6 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { useProject } from "@/context/ProjectContext";
-import { apiGetOperations } from "@/services/api";
 import type { IOperation } from "@/types/operations";
 
 type OperationsTableProps = {
