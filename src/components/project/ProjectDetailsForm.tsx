@@ -17,12 +17,12 @@ import type { UpdateProjectPayload } from "@/types/project";
 type ProjectDetailsFormProps = {
 	formData: UpdateProjectPayload;
 	setFormData: Dispatch<SetStateAction<UpdateProjectPayload>>;
-	isEditing: boolean;
+	isEditingDetails: boolean;
 };
 export function ProjectDetailsForm({
 	formData,
 	setFormData,
-	isEditing,
+	isEditingDetails,
 }: ProjectDetailsFormProps) {
 	const { isLoading: isProjectLoading, project } = useProject();
 
@@ -34,7 +34,7 @@ export function ProjectDetailsForm({
 	return (
 		<form
 			className={`space-y-5 rounded-lg border bg-card p-6 ${
-				isEditing ? "border-amber-400" : "border-border"
+				isEditingDetails ? "border-amber-400" : "border-border"
 			}`}
 		>
 			<div className="space-y-2">
@@ -49,7 +49,7 @@ export function ProjectDetailsForm({
 							name: e.target.value,
 						}))
 					}
-					disabled={!isEditing}
+					disabled={!isEditingDetails}
 				/>
 			</div>
 
@@ -66,7 +66,7 @@ export function ProjectDetailsForm({
 							description: e.target.value,
 						}))
 					}
-					disabled={!isEditing}
+					disabled={!isEditingDetails}
 				/>
 			</div>
 
@@ -83,7 +83,7 @@ export function ProjectDetailsForm({
 							type: value,
 						}));
 					}}
-					disabled={!isEditing}
+					disabled={!isEditingDetails}
 				>
 					<SelectTrigger>
 						<SelectValue placeholder="Choisir un type" />
@@ -119,7 +119,7 @@ export function ProjectDetailsForm({
 									: undefined,
 							}))
 						}
-						disabled={!isEditing}
+						disabled={!isEditingDetails}
 					/>
 					<Label htmlFor="budget-alert">Activer un seuil d’alerte</Label>
 				</div>
@@ -133,7 +133,7 @@ export function ProjectDetailsForm({
 								<Input
 									id="project-budget"
 									type="number"
-									disabled={!isEditing}
+									disabled={!isEditingDetails}
 									value={formData.budget?.amount ?? ""}
 									onChange={(e) =>
 										setFormData((prev) => ({
@@ -156,7 +156,7 @@ export function ProjectDetailsForm({
 
 						<div className="flex items-center gap-3">
 							<Slider
-								disabled={!isEditing}
+								disabled={!isEditingDetails}
 								max={100}
 								step={1}
 								// Slider expects an array value

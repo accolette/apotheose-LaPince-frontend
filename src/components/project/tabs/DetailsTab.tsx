@@ -11,7 +11,8 @@ export function DetailsTab() {
 	const params = useParams();
 	const projectId = Number(params.id);
 	// Controls whether the form is editable or read-only
-	const [isEditing, setIsEditing] = useState(false);
+	const [isEditingDetails, setIsEditingDetails] = useState(false);
+	const [isEditingParticipants, setIsEditingParticipants] = useState(false);
 	// Access project data and update function from context
 	const { updateProjectById, project } = useProject();
 
@@ -42,15 +43,21 @@ export function DetailsTab() {
 		});
 	}, [project]);
 
-	function handleClick() {
+	function handleClickDetailsForm() {
 		// When already in edit mode:
 		// save current form data before returning to read-only mode
-		if (isEditing) {
+		if (isEditingDetails) {
 			updateProjectById(projectId, formData);
 		}
 
 		// Toggle edit mode
-		setIsEditing(!isEditing);
+		setIsEditingDetails(!isEditingDetails);
+	}
+
+	function handleClickParticipantsForm() {
+		// When already in edit mode:
+		// save current form data before returning to read-only mode
+		// Toggle edit mode
 	}
 
 	return (
@@ -62,16 +69,16 @@ export function DetailsTab() {
 					// State updater passed to child component
 					setFormData={setFormData}
 					// Controls disabled/enabled state of inputs
-					isEditing={isEditing}
+					isEditingDetails={isEditingDetails}
 				/>
 
 				<Button
 					type="button"
 					variant="outline"
-					className={`w-full border-dashed ${isEditing && "bg-yellow-400"}`}
-					onClick={handleClick}
+					className={`w-full border-dashed ${isEditingDetails && "bg-yellow-400"}`}
+					onClick={handleClickDetailsForm}
 				>
-					{isEditing ? (
+					{isEditingDetails ? (
 						<>
 							<Save className="size-4" />
 							Sauvegarder
@@ -85,18 +92,27 @@ export function DetailsTab() {
 				</Button>
 			</div>
 
-			{/* Participants section not yet connected */}
-			{/* <div className="flex-1">
+			<div className="flex-1">
 				<ParticipantsCard />
 				<Button
 					type="button"
 					variant="outline"
-					className="w-full border-dashed"
+					className={`w-full border-dashed ${isEditingParticipants && "bg-yellow-400"}`}
+					onClick={handleClickParticipantsForm}
 				>
-					<Plus className="size-4" />
-					Modifier
+					{isEditingParticipants ? (
+						<>
+							<Save className="size-4" />
+							Sauvegarder
+						</>
+					) : (
+						<>
+							<Plus className="size-4" />
+							Modifier
+						</>
+					)}
 				</Button>
-			</div> */}
+			</div>
 		</div>
 	);
 }

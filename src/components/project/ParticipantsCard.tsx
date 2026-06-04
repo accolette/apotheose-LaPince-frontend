@@ -26,6 +26,10 @@ const participants = [
 ];
 
 export function ParticipantsCard() {
+	type ProjectParticipantsFormProps = {
+		isEditingParticipants: boolean;
+	};
+
 	return (
 		<div className="space-y-3">
 			<div className="rounded-lg border border-border bg-card p-6">

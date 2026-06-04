@@ -4,7 +4,6 @@ import { SpendingByCategory } from "@/components/project/SpendingByCategory";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DetailsTab } from "./tabs/DetailsTab";
 import { OperationTab } from "./tabs/OperationTab";
-import { OverviewTab } from "./tabs/OverviewTab";
 
 export function ProjectTabs() {
 	return (
@@ -32,7 +31,9 @@ export function ProjectTabs() {
 				<DetailsTab />
 			</TabsContent>
 
-			<TabsContent value="expenses">{/* OperationTab — à venir */}</TabsContent>
+			<TabsContent value="expenses">
+				<OperationTab />
+			</TabsContent>
 		</Tabs>
 	);
 }
