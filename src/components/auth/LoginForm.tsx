@@ -25,7 +25,6 @@ export function LoginForm({ onRegisterClick }: LoginFormProps) {
 			// Login successful → redirect to projects page
 			navigate("/projects");
 		} catch {
-			console.log(errorMessage);
 			setErrorMessage("Email ou mot de passe incorrect");
 		}
 	}
