@@ -23,6 +23,11 @@ export function ParticipantsCard({
 		return <div>Loading...</div>;
 	}
 
+	// Removes a participant from the list by index
+	function handleRemoveParticipant(index: number) {
+		setParticipantsFormData((prev) => prev.filter((_, i) => i !== index));
+	}
+
 	// Adds an empty participant slot to the list
 	function handleAddParticipant() {
 		setParticipantsFormData((prev) => [
@@ -57,7 +62,7 @@ export function ParticipantsCard({
 				</div>
 
 				<ul className="space-y-2">
-					{participantsFormData.map((participant) => (
+					{participantsFormData.map((participant, index) => (
 						<li key={participant.id} className="flex items-center gap-2">
 							<Input
 								value={participant.name ?? ""}
@@ -79,6 +84,7 @@ export function ParticipantsCard({
 								variant="ghost"
 								size="icon"
 								className="text-muted-foreground hover:text-destructive"
+								onClick={() => handleRemoveParticipant(index)}
 							>
 								<Trash2 className="size-4" />
 							</Button>
