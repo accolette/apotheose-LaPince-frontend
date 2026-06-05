@@ -28,7 +28,7 @@ export function ProjectPage() {
 		if (project) {
 			document.title = `La Pince – ${project.name}`;
 		}
-	}, [project?.name]);
+	}, [project]);
 
 	if (isAuthLoading) {
 		return <div>Loading...</div>;
