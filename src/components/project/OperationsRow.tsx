@@ -8,6 +8,7 @@ import {
 import { ParticipantStack } from "@/components/common/ParticipantStack";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useCategories } from "@/context/CategoriesContext";
+import { useProject } from "@/context/ProjectContext";
 import type { IOperation } from "@/types/operations";
 import { getAvatarColor } from "@/utils/avatarColors";
 
@@ -36,6 +37,17 @@ export function OperationsRow({
 	const Icon =
 		icons.find((icon) => icon.name === category?.name)?.icon ?? BedDouble;
 	const amount = Number(operation.amount);
+	const { project } = useProject();
+
+	function getPayerParticipantName() {
+		const payerParticipant = project?.projectParticipants.find(
+			(opParticipant) =>
+				opParticipant.participant.id === operation.payerParticipantId,
+		);
+		return payerParticipant?.participant.name;
+	}
+
+	const payerParticipantName = getPayerParticipantName();
 
 	function openOperationDialog() {
 		setSelectedOperation(operation);
@@ -48,13 +60,14 @@ export function OperationsRow({
 				<div className="flex items-center gap-3">
 					<span
 						style={{ backgroundColor: category?.color ?? "#6b7280" }}
-						className="inline-flex text-white size-8 shrink-0 items-center justify-center rounded-md text-primary-foreground"
+						className="inline-flex text-white size-8 shrink-0 items-center justify-center rounded-md"
 					>
 						<Icon className="size-4" />
 					</span>
 					<p className="font-medium">{operation.name}</p>
 				</div>
 			</TableCell>
+
 			<TableCell className="hidden text-xs text-muted-foreground sm:table-cell">
 				{new Date(operation.date).toLocaleDateString("fr-FR", {
 					day: "2-digit",
@@ -62,19 +75,22 @@ export function OperationsRow({
 					year: "2-digit",
 				})}
 			</TableCell>
-			<TableCell className="hidden lg:table-cell">
+
+			<TableCell className="hidden md:table-cell">
 				<div className="flex items-center gap-2">
 					<span
-						className={`flex size-6 items-center justify-center rounded-full text-[10px] font-medium text-white ${getAvatarColor(operation.appUser.name)}`}
+						className={`flex size-6 items-center justify-center rounded-full text-[10px] font-medium text-white ${getAvatarColor(payerParticipantName ?? "")}`}
 					>
-						{operation.appUser.name.slice(0, 2).toUpperCase()}
+						{payerParticipantName?.slice(0, 2).toUpperCase()}
 					</span>
-					<span className="text-xs">{operation.appUser.name}</span>
+					<span className="text-xs">{payerParticipantName}</span>
 				</div>
 			</TableCell>
-			<TableCell className="hidden md:table-cell">
+
+			<TableCell className="hidden sm:table-cell">
 				<ParticipantStack participants={operation.operationParticipants} />
 			</TableCell>
+
 			<TableCell className="text-right font-medium tabular-nums">
 				{amount.toLocaleString("fr-FR", {
 					style: "currency",

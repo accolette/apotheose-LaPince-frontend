@@ -8,8 +8,6 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { useProject } from "@/context/ProjectContext";
-import { apiGetOperations } from "@/services/api";
 import type { IOperation } from "@/types/operations";
 
 type OperationsTableProps = {
@@ -39,14 +37,15 @@ export function OperationsTable({
 	return (
 		<>
 			<p>{operations.length} opérations</p>
+
 			<section className="overflow-hidden rounded-lg border border-border bg-card">
 				<Table>
 					<TableHeader>
 						<TableRow>
 							<TableHead>Description</TableHead>
 							<TableHead className="hidden sm:table-cell">Date</TableHead>
-							<TableHead className="hidden lg:table-cell">Payé par</TableHead>
-							<TableHead className="hidden md:table-cell">
+							<TableHead className="hidden md:table-cell">Payé par</TableHead>
+							<TableHead className="hidden sm:table-cell">
 								Bénéficiaires
 							</TableHead>
 							<TableHead className="text-right">Montant</TableHead>
@@ -65,11 +64,45 @@ export function OperationsTable({
 					</TableBody>
 
 					<TableFooter>
-						<TableRow>
+						<TableRow className="sm:hidden">
+							<TableCell className="text-right">Total</TableCell>
+							<TableCell className="text-right">
+								{totalAmount.toLocaleString("fr-FR", {
+									style: "currency",
+									currency: "EUR",
+								})}
+							</TableCell>
+						</TableRow>
+
+						<TableRow className="hidden sm:table-row md:hidden">
+							<TableCell colSpan={3} className="text-right">
+								Total
+							</TableCell>
+							<TableCell className="text-right">
+								{totalAmount.toLocaleString("fr-FR", {
+									style: "currency",
+									currency: "EUR",
+								})}
+							</TableCell>
+						</TableRow>
+
+						<TableRow className="hidden md:table-row lg:hidden">
 							<TableCell colSpan={4} className="text-right">
 								Total
 							</TableCell>
-							<TableCell className="text-right tabular-nums">
+							<TableCell className="text-right">
+								{totalAmount.toLocaleString("fr-FR", {
+									style: "currency",
+									currency: "EUR",
+								})}
+							</TableCell>
+						</TableRow>
+
+						<TableRow className="hidden lg:table-row">
+							<TableCell colSpan={4} className="text-right">
+								Total
+							</TableCell>
+							<TableCell className="text-right">
 								{totalAmount.toLocaleString("fr-FR", {
 									style: "currency",
 									currency: "EUR",

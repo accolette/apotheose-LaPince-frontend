@@ -1,8 +1,13 @@
 import { createContext, useCallback, useContext, useState } from "react";
-import { apiGetBalance, apiGetBudgets, apiUpdateProject } from "@/services/api";
+import {
+	apiGetBalance,
+	apiGetBudgets,
+	apiUpdateParticipantsProject,
+	apiUpdateProject,
+} from "@/services/api";
 import type { BudgetSummary } from "@/types/budget";
 import type IProject from "@/types/project";
-import type { UpdateProjectPayload } from "@/types/project";
+import type { IParticipant, UpdateProjectPayload } from "@/types/project";
 import type { Reimbursement } from "@/types/reimbursement";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
@@ -18,6 +23,10 @@ type ProjectContextType = {
 	reimbursements: Reimbursement[];
 	getProjectById: (projectId: number) => void;
 	updateProjectById: (projectId: number, data: UpdateProjectPayload) => void;
+	updateProjectParticipantsById: (
+		projectId: number,
+		data: IParticipant[],
+	) => void;
 	// Re-fetche le budget et la balance sans recharger le projet complet.
 	// À appeler après toute mutation qui affecte les montants (opération, modification budget).
 	refreshBudget: (projectId: number) => Promise<void>;
@@ -97,13 +106,34 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 	) => {
 		try {
 			const response = await apiUpdateProject(projectId, data);
-
 			setProject((prev) => ({
-				...prev!,
+				...prev,
 				...response.projectUpdate.project,
-				budget: response.projectUpdate.budget ?? prev?.budget,
+				budget: response.projectUpdate.budget,
 			}));
 
+			return response;
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	};
+
+	const updateProjectParticipantsById = async (
+		projectId: number,
+		data: IParticipant[],
+	) => {
+		try {
+			const response = await apiUpdateParticipantsProject(projectId, data);
+			setProject((prev) =>
+				prev
+					? {
+							...prev,
+							projectParticipants: response,
+						}
+					: prev,
+			);
+			console.log("PATCH RESPONSE", response);
 			return response;
 		} catch (error) {
 			console.error(error);
@@ -120,6 +150,7 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 		errorCode,
 		getProjectById,
 		updateProjectById,
+		updateProjectParticipantsById,
 		refreshBudget,
 	};
 
