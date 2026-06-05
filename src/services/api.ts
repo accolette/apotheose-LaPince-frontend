@@ -5,7 +5,11 @@ import type {
 	UserResponse,
 } from "@/types";
 import type { BudgetSummary } from "@/types/budget";
-import type { IOperation, IOperationsResponse } from "@/types/operations";
+import type {
+	CreateOperationPayload,
+	IOperation,
+	IOperationsResponse,
+} from "@/types/operations";
 import type {
 	CreateProjectPayload,
 	IDashboardProject,
@@ -200,6 +204,37 @@ export async function apiGetOperations(
 	return data.operations;
 }
 
+export async function apiCreateOperation(
+	operationPayload: CreateOperationPayload,
+): Promise<IOperation> {
+	const projectId = operationPayload.projectId;
+	console.log(projectId);
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}/operations`, {
+		method: "POST",
+		headers: buildHeaders(true),
+		body: JSON.stringify(operationPayload),
+	});
+
+	const data = await handleResponse<{ operation: IOperation }>(res);
+	return data.operation;
+}
+
+export async function apiUpdateOperation(
+	operationId: number,
+	operationPayload: CreateOperationPayload,
+): Promise<IOperation> {
+	const projectId = operationPayload.projectId;
+	const res = await fetch(
+		`${BASE_URL}/api/projects/${projectId}/operations/${operationId}`,
+		{
+			method: "PATCH",
+			headers: buildHeaders(true),
+			body: JSON.stringify(operationPayload),
+		},
+	);
+	const data = await handleResponse<{ operation: IOperation }>(res);
+	return data.operation;
+}
 // ── Global balance endpoint ──────────────────────────────────────────────────
 
 export type GlobalBalance = {

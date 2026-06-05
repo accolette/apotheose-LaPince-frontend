@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { OperationDialog } from "@/components/project/OperationDialog";
 import { OperationsTable } from "@/components/project/OperationsTable";
 import { TableFilters } from "@/components/project/TableFilters";
+import { useCategories } from "@/context/CategoriesContext";
 import { useProject } from "@/context/ProjectContext";
 import { apiGetOperations } from "@/services/api";
 import type { IOperation, IOperationDialogState } from "@/types/operations";
@@ -9,13 +10,14 @@ import { getAvatarColor } from "@/utils/avatarColors";
 
 export function OperationTab() {
 	const { project } = useProject();
+	const { categories } = useCategories();
 
 	const [operations, setOperations] = useState<IOperation[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [, setErrorCode] = useState<number | null>(null);
 
-	const [activeFilter, setActiveFilter] = useState("all");
+	const [activeFilter, setActiveFilter] = useState<number | null>(null);
 
 	const [selectedOperation, setSelectedOperation] = useState<IOperation | null>(
 		null,
@@ -28,34 +30,22 @@ export function OperationTab() {
 
 	// ── Chargement des opérations ─────────────────────────────
 
-	useEffect(() => {
+	const loadOperations = useCallback(async () => {
 		if (!project?.id) return;
-
-		const projectId = project.id;
-
-		async function loadOperations() {
-			setIsLoading(true);
-			setError(null);
-			setErrorCode(null);
-
-			try {
-				const data = await apiGetOperations(projectId);
-				setOperations(data);
-			} catch (err) {
-				setOperations([]);
-
-				setError(
-					err instanceof Error
-						? err.message
-						: "Erreur lors du chargement des opérations",
-				);
-			} finally {
-				setIsLoading(false);
-			}
+		setIsLoading(true);
+		try {
+			const data = await apiGetOperations(project.id);
+			setOperations(data);
+		} finally {
+			setIsLoading(false);
 		}
-
-		loadOperations();
 	}, [project?.id]);
+
+	useEffect(() => {
+		loadOperations();
+	}, [loadOperations]);
+
+	// ── Création des catégories de filtre ──────────────────────────────────────
 
 	// ── Total opérations ──────────────────────────────────────
 
@@ -89,6 +79,7 @@ export function OperationTab() {
 
 		setOperationDialogState({
 			mode: "edit",
+			projectId: project.id,
 			operationId: selectedOperation.id,
 			name: selectedOperation.name,
 			amount: selectedOperation.amount,
@@ -108,6 +99,7 @@ export function OperationTab() {
 
 		setOperationDialogState({
 			mode: "create",
+			projectId: project.id,
 			operationId: null,
 			name: "",
 			amount: 0,
@@ -122,26 +114,19 @@ export function OperationTab() {
 
 	// ── Filtre (préparation future) ───────────────────────────
 
-	const filteredOperations =
-		activeFilter === "all"
-			? operations
-			: operations.filter(
-					(operation) => String(operation.categoryId) === activeFilter,
-				);
+	const filteredOperations = activeFilter
+		? operations.filter(
+			(operation) => operation.categoryId === activeFilter,
+		)
+		: operations;
+
 
 	return (
 		<div className="space-y-4">
 			<TableFilters
-				options={[
-					{ value: "all", label: "Toutes", count: 12 },
-					{ value: "housing", label: "Hébergement", count: 3 },
-					{ value: "transport", label: "Transport", count: 2 },
-					{ value: "food", label: "Restauration", count: 4 },
-					{ value: "activities", label: "Activités", count: 2 },
-				]}
+				options={categories}
 				activeValue={activeFilter}
 				onValueChange={setActiveFilter}
-				actionLabel="Nouvelle opération"
 				onActionClick={openCreateOperationDialog}
 			/>
 
@@ -158,6 +143,7 @@ export function OperationTab() {
 				onOpenChange={setIsOperationDialogOpen}
 				operationDialogState={operationDialogState}
 				setOperationDialogState={setOperationDialogState}
+				onOperationCreated={loadOperations}
 			/>
 		</div>
 	);
