@@ -1,42 +1,47 @@
+import type { IOperationParticipant } from "@/types/operations";
 import type { IProjectParticipants } from "@/types/project";
+import { getAvatarColor } from "@/utils/avatarColors";
 
 type ParticipantStackProps = {
-	projectParticipants: IProjectParticipants[];
+	participants: IProjectParticipants[] | IOperationParticipant[];
 	size?: "sm" | "md";
 	maxVisible?: number;
 };
 
 export function ParticipantStack({
-	projectParticipants,
+	participants = [],
 	maxVisible = 3,
 	size = "sm",
 }: ParticipantStackProps) {
-	const visibleParticipants = projectParticipants.slice(0, maxVisible);
+	if (!participants) return null;
 
-	const remainingCount =
-		projectParticipants.length - visibleParticipants.length;
+	const visibleParticipants = participants.slice(0, maxVisible);
+	const remaining = participants.length - visibleParticipants.length;
+
 	const sizeClasses = {
-		sm: "size-6 text-[10px] flex items-center justify-center rounded-full border-2 border-background bg-muted font-medium text-foreground",
-		md: "size-9 text-xs flex items-center justify-center rounded-full border-2 border-background bg-muted font-medium text-foreground",
+		sm: "size-6 text-[10px] flex items-center justify-center rounded-full border-2 border-background font-medium text-foreground",
+		md: "size-9 text-xs flex items-center justify-center rounded-full border-2 border-background font-medium text-foreground",
 	};
 
 	return (
 		<div className="flex items-center gap-2">
 			<div className="flex -space-x-1.5">
-				{visibleParticipants.map((projectParticipants) => (
+				{visibleParticipants.map((p) => (
 					<span
-						key={projectParticipants.participant.name}
-						className={sizeClasses[size]}
+						key={p.participant.name}
+						className={`${sizeClasses[size]} ${getAvatarColor(
+							p.participant.name,
+						)} text-white`}
 					>
-						{projectParticipants.participant.name.slice(0, 2).toUpperCase()}
+						{p.participant.name.slice(0, 2).toUpperCase()}
 					</span>
 				))}
-				{remainingCount > 0 && (
-					<span className={sizeClasses[size]}>+{remainingCount}</span>
+				{remaining > 0 && (
+					<span className={sizeClasses[size]}>+{remaining}</span>
 				)}
 			</div>
 			<span className="text-xs text-muted-foreground">
-				{projectParticipants.length}
+				{participants.length}
 			</span>
 		</div>
 	);
