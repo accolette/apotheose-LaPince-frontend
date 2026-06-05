@@ -47,9 +47,6 @@ export function OperationTab() {
 
 	// ── Création des catégories de filtre ──────────────────────────────────────
 
-
-
-
 	// ── Total opérations ──────────────────────────────────────
 
 	const buildDialogParticipants = useCallback(
@@ -117,10 +114,9 @@ export function OperationTab() {
 
 	// ── Filtre (préparation future) ───────────────────────────
 
-	const filteredOperations =
-		operations.filter(
-			(operation) => operation.categoryId === activeFilter,
-		);
+	const filteredOperations = operations.filter(
+		(operation) => operation.categoryId === activeFilter,
+	);
 
 	return (
 		<div className="space-y-4">

@@ -43,10 +43,7 @@ export function TableFilters({
 						<SelectItem value="all">Toutes les catégories</SelectItem>
 
 						{options.map((option) => (
-							<SelectItem
-								key={option.id}
-								value={String(option.id)}
-							>
+							<SelectItem key={option.id} value={String(option.id)}>
 								{option.name}
 							</SelectItem>
 						))}

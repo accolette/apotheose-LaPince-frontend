@@ -75,7 +75,7 @@ export function OperationsTable({
 						</TableRow>
 
 						<TableRow className="hidden sm:table-row md:hidden">
-							<TableCell colSpan={2} className="text-right">
+							<TableCell colSpan={3} className="text-right">
 								Total
 							</TableCell>
 							<TableCell className="text-right">
@@ -87,7 +87,7 @@ export function OperationsTable({
 						</TableRow>
 
 						<TableRow className="hidden md:table-row lg:hidden">
-							<TableCell colSpan={3} className="text-right">
+							<TableCell colSpan={4} className="text-right">
 								Total
 							</TableCell>
 							<TableCell className="text-right">
