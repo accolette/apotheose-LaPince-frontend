@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ProjectRow } from "@/components/projects/ProjectRow";
 import {
 	Table,
@@ -8,7 +9,11 @@ import {
 } from "@/components/ui/table";
 import { useProjectsQuery } from "@/lib/useProjectsQuery";
 
+type Filter = "all" | "active" | "archived";
+
 export function ProjectsTable() {
+	const [filter, setFilter] = useState<Filter>("active");
+
 	const {
 		data,
 		isLoading,
@@ -19,7 +24,20 @@ export function ProjectsTable() {
 	} = useProjectsQuery();
 
 	// Flatten all pages into a single array
-	const projects = data?.pages.flatMap((page) => page.projects) ?? [];
+	const allProjects = data?.pages.flatMap((page) => page.projects) ?? [];
+
+	// Filter based on selected tab
+	const projects = allProjects.filter((p) => {
+		if (filter === "active") return !p.isArchived;
+		if (filter === "archived") return p.isArchived;
+		return true;
+	});
+
+	const tabs: { label: string; value: Filter }[] = [
+		{ label: "Actifs", value: "active" },
+		{ label: "Archivés", value: "archived" },
+		{ label: "Tous", value: "all" },
+	];
 
 	if (isLoading) {
 		return (
@@ -43,6 +61,23 @@ export function ProjectsTable() {
 
 	return (
 		<section className="overflow-hidden rounded-lg border border-border">
+			{/* Filter tabs */}
+			<div className="flex gap-1 border-b border-border px-4 pt-3">
+				{tabs.map((tab) => (
+					<button
+						key={tab.value}
+						type="button"
+						onClick={() => setFilter(tab.value)}
+						className={`px-3 py-1.5 text-sm rounded-t font-medium transition-colors ${filter === tab.value
+							? "text-foreground border-b-2 border-primary"
+							: "text-muted-foreground hover:text-foreground"
+							}`}
+					>
+						{tab.label}
+					</button>
+				))}
+			</div>
+
 			<Table>
 				<TableHeader className="bg-muted/50">
 					<TableRow>
@@ -59,9 +94,20 @@ export function ProjectsTable() {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{projects.map((project) => (
-						<ProjectRow key={project.id} project={project} />
-					))}
+					{projects.length === 0 ? (
+						<TableRow>
+							<td
+								colSpan={6}
+								className="px-6 py-8 text-center text-sm text-muted-foreground"
+							>
+								Aucun projet trouvé.
+							</td>
+						</TableRow>
+					) : (
+						projects.map((project) => (
+							<ProjectRow key={project.id} project={project} />
+						))
+					)}
 				</TableBody>
 			</Table>
 

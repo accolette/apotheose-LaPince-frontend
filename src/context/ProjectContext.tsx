@@ -98,10 +98,11 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 		try {
 			const response = await apiUpdateProject(projectId, data);
 
-			setProject({
+			setProject((prev) => ({
+				...prev!,
 				...response.projectUpdate.project,
-				budget: response.projectUpdate.budget,
-			});
+				budget: response.projectUpdate.budget ?? prev?.budget,
+			}));
 
 			return response;
 		} catch (error) {
