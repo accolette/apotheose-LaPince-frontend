@@ -1,9 +1,9 @@
 import { Archive } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { useProject } from "@/context/ProjectContext";
 import type IProject from "@/types/project";
 import { ParticipantStack } from "../common/ParticipantStack";
-import { useProject } from "@/context/ProjectContext";
 
 interface ProjectHeadingProps {
 	project: IProject;
@@ -36,7 +36,10 @@ export function ProjectHeading({ project }: ProjectHeadingProps) {
 					<label htmlFor="archive-toggle">Archivé</label>
 				</div>
 
-				<ParticipantStack participants={project.projectParticipants} size="md" />
+				<ParticipantStack
+					participants={project.projectParticipants}
+					size="md"
+				/>
 			</div>
 		</div>
 	);

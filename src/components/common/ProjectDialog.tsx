@@ -1,6 +1,7 @@
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
 	Dialog,
 	DialogContent,
@@ -20,6 +21,7 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/context/AuthContext";
 import { useCreateProjectMutation } from "@/lib/useProjectsQuery";
 
 type Participant = { id: number; name: string };
@@ -38,6 +40,7 @@ export function ProjectDialog({
 	submitLabel = "Créer le projet",
 }: ProjectDialogProps) {
 	const { mutate: createProject, isPending } = useCreateProjectMutation();
+	const { user } = useAuth()
 
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
@@ -45,6 +48,7 @@ export function ProjectDialog({
 	const [budgetAmount, setBudgetAmount] = useState("");
 	const [alertEnabled, setAlertEnabled] = useState(false);
 	const [limitCriteria, setLimitCriteria] = useState(80);
+	const [includeMe, setIncludeMe] = useState(true);
 	const [participants, setParticipants] = useState<Participant[]>([]);
 
 	// Resets all
@@ -55,6 +59,7 @@ export function ProjectDialog({
 		setBudgetAmount("");
 		setAlertEnabled(false);
 		setLimitCriteria(80);
+		setIncludeMe(true);
 		setParticipants([]);
 	}
 
@@ -84,14 +89,18 @@ export function ProjectDialog({
 				name,
 				description: description || undefined,
 				type,
-				budget: budgetAmount
+				budget: alertEnabled
 					? {
-							amount: Number(budgetAmount),
-							alertEnabled,
-							limitCriteria,
-						}
+						amount: Number(budgetAmount),
+						alertEnabled,
+						limitCriteria,
+					}
 					: undefined,
-				participants: participants.filter((p) => p.name.trim() !== ""),
+				// Prepend the current user if includeMe is checkek
+				participants: [
+					...(includeMe && user ? [{ name: user.name }] : []),
+					...participants.filter((p) => p.name.trim() !== ""),
+				],
 			},
 			{
 				onSuccess: () => {
@@ -221,6 +230,17 @@ export function ProjectDialog({
 								<Plus className="size-4" />
 								Ajouter
 							</Button>
+						</div>
+
+						<div className="flex items-center gap-2">
+							<Checkbox
+								id="include-me"
+								checked={includeMe}
+								onCheckedChange={(checked) => setIncludeMe(!!checked)}
+							/>
+							<Label htmlFor="include-me" className="font-normal">
+								M'inclure ({user?.name})
+							</Label>
 						</div>
 
 						<ul className="space-y-2">
