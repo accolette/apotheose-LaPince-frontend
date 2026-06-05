@@ -1,34 +1,42 @@
-import { CircleFadingArrowUpIcon, Plus, Save } from "lucide-react";
+import { CircleFadingArrowUpIcon, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { useProject } from "@/context/ProjectContext";
-import type { UpdateProjectPayload } from "@/types/project";
+import type { IParticipant, UpdateProjectPayload } from "@/types/project";
 import { ParticipantsCard } from "../ParticipantsCard";
 import { ProjectDetailsForm } from "../ProjectDetailsForm";
 
 export function DetailsTab() {
 	const params = useParams();
 	const projectId = Number(params.id);
-	// Controls whether the form is editable or read-only
+
+	// Controls to check if inputs are editable
 	const [isEditingDetails, setIsEditingDetails] = useState(false);
 	const [isEditingParticipants, setIsEditingParticipants] = useState(false);
-	// Access project data and update function from context
-	const { updateProjectById, project } = useProject();
 
-	// Local form state used by controlled inputs
+	// Access current project data and update function from context
+	const { updateProjectById, updateProjectParticipantsById, project } =
+		useProject();
+
+	// Local state used by ProjectDetailsForm
+	// Keeps a copy of project data while user edits it
 	const [formData, setFormData] = useState<UpdateProjectPayload>({
 		name: "",
 		description: "",
 		type: undefined,
 	});
 
+	// Local state dedicated to participants editing
+	const [participantsFormData, setParticipantsFormData] = useState<
+		IParticipant[]
+	>([]);
+
 	useEffect(() => {
-		// Wait until project data has been loaded
 		if (!project) return;
 
-		// Initialize form state from project data
-		// This runs when the project is fetched or updated
+		// Synchronize project details from API/context into local form state
+		// This allows controlled inputs to display current values
 		setFormData({
 			name: project.name,
 			description: project.description,
@@ -41,34 +49,62 @@ export function DetailsTab() {
 					}
 				: undefined,
 		});
-	}, [project]);
+
+		// Extract participants from projectParticipants relation
+		// projectParticipants contains the junction table data,
+		// but we only need the participant object itself in a clean array
+		setParticipantsFormData(
+			project.projectParticipants
+				.map((pp) => pp.participant)
+				.filter(
+					// TypeScript type guard:
+					// removes any undefined value and tells TS
+					// that the result is a valid IParticipant[]
+					(participant): participant is IParticipant =>
+						participant !== undefined,
+				),
+		);
+	}, [project]); // Runs every time project changes
 
 	function handleClickDetailsForm() {
-		// When already in edit mode:
-		// save current form data before returning to read-only mode
+		// If user is already editing and clicks again,
+		// save the modified data before leaving edit mode
 		if (isEditingDetails) {
 			updateProjectById(projectId, formData);
 		}
 
-		// Toggle edit mode
+		// Toggle edit mode on/off
 		setIsEditingDetails(!isEditingDetails);
 	}
 
-	function handleClickParticipantsForm() {
-		// When already in edit mode:
-		// save current form data before returning to read-only mode
-		// Toggle edit mode
+	async function handleClickParticipantsForm() {
+		// Same logic as details section:
+		if (isEditingParticipants) {
+			await updateProjectParticipantsById(projectId, participantsFormData);
+		}
+		setIsEditingParticipants(!isEditingParticipants);
 	}
-
+	useEffect(() => {
+		console.log("PROJECT CHANGED");
+		console.table(
+			project?.projectParticipants?.map((p) => ({
+				id: p.participant?.id,
+				name: p.participant?.name,
+			})),
+		);
+	}, [project]);
 	return (
 		<div className="flex flex-col gap-6 md:flex-row">
+			{/* =========================
+			    PROJECT DETAILS SECTION
+			   ========================= */}
 			<div className="flex-1 space-y-6">
 				<ProjectDetailsForm
-					// Current form values
+					// Current values displayed in the form
 					formData={formData}
-					// State updater passed to child component
+					// Allows child component to update parent state
 					setFormData={setFormData}
-					// Controls disabled/enabled state of inputs
+					// Enables/disables inputs
 					isEditingDetails={isEditingDetails}
 				/>
 
@@ -92,8 +128,19 @@ export function DetailsTab() {
 				</Button>
 			</div>
 
-			<div className="flex-1">
-				<ParticipantsCard />
+			{/* =========================
+			    PARTICIPANTS SECTION
+			   ========================= */}
+			<div className="flex-1 space-y-6">
+				<ParticipantsCard
+					// Local participants state
+					participantsFormData={participantsFormData}
+					// Allows ParticipantsCard to modify participants list
+					setParticipantsFormData={setParticipantsFormData}
+					// Enables/disables participant inputs
+					isEditingParticipants={isEditingParticipants}
+				/>
+
 				<Button
 					type="button"
 					variant="outline"
@@ -107,7 +154,7 @@ export function DetailsTab() {
 						</>
 					) : (
 						<>
-							<Plus className="size-4" />
+							<CircleFadingArrowUpIcon className="size-4" />
 							Modifier
 						</>
 					)}

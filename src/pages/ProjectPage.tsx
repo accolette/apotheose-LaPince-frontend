@@ -19,10 +19,17 @@ export function ProjectPage() {
 	const { user, isLoading: isAuthLoading } = useAuth();
 
 	useEffect(() => {
+		console.log("REFETCH PROJECT TRIGGERED");
 		if (user) {
 			getProjectById(projectId);
 		}
 	}, [user, projectId, getProjectById]);
+
+	useEffect(() => {
+		if (project) {
+			document.title = `La Pince – ${project.name}`;
+		}
+	}, [project]);
 
 	if (isAuthLoading) {
 		return <div>Loading...</div>;
@@ -43,6 +50,7 @@ export function ProjectPage() {
 	if (isProjectLoading || !project) {
 		return <div>Loading...</div>;
 	}
+
 	return (
 		<>
 			<ConnectedHeader />

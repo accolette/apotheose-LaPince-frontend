@@ -13,7 +13,9 @@ import type {
 import type {
 	CreateProjectPayload,
 	IDashboardProject,
+	IParticipant,
 	IProjectsDashboardResponse,
+	UpdateProjectParticipantsResponse,
 	UpdateProjectPayload,
 	UpdateProjectResponse,
 } from "@/types/project";
@@ -139,6 +141,21 @@ export async function apiUpdateProject(
 		body: JSON.stringify(payload),
 	});
 	return handleResponse<UpdateProjectResponse>(res);
+}
+
+export async function apiUpdateParticipantsProject(
+	projectId: number,
+	payload: IParticipant[],
+): Promise<UpdateProjectParticipantsResponse> {
+	const res = await fetch(
+		`${BASE_URL}/api/projects/${projectId}/participants`,
+		{
+			method: "PATCH",
+			headers: buildHeaders(true),
+			body: JSON.stringify(payload),
+		},
+	);
+	return handleResponse<UpdateProjectParticipantsResponse>(res);
 }
 
 // ── Budget endpoints ─────────────────────────────────────────────────────────
