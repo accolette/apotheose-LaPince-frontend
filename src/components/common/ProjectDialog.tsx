@@ -86,10 +86,10 @@ export function ProjectDialog({
 				type,
 				budget: budgetAmount
 					? {
-						amount: Number(budgetAmount),
-						alertEnabled,
-						limitCriteria,
-					}
+							amount: Number(budgetAmount),
+							alertEnabled,
+							limitCriteria,
+						}
 					: undefined,
 				participants: participants.filter((p) => p.name.trim() !== ""),
 			},
@@ -193,7 +193,10 @@ export function ProjectDialog({
 										value={[limitCriteria]}
 										max={100}
 										step={1}
-										onValueChange={(value) => setLimitCriteria(Array.isArray(value) ? value[0] : value)} />
+										onValueChange={(value) =>
+											setLimitCriteria(Array.isArray(value) ? value[0] : value)
+										}
+									/>
 									<span className="w-12 text-right text-xs font-medium tabular-nums">
 										{limitCriteria} %
 									</span>

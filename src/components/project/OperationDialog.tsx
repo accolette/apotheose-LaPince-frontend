@@ -1,8 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+	Dialog,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { useCategories } from "@/context/CategoriesContext";
 import type { IOperationDialogState } from "@/types/operations";
 
@@ -23,20 +35,18 @@ export function OperationDialog({
 	const dialogMode = operationDialogState?.mode ?? "create";
 
 	const selectedCategory = categories.find(
-		(category) => category.id === operationDialogState?.categoryId,);
+		(category) => category.id === operationDialogState?.categoryId,
+	);
 
-	const selectedPayerParticipant =
-		operationDialogState?.participants.find(
-			(participant) =>
-				participant.participantId ===
-				operationDialogState.payerParticipantId,
-		);
+	const selectedPayerParticipant = operationDialogState?.participants.find(
+		(participant) =>
+			participant.participantId === operationDialogState.payerParticipantId,
+	);
 
 	function handleSubmit(event: React.SyntheticEvent) {
 		event.preventDefault();
 		console.log(operationDialogState);
 	}
-
 
 	function updateOperationDialogState(updates: Partial<IOperationDialogState>) {
 		if (!operationDialogState) return;
@@ -83,7 +93,9 @@ export function OperationDialog({
 									className="pr-8 text-right font-medium"
 									value={operationDialogState?.amount ?? ""}
 									onChange={(event) =>
-										updateOperationDialogState({ amount: Number(event.target.value) })
+										updateOperationDialogState({
+											amount: Number(event.target.value),
+										})
 									}
 								/>
 								<span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
@@ -98,7 +110,6 @@ export function OperationDialog({
 							<Label>Catégorie</Label>
 
 							<Select
-
 								value={String(operationDialogState?.categoryId ?? "")}
 								onValueChange={(value) =>
 									updateOperationDialogState({
@@ -118,7 +129,6 @@ export function OperationDialog({
 										</SelectItem>
 									))}
 								</SelectContent>
-
 							</Select>
 						</div>
 
@@ -140,7 +150,6 @@ export function OperationDialog({
 						<Label>Payé par</Label>
 
 						<Select
-
 							value={String(operationDialogState?.payerParticipantId ?? "")}
 							onValueChange={(payerParticipantId) =>
 								updateOperationDialogState({
@@ -161,7 +170,6 @@ export function OperationDialog({
 									</SelectItem>
 								))}
 							</SelectContent>
-
 						</Select>
 					</div>
 
@@ -186,9 +194,9 @@ export function OperationDialog({
 														(item) =>
 															item.participantId === participant.participantId
 																? {
-																	...item,
-																	isSelected: event.target.checked,
-																}
+																		...item,
+																		isSelected: event.target.checked,
+																	}
 																: item,
 													),
 												})
@@ -219,9 +227,9 @@ export function OperationDialog({
 														(item) =>
 															item.participantId === participant.participantId
 																? {
-																	...item,
-																	repartitionAmount: event.target.value,
-																}
+																		...item,
+																		repartitionAmount: event.target.value,
+																	}
 																: item,
 													),
 												})
@@ -246,9 +254,7 @@ export function OperationDialog({
 							Annuler
 						</Button>
 
-						<Button
-							type="submit"
-						>
+						<Button type="submit">
 							{dialogMode === "edit" ? "Modifier" : "Créer"}
 						</Button>
 					</DialogFooter>

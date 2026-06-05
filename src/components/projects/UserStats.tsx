@@ -38,7 +38,11 @@ export function UserStats() {
 			<StatCard
 				icon={Wallet}
 				label="Solde net"
-				value={balance ? `${balance.netBalance >= 0 ? "+" : ""}${formatEuro(balance.netBalance)}` : "—"}
+				value={
+					balance
+						? `${balance.netBalance >= 0 ? "+" : ""}${formatEuro(balance.netBalance)}`
+						: "—"
+				}
 			/>
 		</section>
 	);
