@@ -106,10 +106,11 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 	) => {
 		try {
 			const response = await apiUpdateProject(projectId, data);
-			setProject({
+			setProject((prev) => ({
+				...prev,
 				...response.projectUpdate.project,
 				budget: response.projectUpdate.budget,
-			});
+			}));
 
 			return response;
 		} catch (error) {
@@ -124,8 +125,6 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 	) => {
 		try {
 			const response = await apiUpdateParticipantsProject(projectId, data);
-			console.log("reponse", response);
-
 			setProject((prev) =>
 				prev
 					? {
@@ -134,7 +133,7 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 						}
 					: prev,
 			);
-
+			console.log("PATCH RESPONSE", response);
 			return response;
 		} catch (error) {
 			console.error(error);

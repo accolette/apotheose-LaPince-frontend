@@ -33,6 +33,8 @@ export function ParticipantsCard({
 
 			// Add a new empty participant at the end
 			{
+				// An id just used in front
+				tempId: crypto.randomUUID(),
 				// New participants are not linked to an app user yet
 				appUser: null,
 				// Empty name waiting for user input
@@ -40,7 +42,13 @@ export function ParticipantsCard({
 			},
 		]);
 	}
-
+	console.table(
+		participantsFormData.map((p) => ({
+			id: p.id,
+			tempId: p.tempId,
+			name: p.name,
+		})),
+	);
 	return (
 		<div className="space-y-3">
 			<div
@@ -69,7 +77,7 @@ export function ParticipantsCard({
 				<ul className="space-y-2">
 					{participantsFormData.map((participant, index) => (
 						<li
-							key={participant.id ?? `new-${index}`}
+							key={participant.id ?? participant.tempId}
 							className="flex items-center gap-2"
 						>
 							<Input
@@ -78,14 +86,8 @@ export function ParticipantsCard({
 								value={participant.name ?? ""}
 								onChange={(e) =>
 									setParticipantsFormData((prev) =>
-										// Create a new array
-										prev.map((p) =>
-											// Find the participant currently being edited
-											p.id === participant.id
-												? // Update only its name
-													{ ...p, name: e.target.value }
-												: // Keep all other participants unchanged
-													p,
+										prev.map((p, i) =>
+											i === index ? { ...p, name: e.target.value } : p,
 										),
 									)
 								}

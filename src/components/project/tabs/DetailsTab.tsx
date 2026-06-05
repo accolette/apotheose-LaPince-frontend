@@ -53,7 +53,6 @@ export function DetailsTab() {
 		// Extract participants from projectParticipants relation
 		// projectParticipants contains the junction table data,
 		// but we only need the participant object itself in a clean array
-		console.log("PROJECT", project);
 		setParticipantsFormData(
 			project.projectParticipants
 				.map((pp) => pp.participant)
@@ -78,14 +77,22 @@ export function DetailsTab() {
 		setIsEditingDetails(!isEditingDetails);
 	}
 
-	function handleClickParticipantsForm() {
+	async function handleClickParticipantsForm() {
 		// Same logic as details section:
 		if (isEditingParticipants) {
-			updateProjectParticipantsById(projectId, participantsFormData);
+			await updateProjectParticipantsById(projectId, participantsFormData);
 		}
 		setIsEditingParticipants(!isEditingParticipants);
 	}
-
+	useEffect(() => {
+		console.log("PROJECT CHANGED");
+		console.table(
+			project?.projectParticipants?.map((p) => ({
+				id: p.participant?.id,
+				name: p.participant?.name,
+			})),
+		);
+	}, [project]);
 	return (
 		<div className="flex flex-col gap-6 md:flex-row">
 			{/* =========================
