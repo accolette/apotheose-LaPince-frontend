@@ -24,6 +24,12 @@ export function ProjectPage() {
 		}
 	}, [user, projectId, getProjectById]);
 
+	useEffect(() => {
+		if (project) {
+			document.title = `La Pince – ${project.name}`;
+		}
+	}, [project?.name]);
+
 	if (isAuthLoading) {
 		return <div>Loading...</div>;
 	}
@@ -43,6 +49,7 @@ export function ProjectPage() {
 	if (isProjectLoading || !project) {
 		return <div>Loading...</div>;
 	}
+
 	return (
 		<>
 			<ConnectedHeader />

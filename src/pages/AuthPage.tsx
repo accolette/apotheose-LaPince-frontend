@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { LoginForm } from "@/components/auth/LoginForm";
 import { RegisterForm } from "@/components/auth/RegisterForm";
@@ -11,6 +11,9 @@ type AuthPageProps = {
 
 export function AuthPage({ defaultMode }: AuthPageProps) {
 	const [mode, setMode] = useState<AuthMode>(defaultMode);
+	useEffect(() => {
+		document.title = mode === "login" ? "La Pince – Connexion" : "La Pince – Inscription";
+	}, [mode]);
 
 	return (
 		<main className="flex min-h-screen items-center justify-center px-4">

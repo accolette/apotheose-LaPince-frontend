@@ -1,7 +1,11 @@
+import { useEffect } from "react";
 import { PublicFooter } from "@/components/landingPage/PublicFooter";
 import { PublicHeader } from "@/components/landingPage/PublicHeader";
 
 export function LegalsPage() {
+	useEffect(() => {
+		document.title = "La Pince – Mentions légales";
+	}, []);
 	return (
 		<div className="min-h-screen w-full">
 			<PublicHeader />
