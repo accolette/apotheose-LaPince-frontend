@@ -21,7 +21,18 @@ const categoryIconMap: Record<string, LucideIcon> = {
 
 export function BudgetOverview() {
 	const { budgetSummary } = useProject();
-	if (!budgetSummary) return null;
+
+	if (!budgetSummary || budgetSummary.spentByCategory.length === 0) {
+		return (
+			<div className="rounded-lg border border-dashed border-border p-6 text-center">
+				<p className="text-sm font-medium">Aucune dépense</p>
+				<p className="text-xs text-muted-foreground mt-1">
+					La vue d'ensemble apparaîtra ici.
+				</p>
+			</div>
+		);
+	}
+
 	const { totalSpent, totalLimit, spentByCategory } = budgetSummary;
 	const usedPercent = totalLimit
 		? Math.round((totalSpent / totalLimit) * 100)

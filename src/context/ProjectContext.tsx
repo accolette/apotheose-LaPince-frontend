@@ -1,15 +1,9 @@
-import {
-	createContext,
-	useCallback,
-	useContext,
-	useEffect,
-	useState,
-} from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import { apiGetBalance, apiGetBudgets, apiUpdateProject } from "@/services/api";
 import type { BudgetSummary } from "@/types/budget";
 import type IProject from "@/types/project";
 import type { UpdateProjectPayload } from "@/types/project";
-import type { ParticipantBalance, Reimbursement } from "@/types/reimbursement";
+import type { Reimbursement } from "@/types/reimbursement";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -24,6 +18,9 @@ type ProjectContextType = {
 	reimbursements: Reimbursement[];
 	getProjectById: (projectId: number) => void;
 	updateProjectById: (projectId: number, data: UpdateProjectPayload) => void;
+	// Re-fetche le budget et la balance sans recharger le projet complet.
+	// À appeler après toute mutation qui affecte les montants (opération, modification budget).
+	refreshBudget: (projectId: number) => Promise<void>;
 };
 
 // ── Project context creation ──────────────────────────────────────────────────
@@ -48,43 +45,51 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 	const [error, setError] = useState<string | null>(null);
 	const [errorCode, setErrorCode] = useState<number | null>(null);
 
-	const getProjectById = useCallback(async (projectId: number) => {
-		const token = localStorage.getItem("token");
-		setIsLoading(true);
-		try {
-			// TODO: replace with apiGetProjectById
-			const response = await fetch(`${BASE_URL}/api/projects/${projectId}`, {
-				headers: { Authorization: `Bearer ${token}` },
-			});
-			if (!response.ok) {
-				setErrorCode(response.status);
-				return;
-			}
-			const data = await response.json();
-			setProject(data.project);
-
-			// Fetch budgets + balance in parallel
-			const [budgetData, balanceData] = await Promise.all([
-				apiGetBudgets(projectId),
-				apiGetBalance(projectId),
-			]);
-			setBudgetSummary(budgetData);
-			setReimbursements(balanceData);
-			setError(null);
-			setErrorCode(null);
-		} catch (err: unknown) {
-			setProject(null);
-			setBudgetSummary(null);
-			setReimbursements([]);
-			setError(
-				err instanceof Error
-					? err.message
-					: `Error fetching project: ${projectId}`,
-			);
-		} finally {
-			setIsLoading(false);
-		}
+	// Re-fetche uniquement le résumé budget et les remboursements.
+	// Évite de recharger le projet entier quand seuls les montants ont changé.
+	const refreshBudget = useCallback(async (projectId: number) => {
+		const [budgetData, balanceData] = await Promise.all([
+			apiGetBudgets(projectId),
+			apiGetBalance(projectId),
+		]);
+		setBudgetSummary(budgetData);
+		setReimbursements(balanceData);
 	}, []);
+
+	const getProjectById = useCallback(
+		async (projectId: number) => {
+			const token = localStorage.getItem("token");
+			setIsLoading(true);
+			try {
+				// TODO: replace with apiGetProjectById
+				const response = await fetch(`${BASE_URL}/api/projects/${projectId}`, {
+					headers: { Authorization: `Bearer ${token}` },
+				});
+				if (!response.ok) {
+					setErrorCode(response.status);
+					return;
+				}
+				const data = await response.json();
+				setProject(data.project);
+				// Utilise refreshBudget pour éviter de dupliquer la logique de fetch budget/balance
+				await refreshBudget(projectId);
+				setError(null);
+				setErrorCode(null);
+			} catch (err: unknown) {
+				setProject(null);
+				setBudgetSummary(null);
+				setReimbursements([]);
+				setError(
+					err instanceof Error
+						? err.message
+						: `Error fetching project: ${projectId}`,
+				);
+			} finally {
+				setIsLoading(false);
+			}
+		},
+		[refreshBudget],
+	);
 
 	const updateProjectById = async (
 		projectId: number,
@@ -114,6 +119,7 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 		errorCode,
 		getProjectById,
 		updateProjectById,
+		refreshBudget,
 	};
 
 	return (
