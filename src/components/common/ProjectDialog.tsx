@@ -40,7 +40,7 @@ export function ProjectDialog({
 	submitLabel = "Créer le projet",
 }: ProjectDialogProps) {
 	const { mutate: createProject, isPending } = useCreateProjectMutation();
-	const { user } = useAuth()
+	const { user } = useAuth();
 
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
@@ -91,10 +91,10 @@ export function ProjectDialog({
 				type,
 				budget: alertEnabled
 					? {
-						amount: Number(budgetAmount),
-						alertEnabled,
-						limitCriteria,
-					}
+							amount: Number(budgetAmount),
+							alertEnabled,
+							limitCriteria,
+						}
 					: undefined,
 				// Prepend the current user if includeMe is checkek
 				participants: [
