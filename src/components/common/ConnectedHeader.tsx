@@ -1,5 +1,4 @@
 import { LandmarkIcon, LogOutIcon, MoonIcon, SunIcon } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import {
 	DropdownMenu,
@@ -8,27 +7,17 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/context/AuthContext";
-
-
+import { useTheme } from "@/context/ThemesContext";
 
 export function ConnectedHeader() {
-
 	const { logout, user } = useAuth();
 	const navigate = useNavigate();
-	const [isDark, setIsDark] = useState(
-		() => localStorage.getItem("theme") === "dark",
-	);
+	const { theme, setTheme } = useTheme()
 
-	useEffect(() => {
-		document.querySelector("html")?.classList.toggle("dark", isDark);
-	}, [isDark]);
+	const isDark = theme === "dark";
 
 	function toggleDark() {
-		setIsDark((prev) => {
-			const next = !prev;
-			localStorage.setItem("theme", next ? "dark" : "light");
-			return next;
-		});
+		setTheme(isDark ? "light" : "dark");
 	}
 
 	async function handleLogout() {
