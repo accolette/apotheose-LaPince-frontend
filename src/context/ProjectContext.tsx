@@ -5,10 +5,15 @@ import {
 	useEffect,
 	useState,
 } from "react";
-import { apiGetBalance, apiGetBudgets, apiUpdateProject } from "@/services/api";
+import {
+	apiGetBalance,
+	apiGetBudgets,
+	apiUpdateParticipantsProject,
+	apiUpdateProject,
+} from "@/services/api";
 import type { BudgetSummary } from "@/types/budget";
 import type IProject from "@/types/project";
-import type { UpdateProjectPayload } from "@/types/project";
+import type { IParticipant, UpdateProjectPayload } from "@/types/project";
 import type { ParticipantBalance, Reimbursement } from "@/types/reimbursement";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
@@ -24,6 +29,10 @@ type ProjectContextType = {
 	reimbursements: Reimbursement[];
 	getProjectById: (projectId: number) => void;
 	updateProjectById: (projectId: number, data: UpdateProjectPayload) => void;
+	updateProjectParticipantsById: (
+		projectId: number,
+		data: IParticipant[],
+	) => void;
 };
 
 // ── Project context creation ──────────────────────────────────────────────────
@@ -105,6 +114,30 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 		}
 	};
 
+	const updateProjectParticipantsById = async (
+		projectId: number,
+		data: IParticipant[],
+	) => {
+		try {
+			const response = await apiUpdateParticipantsProject(projectId, data);
+
+			setProject((prev) =>
+				prev
+					? {
+							...prev,
+							projectParticipants: response.participants.map((participant) => ({
+								participant,
+							})),
+						}
+					: prev,
+			);
+			return response;
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	};
+
 	const value = {
 		project,
 		budgetSummary,
@@ -114,6 +147,7 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 		errorCode,
 		getProjectById,
 		updateProjectById,
+		updateProjectParticipantsById,
 	};
 
 	return (

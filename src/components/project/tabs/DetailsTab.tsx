@@ -16,7 +16,8 @@ export function DetailsTab() {
 	const [isEditingParticipants, setIsEditingParticipants] = useState(false);
 
 	// Access current project data and update function from context
-	const { updateProjectById, project } = useProject();
+	const { updateProjectById, updateProjectParticipantsById, project } =
+		useProject();
 
 	// Local state used by ProjectDetailsForm
 	// Keeps a copy of project data while user edits it
@@ -79,7 +80,7 @@ export function DetailsTab() {
 	function handleClickParticipantsForm() {
 		// Same logic as details section:
 		if (isEditingParticipants) {
-			// updateProjectParticipantsById();
+			updateProjectParticipantsById(projectId, participantsFormData);
 		}
 		setIsEditingParticipants(!isEditingParticipants);
 	}

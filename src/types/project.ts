@@ -61,6 +61,10 @@ export type ProjectType =
 	| "Pro_Travail"
 	| "Autre";
 
+export type UpdateProjectParticipantsResponse = {
+	participants: IParticipant[];
+};
+
 // Initial setup before dynamisation of page
 //TODO: Remove it when everythings is setup
 export type Project = {
