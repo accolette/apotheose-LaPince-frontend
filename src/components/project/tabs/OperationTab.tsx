@@ -114,9 +114,12 @@ export function OperationTab() {
 
 	// ── Filtre (préparation future) ───────────────────────────
 
-	const filteredOperations = operations.filter(
-		(operation) => operation.categoryId === activeFilter,
-	);
+	const filteredOperations = activeFilter
+		? operations.filter(
+			(operation) => operation.categoryId === activeFilter,
+		)
+		: operations;
+
 
 	return (
 		<div className="space-y-4">
