@@ -88,7 +88,9 @@ export function ProjectRow({ project }: ProjectRowProps) {
 
 			<td className="hidden px-6 py-4 text-right sm:table-cell">
 				{project.userBalance !== null ? (
-					<span className={`text-sm font-medium ${project.userBalance >= 0 ? "text-green-600" : "text-destructive"}`}>
+					<span
+						className={`text-sm font-medium ${project.userBalance >= 0 ? "text-green-600" : "text-destructive"}`}
+					>
 						{project.userBalance >= 0 ? "+" : ""}
 						{project.userBalance.toLocaleString("fr-FR", {
 							style: "currency",

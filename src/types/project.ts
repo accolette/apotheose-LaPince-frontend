@@ -15,7 +15,7 @@ export interface IProjectParticipants {
 }
 
 export interface IParticipant {
-	id: number;
+	id?: number;
 	appUser: IAppUser | null;
 	name: string;
 }
@@ -61,9 +61,7 @@ export type ProjectType =
 	| "Pro_Travail"
 	| "Autre";
 
-export type UpdateProjectParticipantsResponse = {
-	participants: IParticipant[];
-};
+export type UpdateProjectParticipantsResponse = IProjectParticipants[];
 
 // Initial setup before dynamisation of page
 //TODO: Remove it when everythings is setup

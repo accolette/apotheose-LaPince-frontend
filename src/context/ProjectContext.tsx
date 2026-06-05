@@ -106,7 +106,6 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 	) => {
 		try {
 			const response = await apiUpdateProject(projectId, data);
-
 			setProject({
 				...response.projectUpdate.project,
 				budget: response.projectUpdate.budget,
@@ -125,17 +124,17 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 	) => {
 		try {
 			const response = await apiUpdateParticipantsProject(projectId, data);
+			console.log("reponse", response);
 
 			setProject((prev) =>
 				prev
 					? {
 							...prev,
-							projectParticipants: response.participants.map((participant) => ({
-								participant,
-							})),
+							projectParticipants: response,
 						}
 					: prev,
 			);
+
 			return response;
 		} catch (error) {
 			console.error(error);

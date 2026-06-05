@@ -53,6 +53,7 @@ export function DetailsTab() {
 		// Extract participants from projectParticipants relation
 		// projectParticipants contains the junction table data,
 		// but we only need the participant object itself in a clean array
+		console.log("PROJECT", project);
 		setParticipantsFormData(
 			project.projectParticipants
 				.map((pp) => pp.participant)

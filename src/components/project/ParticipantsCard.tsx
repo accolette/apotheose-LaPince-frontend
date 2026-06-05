@@ -2,7 +2,6 @@ import { Plus, Trash2 } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useProject } from "@/context/ProjectContext";
 import type { IParticipant } from "@/types/project";
 
 // Props received from the parent component (DetailsTab)
@@ -34,8 +33,6 @@ export function ParticipantsCard({
 
 			// Add a new empty participant at the end
 			{
-				// Temporary id used by React as a key (not yet persisted in database)
-				id: Date.now(),
 				// New participants are not linked to an app user yet
 				appUser: null,
 				// Empty name waiting for user input
@@ -71,7 +68,10 @@ export function ParticipantsCard({
 				{/* Participants list */}
 				<ul className="space-y-2">
 					{participantsFormData.map((participant, index) => (
-						<li key={participant.id} className="flex items-center gap-2">
+						<li
+							key={participant.id ?? `new-${index}`}
+							className="flex items-center gap-2"
+						>
 							<Input
 								// Controlled input:
 								// value always comes from React state
