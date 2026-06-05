@@ -5,7 +5,11 @@ import type {
 	UserResponse,
 } from "@/types";
 import type { BudgetSummary } from "@/types/budget";
-import type { CreateOperationPayload, IOperation, IOperationsResponse } from "@/types/operations";
+import type {
+	CreateOperationPayload,
+	IOperation,
+	IOperationsResponse,
+} from "@/types/operations";
 import type {
 	CreateProjectPayload,
 	IDashboardProject,
@@ -183,10 +187,6 @@ export async function apiGetOperations(
 	return data.operations;
 }
 
-
-
-
-
 export async function apiCreateOperation(
 	operationPayload: CreateOperationPayload,
 ): Promise<IOperation> {
@@ -199,6 +199,24 @@ export async function apiCreateOperation(
 	});
 
 	const data = await handleResponse<{ operation: IOperation }>(res);
+	return data.operation;
+}
 
+
+export async function apiUpdateOperation(
+	operationId: number,
+	operationPayload: CreateOperationPayload,
+): Promise<IOperation> {
+
+	const projectId = operationPayload.projectId;
+	const res = await fetch(
+		`${BASE_URL}/api/projects/${projectId}/operations/${operationId}`,
+		{
+			method: "PATCH",
+			headers: buildHeaders(true),
+			body: JSON.stringify(operationPayload),
+		},
+	);
+	const data = await handleResponse<{ operation: IOperation }>(res);
 	return data.operation;
 }

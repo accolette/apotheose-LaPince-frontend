@@ -16,17 +16,19 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { useCategories } from "@/context/CategoriesContext";
-import { apiCreateOperation } from "@/services/api";
+import { apiCreateOperation, apiUpdateOperation } from "@/services/api";
 import type {
 	CreateOperationPayload,
 	IOperationDialogState,
 } from "@/types/operations";
+
 
 type OperationDialogProps = {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	operationDialogState: IOperationDialogState | null;
 	setOperationDialogState: (state: IOperationDialogState | null) => void;
+	onOperationCreated: () => void | Promise<void>
 };
 
 export function OperationDialog({
@@ -34,6 +36,7 @@ export function OperationDialog({
 	onOpenChange,
 	operationDialogState,
 	setOperationDialogState,
+	onOperationCreated,
 }: OperationDialogProps) {
 	const { categories } = useCategories();
 	const dialogMode = operationDialogState?.mode ?? "create";
@@ -47,8 +50,7 @@ export function OperationDialog({
 			participant.participantId === operationDialogState.payerParticipantId,
 	);
 
-	function buildCreateOperationPayload(): CreateOperationPayload {
-		if (!operationDialogState) return;
+	function buildCreateOperationPayload(operationDialogState: IOperationDialogState): CreateOperationPayload {
 		return {
 			name: operationDialogState.name,
 			amount: operationDialogState.amount,
@@ -65,13 +67,28 @@ export function OperationDialog({
 		};
 	}
 
-	function handleSubmit(event: React.SyntheticEvent) {
+	async function handleSubmit(event: React.SyntheticEvent) {
+
 		event.preventDefault();
-		if (!operationDialogState) return null;
-		const payload = buildCreateOperationPayload();
-		console.log("operationDialogState", payload);
-		apiCreateOperation(payload);
-		onOpenChange(false);
+		if (!operationDialogState) return;
+		try {
+			const payload = buildCreateOperationPayload(operationDialogState);
+			if (operationDialogState.mode === "create") {
+				await apiCreateOperation(payload);
+			} else {
+				if (!operationDialogState.operationId) return;
+				await apiUpdateOperation(
+					operationDialogState.operationId,
+					payload,
+				);
+			}
+			await onOperationCreated();
+			onOpenChange(false);
+			setOperationDialogState(null);
+		} catch (error) {
+			console.error("Failed to save operation:", error);
+		}
+
 	}
 
 	function updateOperationDialogState(updates: Partial<IOperationDialogState>) {

@@ -8,9 +8,8 @@ import {
 import { apiGetBalance, apiGetBudgets, apiUpdateProject } from "@/services/api";
 import type { BudgetSummary } from "@/types/budget";
 import type IProject from "@/types/project";
-import type { Reimbursement } from "@/types/reimbursement";
 import type { UpdateProjectPayload } from "@/types/project";
-import type { ParticipantBalance } from "@/types/reimbursement";
+import type { ParticipantBalance, Reimbursement } from "@/types/reimbursement";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 

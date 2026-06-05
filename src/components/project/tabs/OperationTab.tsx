@@ -28,56 +28,43 @@ export function OperationTab() {
 
 	// ── Chargement des opérations ─────────────────────────────
 
-	useEffect(() => {
+	const loadOperations = useCallback(async () => {
 		if (!project?.id) return;
-
-		const projectId = project.id;
-
-		async function loadOperations() {
-			setIsLoading(true);
-			setError(null);
-			setErrorCode(null);
-
-			try {
-				const data = await apiGetOperations(projectId);
-				setOperations(data);
-			} catch (err) {
-				setOperations([]);
-
-				setError(
-					err instanceof Error
-						? err.message
-						: "Erreur lors du chargement des opérations",
-				);
-			} finally {
-				setIsLoading(false);
-			}
+		setIsLoading(true);
+		try {
+			const data = await apiGetOperations(project.id);
+			setOperations(data);
+		} finally {
+			setIsLoading(false);
 		}
-
-		loadOperations();
 	}, [project?.id]);
+
+	useEffect(() => {
+		loadOperations();
+	}, [loadOperations]);
 
 	// ── Total opérations ──────────────────────────────────────
 
-	const buildDialogParticipants = useCallback((operation: IOperation | null = null) => {
-		if (!project) return [];
-		return project.projectParticipants.map((projectParticipant) => {
-			const participant = projectParticipant.participant;
-			const operationParticipant = operation?.operationParticipants.find(
-				(opParticipant) => opParticipant.participant.id === participant.id,
-			);
-			return {
-				participantId: participant.id,
-				name: participant.name,
-				initials: participant.name.slice(0, 2).toUpperCase(),
-				avatarColor: getAvatarColor(participant.name),
-				isSelected: Boolean(operationParticipant),
-				repartitionAmount: operationParticipant?.repartitionAmount
-					? String(operationParticipant.repartitionAmount)
-					: "",
-			};
-		});
-	},
+	const buildDialogParticipants = useCallback(
+		(operation: IOperation | null = null) => {
+			if (!project) return [];
+			return project.projectParticipants.map((projectParticipant) => {
+				const participant = projectParticipant.participant;
+				const operationParticipant = operation?.operationParticipants.find(
+					(opParticipant) => opParticipant.participant.id === participant.id,
+				);
+				return {
+					participantId: participant.id,
+					name: participant.name,
+					initials: participant.name.slice(0, 2).toUpperCase(),
+					avatarColor: getAvatarColor(participant.name),
+					isSelected: Boolean(operationParticipant),
+					repartitionAmount: operationParticipant?.repartitionAmount
+						? String(operationParticipant.repartitionAmount)
+						: "",
+				};
+			});
+		},
 		[project],
 	);
 
@@ -159,6 +146,7 @@ export function OperationTab() {
 				onOpenChange={setIsOperationDialogOpen}
 				operationDialogState={operationDialogState}
 				setOperationDialogState={setOperationDialogState}
+				onOperationCreated={loadOperations}
 			/>
 		</div>
 	);
