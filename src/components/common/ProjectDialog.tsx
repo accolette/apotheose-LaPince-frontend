@@ -86,10 +86,10 @@ export function ProjectDialog({
 				type,
 				budget: budgetAmount
 					? {
-							amount: Number(budgetAmount),
-							alertEnabled,
-							limitCriteria,
-						}
+						amount: Number(budgetAmount),
+						alertEnabled,
+						limitCriteria,
+					}
 					: undefined,
 				participants: participants.filter((p) => p.name.trim() !== ""),
 			},
@@ -155,27 +155,6 @@ export function ProjectDialog({
 						</Select>
 					</div>
 
-					<div className="space-y-2">
-						<Label htmlFor="project-budget">
-							Budget global{" "}
-							<span className="text-muted-foreground">(optionnel)</span>
-						</Label>
-
-						<div className="relative">
-							<Input
-								id="project-budget"
-								type="number"
-								placeholder="1000"
-								className="pr-8"
-								value={budgetAmount}
-								onChange={(e) => setBudgetAmount(e.target.value)}
-							/>
-							<span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-								€
-							</span>
-						</div>
-					</div>
-
 					<div className="space-y-3">
 						<div className="flex items-center gap-2">
 							<Switch
@@ -187,12 +166,39 @@ export function ProjectDialog({
 						</div>
 
 						{alertEnabled && (
-							<div className="flex items-center gap-3">
-								<Slider value={[limitCriteria]} max={100} step={1} />
-								<span className="w-12 text-right text-xs font-medium tabular-nums">
-									{limitCriteria} %
-								</span>
-							</div>
+							<>
+								<div className="space-y-2">
+									<Label htmlFor="project-budget">
+										Budget global{" "}
+										<span className="text-muted-foreground">(optionnel)</span>
+									</Label>
+
+									<div className="relative">
+										<Input
+											id="project-budget"
+											type="number"
+											placeholder="1000"
+											className="pr-8"
+											value={budgetAmount}
+											onChange={(e) => setBudgetAmount(e.target.value)}
+										/>
+										<span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+											€
+										</span>
+									</div>
+								</div>
+
+								<div className="flex items-center gap-3">
+									<Slider
+										value={[limitCriteria]}
+										max={100}
+										step={1}
+										onValueChange={(value) => setLimitCriteria(Array.isArray(value) ? value[0] : value)} />
+									<span className="w-12 text-right text-xs font-medium tabular-nums">
+										{limitCriteria} %
+									</span>
+								</div>
+							</>
 						)}
 					</div>
 

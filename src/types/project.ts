@@ -157,6 +157,7 @@ export interface IDashboardProject {
 	operationsCount: number;
 	participants: IDashboardParticipant[];
 	budget: IDashboardBudget | null;
+	userBalance: number | null;
 }
 
 export interface IProjectsDashboardResponse {
