@@ -1,9 +1,7 @@
-import { BalanceCard } from "@/components/project/BalanceCard";
-import { BudgetOverview } from "@/components/project/BudgetOverview";
-import { SpendingByCategory } from "@/components/project/SpendingByCategory";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DetailsTab } from "./tabs/DetailsTab";
 import { OperationTab } from "./tabs/OperationTab";
+import { OverviewTab } from "./tabs/OverviewTab";
 
 export function ProjectTabs() {
 	return (
@@ -16,15 +14,7 @@ export function ProjectTabs() {
 				</TabsList>
 			</div>
 			<TabsContent value="overview">
-				<div className="flex flex-col gap-6 md:flex-row">
-					<div className="flex-1 space-y-6">
-						<BudgetOverview />
-						<SpendingByCategory />
-					</div>
-					<div className="flex-1">
-						<BalanceCard />
-					</div>
-				</div>
+				<OverviewTab />
 			</TabsContent>
 
 			<TabsContent value="details">

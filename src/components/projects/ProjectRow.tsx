@@ -55,7 +55,7 @@ export function ProjectRow({ project }: ProjectRowProps) {
 			<td className="hidden px-6 py-4 md:table-cell">
 				<ParticipantStack
 					participants={project.participants.map((p) => ({
-						participant: { name: p.name, appUser: null },
+						participant: { id: p.id, name: p.name, appUser: null },
 					}))}
 				/>
 			</td>
@@ -87,7 +87,17 @@ export function ProjectRow({ project }: ProjectRowProps) {
 			</td>
 
 			<td className="hidden px-6 py-4 text-right sm:table-cell">
-				<span className="text-sm font-medium text-muted-foreground">—</span>
+				{project.userBalance !== null ? (
+					<span className={`text-sm font-medium ${project.userBalance >= 0 ? "text-green-600" : "text-destructive"}`}>
+						{project.userBalance >= 0 ? "+" : ""}
+						{project.userBalance.toLocaleString("fr-FR", {
+							style: "currency",
+							currency: "EUR",
+						})}
+					</span>
+				) : (
+					<span className="text-sm font-medium text-muted-foreground">—</span>
+				)}
 			</td>
 
 			<td className="px-4 py-4 text-muted-foreground">

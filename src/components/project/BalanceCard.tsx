@@ -5,7 +5,16 @@ import type { Reimbursement } from "@/types/reimbursement";
 export function BalanceCard() {
 	const { reimbursements } = useProject();
 
-	if (!reimbursements.length) return null;
+	if (!reimbursements.length) {
+		return (
+			<div className="rounded-lg border border-dashed border-border p-6 text-center">
+				<p className="text-sm font-medium">Balance équilibrée</p>
+				<p className="text-xs text-muted-foreground mt-1">
+					Les remboursements à effectuer apparaîtront ici.
+				</p>
+			</div>
+		);
+	}
 
 	return (
 		<div className="overflow-hidden rounded-lg border border-border bg-card">

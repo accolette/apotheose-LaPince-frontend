@@ -199,3 +199,19 @@ export async function apiGetOperations(
 	const data = await handleResponse<IOperationsResponse>(res);
 	return data.operations;
 }
+
+// ── Global balance endpoint ──────────────────────────────────────────────────
+
+export type GlobalBalance = {
+	toDo: number;
+	toReceive: number;
+	netBalance: number;
+};
+
+export async function apiGetGlobalBalance(): Promise<GlobalBalance> {
+	const res = await fetch(`${BASE_URL}/api/balance`, {
+		method: "GET",
+		headers: buildHeaders(true),
+	});
+	return handleResponse<GlobalBalance>(res);
+}
