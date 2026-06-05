@@ -202,12 +202,10 @@ export async function apiCreateOperation(
 	return data.operation;
 }
 
-
 export async function apiUpdateOperation(
 	operationId: number,
 	operationPayload: CreateOperationPayload,
 ): Promise<IOperation> {
-
 	const projectId = operationPayload.projectId;
 	const res = await fetch(
 		`${BASE_URL}/api/projects/${projectId}/operations/${operationId}`,

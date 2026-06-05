@@ -22,13 +22,12 @@ import type {
 	IOperationDialogState,
 } from "@/types/operations";
 
-
 type OperationDialogProps = {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	operationDialogState: IOperationDialogState | null;
 	setOperationDialogState: (state: IOperationDialogState | null) => void;
-	onOperationCreated: () => void | Promise<void>
+	onOperationCreated: () => void | Promise<void>;
 };
 
 export function OperationDialog({
@@ -50,7 +49,9 @@ export function OperationDialog({
 			participant.participantId === operationDialogState.payerParticipantId,
 	);
 
-	function buildCreateOperationPayload(operationDialogState: IOperationDialogState): CreateOperationPayload {
+	function buildCreateOperationPayload(
+		operationDialogState: IOperationDialogState,
+	): CreateOperationPayload {
 		return {
 			name: operationDialogState.name,
 			amount: operationDialogState.amount,
@@ -68,7 +69,6 @@ export function OperationDialog({
 	}
 
 	async function handleSubmit(event: React.SyntheticEvent) {
-
 		event.preventDefault();
 		if (!operationDialogState) return;
 		try {
@@ -77,10 +77,7 @@ export function OperationDialog({
 				await apiCreateOperation(payload);
 			} else {
 				if (!operationDialogState.operationId) return;
-				await apiUpdateOperation(
-					operationDialogState.operationId,
-					payload,
-				);
+				await apiUpdateOperation(operationDialogState.operationId, payload);
 			}
 			await onOperationCreated();
 			onOpenChange(false);
@@ -88,7 +85,6 @@ export function OperationDialog({
 		} catch (error) {
 			console.error("Failed to save operation:", error);
 		}
-
 	}
 
 	function updateOperationDialogState(updates: Partial<IOperationDialogState>) {
@@ -237,9 +233,9 @@ export function OperationDialog({
 														(item) =>
 															item.participantId === participant.participantId
 																? {
-																	...item,
-																	isSelected: event.target.checked,
-																}
+																		...item,
+																		isSelected: event.target.checked,
+																	}
 																: item,
 													),
 												})
@@ -270,9 +266,9 @@ export function OperationDialog({
 														(item) =>
 															item.participantId === participant.participantId
 																? {
-																	...item,
-																	repartitionAmount: event.target.value,
-																}
+																		...item,
+																		repartitionAmount: event.target.value,
+																	}
 																: item,
 													),
 												})

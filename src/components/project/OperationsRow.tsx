@@ -67,6 +67,7 @@ export function OperationsRow({
 					<p className="font-medium">{operation.name}</p>
 				</div>
 			</TableCell>
+
 			<TableCell className="hidden text-xs text-muted-foreground sm:table-cell">
 				{new Date(operation.date).toLocaleDateString("fr-FR", {
 					day: "2-digit",
@@ -74,7 +75,8 @@ export function OperationsRow({
 					year: "2-digit",
 				})}
 			</TableCell>
-			<TableCell className="hidden lg:table-cell">
+
+			<TableCell className="hidden md:table-cell">
 				<div className="flex items-center gap-2">
 					<span
 						className={`flex size-6 items-center justify-center rounded-full text-[10px] font-medium text-white ${getAvatarColor(payerParticipantName ?? "")}`}
@@ -84,9 +86,11 @@ export function OperationsRow({
 					<span className="text-xs">{payerParticipantName}</span>
 				</div>
 			</TableCell>
-			<TableCell className="hidden md:table-cell">
+
+			<TableCell className="hidden sm:table-cell">
 				<ParticipantStack participants={operation.operationParticipants} />
 			</TableCell>
+
 			<TableCell className="text-right font-medium tabular-nums">
 				{amount.toLocaleString("fr-FR", {
 					style: "currency",
