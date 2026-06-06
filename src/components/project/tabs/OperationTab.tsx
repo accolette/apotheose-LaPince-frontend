@@ -15,7 +15,6 @@ export function OperationTab() {
 	const [operations, setOperations] = useState<IOperation[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-	const [, setErrorCode] = useState<number | null>(null);
 
 	const [activeFilter, setActiveFilter] = useState<number | null>(null);
 

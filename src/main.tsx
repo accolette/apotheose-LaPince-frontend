@@ -32,6 +32,5 @@ createRoot(rootElement).render(
 				</AuthProvider>
 			</QueryClientProvider>
 		</ThemeProvider>
-
 	</StrictMode>,
 );
