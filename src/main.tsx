@@ -8,6 +8,7 @@ import { AuthProvider } from "./context/AuthContext.tsx";
 import CategoriesProvider from "./context/CategoriesContext.tsx";
 import { ProjectProvider } from "./context/ProjectContext.tsx";
 import ProjectsProvider from "./context/ProjectsContext.tsx";
+import { ThemeProvider } from "./context/ThemesContext.tsx";
 
 const queryClient = new QueryClient();
 
@@ -19,17 +20,19 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
 	<StrictMode>
-		<QueryClientProvider client={queryClient}>
-			<AuthProvider>
-				<CategoriesProvider>
-					<ProjectsProvider>
-						<ProjectProvider>
-							<App />
-						</ProjectProvider>
-					</ProjectsProvider>
-				</CategoriesProvider>
-			</AuthProvider>
-		</QueryClientProvider>
-		<Toaster position="top-right" richColors />
+		<ThemeProvider defaultTheme="dark" storageKey="lapince-theme">
+			<QueryClientProvider client={queryClient}>
+				<AuthProvider>
+					<CategoriesProvider>
+						<ProjectsProvider>
+							<ProjectProvider>
+								<App />
+							</ProjectProvider>
+						</ProjectsProvider>
+					</CategoriesProvider>
+				</AuthProvider>
+			</QueryClientProvider>
+			<Toaster position="top-right" richColors />
+		</ThemeProvider>
 	</StrictMode>,
 );
