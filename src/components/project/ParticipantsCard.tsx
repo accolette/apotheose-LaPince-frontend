@@ -95,6 +95,7 @@ export function ParticipantsCard({
 								variant="ghost"
 								size="icon"
 								className="text-muted-foreground hover:text-destructive"
+								disabled={!isEditingParticipants}
 								onClick={() => handleRemoveParticipant(index)}
 							>
 								<Trash2 className="size-4" />
