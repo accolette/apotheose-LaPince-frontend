@@ -131,6 +131,7 @@ export function ProjectDetailsForm({
 							<Label htmlFor="project-budget">Budget global</Label>
 							<div className="relative">
 								<Input
+									className=" no-spinner"
 									id="project-budget"
 									type="number"
 									disabled={!isEditingDetails}
