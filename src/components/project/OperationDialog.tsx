@@ -53,7 +53,6 @@ export function OperationDialog({
 		(participant) =>
 			participant.participantId === operationDialogState.payerParticipantId,
 	);
-	const Trash = Trash2;
 
 	function buildCreateOperationPayload(
 		operationDialogState: IOperationDialogState,
@@ -93,6 +92,7 @@ export function OperationDialog({
 
 	async function handleSubmit(event: React.SyntheticEvent) {
 		event.preventDefault();
+		event.stopPropagation();
 		if (!operationDialogState) return;
 		try {
 			const payload = buildCreateOperationPayload(operationDialogState);
@@ -135,6 +135,7 @@ export function OperationDialog({
 						<div className="col-span-3 space-y-2">
 							<Label htmlFor="operation-description">Description</Label>
 							<Input
+								required
 								id="operation-description"
 								placeholder="Dîner Time Out Market"
 								value={operationDialogState?.name ?? ""}
@@ -148,6 +149,7 @@ export function OperationDialog({
 							<Label htmlFor="operation-amount">Montant</Label>
 							<div className="relative">
 								<Input
+									required
 									id="operation-amount"
 									type="number"
 									step="0.01"
@@ -309,13 +311,15 @@ export function OperationDialog({
 
 					<DialogFooter className="flex">
 						<div className="flex-1">
-							<Button
-								type="button"
-								variant="destructive"
-								onClick={handleDelete}
-							>
-								<Trash className="size-4" />
-							</Button>
+							{dialogMode === "edit"
+								? <Button
+									type="button"
+									variant="destructive"
+									onClick={handleDelete}
+								>
+									<Trash2 className="size-4" />
+								</Button>
+								: ""}
 						</div>
 						<div className="flex-1 flex justify-end gap-2">
 							<Button

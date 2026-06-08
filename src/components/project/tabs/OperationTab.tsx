@@ -65,16 +65,21 @@ export function OperationTab() {
 	// ── Chargement des opérations ─────────────────────────────
 
 	const loadOperations = useCallback(async () => {
+
 		if (!project?.id) return;
 		setIsLoading(true);
+		setError(null);
 		try {
 			const data = await apiGetOperations(project.id);
+			console.log("operations rechargées", data);
 			setOperations(data);
-		} catch {
+		} catch (error) {
+			console.error("Erreur apiGetOperations:", error);
 			setError("Impossible de charger les opérations");
 		} finally {
 			setIsLoading(false);
 		}
+
 	}, [project?.id]);
 
 	useEffect(() => {
