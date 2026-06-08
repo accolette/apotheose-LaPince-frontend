@@ -32,7 +32,7 @@ type OperationDialogProps = {
 	onOpenChange: (open: boolean) => void;
 	operationDialogState: IOperationDialogState | null;
 	setOperationDialogState: (state: IOperationDialogState | null) => void;
-	onOperationCreated: () => void | Promise<void>;
+	onOperationChanged: () => void | Promise<void>;
 };
 
 export function OperationDialog({
@@ -40,7 +40,7 @@ export function OperationDialog({
 	onOpenChange,
 	operationDialogState,
 	setOperationDialogState,
-	onOperationCreated,
+	onOperationChanged,
 }: OperationDialogProps) {
 	const { categories } = useCategories();
 	const dialogMode = operationDialogState?.mode ?? "create";
@@ -75,12 +75,20 @@ export function OperationDialog({
 	}
 
 	async function handleDelete(event: React.SyntheticEvent) {
-		event.preventDefault();
+		if (
+			!operationDialogState ||
+			operationDialogState.operationId == null ||
+			operationDialogState.projectId == null
+		) {
+			return;
+		}
 		await apiDeleteOperation(
 			operationDialogState?.operationId,
 			operationDialogState?.projectId,
 		);
-		console.log("l'op a sup est la num", operationDialogState?.operationId);
+		await onOperationChanged();
+		onOpenChange(false);
+		console.log("l'op à sup est la num", operationDialogState?.operationId);
 	}
 
 	async function handleSubmit(event: React.SyntheticEvent) {
@@ -94,7 +102,7 @@ export function OperationDialog({
 				if (!operationDialogState.operationId) return;
 				await apiUpdateOperation(operationDialogState.operationId, payload);
 			}
-			await onOperationCreated();
+			await onOperationChanged();
 			onOpenChange(false);
 			setOperationDialogState(null);
 		} catch (error) {
@@ -248,9 +256,9 @@ export function OperationDialog({
 														(item) =>
 															item.participantId === participant.participantId
 																? {
-																		...item,
-																		isSelected: event.target.checked,
-																	}
+																	...item,
+																	isSelected: event.target.checked,
+																}
 																: item,
 													),
 												})
@@ -281,9 +289,9 @@ export function OperationDialog({
 														(item) =>
 															item.participantId === participant.participantId
 																? {
-																		...item,
-																		repartitionAmount: event.target.value,
-																	}
+																	...item,
+																	repartitionAmount: event.target.value,
+																}
 																: item,
 													),
 												})

@@ -10,8 +10,8 @@ export default interface IProject {
 }
 
 export interface IProjectParticipants {
-	id?: number;
-	participant?: IParticipant;
+	id: number;
+	participant: IParticipant;
 }
 
 export interface IParticipant {

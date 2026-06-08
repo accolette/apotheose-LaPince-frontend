@@ -149,7 +149,7 @@ export function OperationTab() {
 				onOpenChange={setIsOperationDialogOpen}
 				operationDialogState={operationDialogState}
 				setOperationDialogState={setOperationDialogState}
-				onOperationCreated={loadOperations}
+				onOperationChanged={loadOperations}
 			/>
 		</div>
 	);
