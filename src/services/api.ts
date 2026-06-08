@@ -63,6 +63,9 @@ async function handleResponse<T>(res: Response): Promise<T> {
 		const error = await res.json().catch(() => ({ error: res.statusText }));
 		throw error;
 	}
+		if (res.status === 204) {
+		return undefined as T;
+	}
 	return res.json();
 }
 
@@ -202,6 +205,17 @@ export async function apiGetOperations(
 	});
 	const data = await handleResponse<IOperationsResponse>(res);
 	return data.operations;
+}
+
+export async function apiDeleteOperation(
+	operationId: number,
+	projectId: number,
+): Promise<void> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}/operations/${operationId}`, {
+		method: "DELETE",
+		headers: buildHeaders(true),
+	});
+	return handleResponse<void>(res)
 }
 
 export async function apiCreateOperation(

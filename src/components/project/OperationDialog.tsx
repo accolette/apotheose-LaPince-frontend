@@ -1,3 +1,4 @@
+import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -16,7 +17,11 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { useCategories } from "@/context/CategoriesContext";
-import { apiCreateOperation, apiUpdateOperation } from "@/services/api";
+import {
+	apiCreateOperation,
+	apiDeleteOperation,
+	apiUpdateOperation,
+} from "@/services/api";
 import type {
 	CreateOperationPayload,
 	IOperationDialogState,
@@ -48,6 +53,7 @@ export function OperationDialog({
 		(participant) =>
 			participant.participantId === operationDialogState.payerParticipantId,
 	);
+	const Trash = Trash2;
 
 	function buildCreateOperationPayload(
 		operationDialogState: IOperationDialogState,
@@ -66,6 +72,12 @@ export function OperationDialog({
 					repartitionAmount: Number(participant.repartitionAmount),
 				})),
 		};
+	}
+
+	async function handleDelete(event: React.SyntheticEvent) {
+		event.preventDefault();
+		await apiDeleteOperation(operationDialogState?.operationId, operationDialogState?.projectId);
+		console.log("l'op a sup est la num", operationDialogState?.operationId)
 	}
 
 	async function handleSubmit(event: React.SyntheticEvent) {
@@ -233,9 +245,9 @@ export function OperationDialog({
 														(item) =>
 															item.participantId === participant.participantId
 																? {
-																		...item,
-																		isSelected: event.target.checked,
-																	}
+																	...item,
+																	isSelected: event.target.checked,
+																}
 																: item,
 													),
 												})
@@ -266,9 +278,9 @@ export function OperationDialog({
 														(item) =>
 															item.participantId === participant.participantId
 																? {
-																		...item,
-																		repartitionAmount: event.target.value,
-																	}
+																	...item,
+																	repartitionAmount: event.target.value,
+																}
 																: item,
 													),
 												})
@@ -284,18 +296,28 @@ export function OperationDialog({
 						</ul>
 					</div>
 
-					<DialogFooter>
-						<Button
-							type="button"
-							variant="outline"
-							onClick={() => onOpenChange(false)}
-						>
-							Annuler
-						</Button>
+					<DialogFooter className="flex">
+						<div className="flex-1">
+							<Button
+								type="button"
+								variant="destructive"
+								onClick={handleDelete}>
+								<Trash className="size-4" />
+							</Button>
+						</div>
+						<div className="flex-1 flex justify-end gap-2">
+							<Button
+								type="button"
+								variant="outline"
+								onClick={() => onOpenChange(false)}
+							>
+								Annuler
+							</Button>
 
-						<Button type="submit">
-							{dialogMode === "edit" ? "Modifier" : "Créer"}
-						</Button>
+							<Button type="submit">
+								{dialogMode === "edit" ? "Modifier" : "Créer"}
+							</Button>
+						</div>
 					</DialogFooter>
 				</form>
 			</DialogContent>

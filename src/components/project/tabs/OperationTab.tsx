@@ -5,8 +5,35 @@ import { TableFilters } from "@/components/project/TableFilters";
 import { useCategories } from "@/context/CategoriesContext";
 import { useProject } from "@/context/ProjectContext";
 import { apiGetOperations } from "@/services/api";
-import type { IOperation, IOperationDialogState } from "@/types/operations";
+import type { IOperation, IOperationDialogParticipant, IOperationDialogState } from "@/types/operations";
+import type IProject from "@/types/project";
 import { getAvatarColor } from "@/utils/avatarColors";
+
+export function buildDialogParticipants(project: IProject, operation?: IOperation) {
+	if (!project) return [];
+
+	return project.projectParticipants.reduce<IOperationDialogParticipant[]>((acc, projectParticipant) => {
+		const participant = projectParticipant.participant;
+		if (!participant?.id) return acc;
+
+		const operationParticipant = operation?.operationParticipants.find(
+			(op) => op.participant.id === participant.id,
+		);
+		acc.push({
+			participantId: participant.id,
+			name: participant.name,
+			initials: participant.name.slice(0, 2).toUpperCase(),
+			avatarColor: getAvatarColor(participant.name),
+			isSelected: Boolean(operationParticipant),
+			repartitionAmount: operationParticipant?.repartitionAmount
+				? String(operationParticipant.repartitionAmount)
+				: "",
+		});
+		return acc;
+	}, []);
+};
+
+
 
 export function OperationTab() {
 	const { project } = useProject();
@@ -35,7 +62,10 @@ export function OperationTab() {
 		try {
 			const data = await apiGetOperations(project.id);
 			setOperations(data);
-		} finally {
+		} catch {
+			setError("Impossible de charger les opérations");
+		}
+		finally {
 			setIsLoading(false);
 		}
 	}, [project?.id]);
@@ -44,32 +74,6 @@ export function OperationTab() {
 		loadOperations();
 	}, [loadOperations]);
 
-	// ── Création des catégories de filtre ──────────────────────────────────────
-
-	// ── Total opérations ──────────────────────────────────────
-
-	const buildDialogParticipants = useCallback(
-		(operation: IOperation | null = null) => {
-			if (!project) return [];
-			return project.projectParticipants.map((projectParticipant) => {
-				const participant = projectParticipant.participant;
-				const operationParticipant = operation?.operationParticipants.find(
-					(opParticipant) => opParticipant.participant.id === participant.id,
-				);
-				return {
-					participantId: participant.id,
-					name: participant.name,
-					initials: participant.name.slice(0, 2).toUpperCase(),
-					avatarColor: getAvatarColor(participant.name),
-					isSelected: Boolean(operationParticipant),
-					repartitionAmount: operationParticipant?.repartitionAmount
-						? String(operationParticipant.repartitionAmount)
-						: "",
-				};
-			});
-		},
-		[project],
-	);
 
 	// ── Préparation modale édition ────────────────────────────
 
@@ -85,9 +89,9 @@ export function OperationTab() {
 			categoryId: selectedOperation.categoryId,
 			date: selectedOperation.date.slice(0, 10),
 			payerParticipantId: selectedOperation.payerParticipantId,
-			participants: buildDialogParticipants(selectedOperation),
+			participants: buildDialogParticipants(project, selectedOperation),
 		});
-	}, [selectedOperation, project, buildDialogParticipants]);
+	}, [selectedOperation, project]);
 
 	// ── Ouverture création ────────────────────────────────────
 
@@ -105,7 +109,7 @@ export function OperationTab() {
 			categoryId: undefined,
 			date: new Date().toISOString().slice(0, 10),
 			payerParticipantId: undefined,
-			participants: buildDialogParticipants(),
+			participants: buildDialogParticipants(project),
 		});
 
 		setIsOperationDialogOpen(true);
