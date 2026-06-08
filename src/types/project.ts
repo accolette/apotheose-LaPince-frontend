@@ -167,6 +167,7 @@ export interface IDashboardProject {
 	participants: IDashboardParticipant[];
 	budget: IDashboardBudget | null;
 	userBalance: number | null;
+	isArchived: boolean;
 }
 
 export interface IProjectsDashboardResponse {
