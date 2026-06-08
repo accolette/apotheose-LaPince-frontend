@@ -1,4 +1,4 @@
-import { LandmarkIcon, LogOutIcon, MoonIcon } from "lucide-react";
+import { LandmarkIcon, LogOutIcon, MoonIcon, SunIcon } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import {
 	DropdownMenu,
@@ -7,10 +7,18 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/context/ThemesContext";
 
 export function ConnectedHeader() {
 	const { logout, user } = useAuth();
 	const navigate = useNavigate();
+	const { theme, setTheme } = useTheme();
+
+	const isDark = theme === "dark";
+
+	function toggleDark() {
+		setTheme(isDark ? "light" : "dark");
+	}
 
 	async function handleLogout() {
 		await logout();
@@ -30,9 +38,14 @@ export function ConnectedHeader() {
 				<div className="flex items-center gap-2">
 					<button
 						type="button"
+						onClick={toggleDark}
 						className="flex size-8 items-center justify-center rounded-full border border-border text-muted-foreground transition hover:border-foreground hover:text-foreground"
 					>
-						<MoonIcon className="size-4" />
+						{isDark ? (
+							<SunIcon className="size-4" />
+						) : (
+							<MoonIcon className="size-4" />
+						)}
 					</button>
 
 					<DropdownMenu>

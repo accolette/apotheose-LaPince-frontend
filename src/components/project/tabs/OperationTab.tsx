@@ -15,7 +15,6 @@ export function OperationTab() {
 	const [operations, setOperations] = useState<IOperation[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-	const [, setErrorCode] = useState<number | null>(null);
 
 	const [activeFilter, setActiveFilter] = useState<number | null>(null);
 
@@ -115,11 +114,8 @@ export function OperationTab() {
 	// ── Filtre (préparation future) ───────────────────────────
 
 	const filteredOperations = activeFilter
-		? operations.filter(
-			(operation) => operation.categoryId === activeFilter,
-		)
+		? operations.filter((operation) => operation.categoryId === activeFilter)
 		: operations;
-
 
 	return (
 		<div className="space-y-4">
