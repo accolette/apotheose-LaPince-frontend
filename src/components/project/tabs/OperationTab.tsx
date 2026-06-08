@@ -5,35 +5,43 @@ import { TableFilters } from "@/components/project/TableFilters";
 import { useCategories } from "@/context/CategoriesContext";
 import { useProject } from "@/context/ProjectContext";
 import { apiGetOperations } from "@/services/api";
-import type { IOperation, IOperationDialogParticipant, IOperationDialogState } from "@/types/operations";
+import type {
+	IOperation,
+	IOperationDialogParticipant,
+	IOperationDialogState,
+} from "@/types/operations";
 import type IProject from "@/types/project";
 import { getAvatarColor } from "@/utils/avatarColors";
 
-export function buildDialogParticipants(project: IProject, operation?: IOperation) {
+export function buildDialogParticipants(
+	project: IProject,
+	operation?: IOperation,
+) {
 	if (!project) return [];
 
-	return project.projectParticipants.reduce<IOperationDialogParticipant[]>((acc, projectParticipant) => {
-		const participant = projectParticipant.participant;
-		if (!participant?.id) return acc;
+	return project.projectParticipants.reduce<IOperationDialogParticipant[]>(
+		(acc, projectParticipant) => {
+			const participant = projectParticipant.participant;
+			if (!participant?.id) return acc;
 
-		const operationParticipant = operation?.operationParticipants.find(
-			(op) => op.participant.id === participant.id,
-		);
-		acc.push({
-			participantId: participant.id,
-			name: participant.name,
-			initials: participant.name.slice(0, 2).toUpperCase(),
-			avatarColor: getAvatarColor(participant.name),
-			isSelected: Boolean(operationParticipant),
-			repartitionAmount: operationParticipant?.repartitionAmount
-				? String(operationParticipant.repartitionAmount)
-				: "",
-		});
-		return acc;
-	}, []);
-};
-
-
+			const operationParticipant = operation?.operationParticipants.find(
+				(op) => op.participant.id === participant.id,
+			);
+			acc.push({
+				participantId: participant.id,
+				name: participant.name,
+				initials: participant.name.slice(0, 2).toUpperCase(),
+				avatarColor: getAvatarColor(participant.name),
+				isSelected: Boolean(operationParticipant),
+				repartitionAmount: operationParticipant?.repartitionAmount
+					? String(operationParticipant.repartitionAmount)
+					: "",
+			});
+			return acc;
+		},
+		[],
+	);
+}
 
 export function OperationTab() {
 	const { project } = useProject();
@@ -64,8 +72,7 @@ export function OperationTab() {
 			setOperations(data);
 		} catch {
 			setError("Impossible de charger les opérations");
-		}
-		finally {
+		} finally {
 			setIsLoading(false);
 		}
 	}, [project?.id]);
@@ -73,7 +80,6 @@ export function OperationTab() {
 	useEffect(() => {
 		loadOperations();
 	}, [loadOperations]);
-
 
 	// ── Préparation modale édition ────────────────────────────
 

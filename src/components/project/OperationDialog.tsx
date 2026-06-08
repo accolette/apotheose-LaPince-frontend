@@ -76,8 +76,11 @@ export function OperationDialog({
 
 	async function handleDelete(event: React.SyntheticEvent) {
 		event.preventDefault();
-		await apiDeleteOperation(operationDialogState?.operationId, operationDialogState?.projectId);
-		console.log("l'op a sup est la num", operationDialogState?.operationId)
+		await apiDeleteOperation(
+			operationDialogState?.operationId,
+			operationDialogState?.projectId,
+		);
+		console.log("l'op a sup est la num", operationDialogState?.operationId);
 	}
 
 	async function handleSubmit(event: React.SyntheticEvent) {
@@ -245,9 +248,9 @@ export function OperationDialog({
 														(item) =>
 															item.participantId === participant.participantId
 																? {
-																	...item,
-																	isSelected: event.target.checked,
-																}
+																		...item,
+																		isSelected: event.target.checked,
+																	}
 																: item,
 													),
 												})
@@ -278,9 +281,9 @@ export function OperationDialog({
 														(item) =>
 															item.participantId === participant.participantId
 																? {
-																	...item,
-																	repartitionAmount: event.target.value,
-																}
+																		...item,
+																		repartitionAmount: event.target.value,
+																	}
 																: item,
 													),
 												})
@@ -301,7 +304,8 @@ export function OperationDialog({
 							<Button
 								type="button"
 								variant="destructive"
-								onClick={handleDelete}>
+								onClick={handleDelete}
+							>
 								<Trash className="size-4" />
 							</Button>
 						</div>
