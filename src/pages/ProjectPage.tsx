@@ -19,7 +19,6 @@ export function ProjectPage() {
 	const { user, isLoading: isAuthLoading } = useAuth();
 
 	useEffect(() => {
-		console.log("REFETCH PROJECT TRIGGERED");
 		if (user) {
 			getProjectById(projectId);
 		}

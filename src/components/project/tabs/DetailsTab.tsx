@@ -32,8 +32,10 @@ export function DetailsTab() {
 		IParticipant[]
 	>([]);
 
+	// To replace useEffect([project]), and initialize it only at first loading
+	const [isInitialized, setIsInitialized] = useState(false);
 	useEffect(() => {
-		if (!project) return;
+		if (!project || isInitialized) return;
 
 		// Synchronize project details from API/context into local form state
 		// This allows controlled inputs to display current values
@@ -53,18 +55,13 @@ export function DetailsTab() {
 		// Extract participants from projectParticipants relation
 		// projectParticipants contains the junction table data,
 		// but we only need the participant object itself in a clean array
-		setParticipantsFormData(
-			project.projectParticipants
-				.map((pp) => pp.participant)
-				.filter(
-					// TypeScript type guard:
-					// removes any undefined value and tells TS
-					// that the result is a valid IParticipant[]
-					(participant): participant is IParticipant =>
-						participant !== undefined,
-				),
-		);
-	}, [project]); // Runs every time project changes
+		const participants = project.projectParticipants
+			.map((pp) => pp.participant)
+			.filter((p): p is IParticipant => p !== undefined);
+
+		setParticipantsFormData(participants);
+		setIsInitialized(true);
+	}, [project, isInitialized]); // Runs every time project changes, or isInitialized is true
 
 	function handleClickDetailsForm() {
 		// If user is already editing and clicks again,
@@ -80,19 +77,32 @@ export function DetailsTab() {
 	async function handleClickParticipantsForm() {
 		// Same logic as details section:
 		if (isEditingParticipants) {
-			await updateProjectParticipantsById(projectId, participantsFormData);
+			// Capturer une snapshot stable avant tout await
+			const snapshot = [...participantsFormData];
+
+			try {
+				const response = await updateProjectParticipantsById(
+					projectId,
+					snapshot,
+				);
+
+				// Reconstruire depuis la réponse API
+				const updated = response
+					.map((r) => r.participant)
+					.filter((p): p is IParticipant => p !== undefined);
+
+				// Resync explicit from API answer, not from project
+				setParticipantsFormData(updated);
+			} catch (err) {
+				console.error("Erreur PATCH participants :", err);
+				// Restaurer le snapshot en cas d'échec
+				setParticipantsFormData(snapshot);
+				return; // Ne pas quitter le mode édition si erreur
+			}
 		}
-		setIsEditingParticipants(!isEditingParticipants);
+		setIsEditingParticipants((prev) => !prev);
 	}
-	useEffect(() => {
-		console.log("PROJECT CHANGED");
-		console.table(
-			project?.projectParticipants?.map((p) => ({
-				id: p.participant?.id,
-				name: p.participant?.name,
-			})),
-		);
-	}, [project]);
+
 	return (
 		<div className="flex flex-col gap-6 md:flex-row">
 			{/* =========================

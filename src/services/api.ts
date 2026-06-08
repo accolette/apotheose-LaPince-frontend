@@ -225,7 +225,6 @@ export async function apiCreateOperation(
 	operationPayload: CreateOperationPayload,
 ): Promise<IOperation> {
 	const projectId = operationPayload.projectId;
-	console.log(projectId);
 	const res = await fetch(`${BASE_URL}/api/projects/${projectId}/operations`, {
 		method: "POST",
 		headers: buildHeaders(true),

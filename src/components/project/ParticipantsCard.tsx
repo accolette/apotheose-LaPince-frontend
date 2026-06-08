@@ -42,13 +42,7 @@ export function ParticipantsCard({
 			},
 		]);
 	}
-	console.table(
-		participantsFormData.map((p) => ({
-			id: p.id,
-			tempId: p.tempId,
-			name: p.name,
-		})),
-	);
+
 	return (
 		<div className="space-y-3">
 			<div
