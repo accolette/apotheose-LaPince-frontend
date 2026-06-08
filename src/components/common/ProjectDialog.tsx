@@ -91,14 +91,14 @@ export function ProjectDialog({
 				type,
 				budget: alertEnabled
 					? {
-							amount: Number(budgetAmount),
-							alertEnabled,
-							limitCriteria,
-						}
+						amount: Number(budgetAmount),
+						alertEnabled,
+						limitCriteria,
+					}
 					: undefined,
 				// Prepend the current user if includeMe is checkek
 				participants: [
-					...(includeMe && user ? [{ name: user.name }] : []),
+					...(includeMe && user ? [{ name: user.name, isMe: true }] : []),
 					...participants.filter((p) => p.name.trim() !== ""),
 				],
 			},
