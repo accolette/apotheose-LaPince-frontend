@@ -1,8 +1,7 @@
-import { Archive } from "lucide-react";
+import { Archive, ArrowLeft } from "lucide-react";
+import { Link } from "react-router";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { ArrowLeft } from "lucide-react";
-import { Link } from "react-router";
 import { useProject } from "@/context/ProjectContext";
 import type IProject from "@/types/project";
 import { ParticipantStack } from "../common/ParticipantStack";
@@ -17,7 +16,6 @@ export function ProjectHeading({ project }: ProjectHeadingProps) {
 	return (
 		<div className="mb-8 flex items-end justify-between">
 			<div>
-
 				<Link
 					to="/projects"
 					className="mb-2 flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"

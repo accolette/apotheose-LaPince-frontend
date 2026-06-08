@@ -186,5 +186,5 @@ export type CreateProjectPayload = {
 		alertEnabled: boolean;
 		limitCriteria: number;
 	};
-	participants?: { name: string }[];
+	participants?: { name: string; isMe?: boolean }[];
 };

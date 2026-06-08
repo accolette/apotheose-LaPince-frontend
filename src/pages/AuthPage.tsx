@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { RegisterForm } from "@/components/auth/RegisterForm";
