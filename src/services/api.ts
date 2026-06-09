@@ -4,6 +4,7 @@ import type {
 	LoginResponse,
 	UserResponse,
 } from "@/types";
+import type { Alert, UpdateAlertPayload } from "@/types/alert";
 import type { BudgetSummary } from "@/types/budget";
 import type {
 	CreateOperationPayload,
@@ -266,4 +267,36 @@ export async function apiGetGlobalBalance(): Promise<GlobalBalance> {
 		headers: buildHeaders(true),
 	});
 	return handleResponse<GlobalBalance>(res);
+}
+
+// ── Alert endpoints ──────────────────────────────────────────────────────────
+
+export async function apiGetAlerts(): Promise<Alert[]> {
+	const res = await fetch(`${BASE_URL}/api/alertes`, {
+		method: "GET",
+		headers: buildHeaders(true),
+	});
+	const data = await handleResponse<{ alerts: Alert[] }>(res);
+	return data.alerts;
+}
+
+export async function apiGetProjectAlerts(projectId: number): Promise<Alert[]> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}/alertes`, {
+		method: "GET",
+		headers: buildHeaders(true),
+	});
+	const data = await handleResponse<{ alerts: Alert[] }>(res);
+	return data.alerts;
+}
+
+export async function apiMarkAlertAsRead(
+	alertId: number,
+	payload: UpdateAlertPayload,
+): Promise<Alert> {
+	const res = await fetch(`${BASE_URL}/api/alertes/${alertId}`, {
+		method: "PATCH",
+		headers: buildHeaders(true),
+		body: JSON.stringify(payload),
+	});
+	return handleResponse<Alert>(res);
 }
