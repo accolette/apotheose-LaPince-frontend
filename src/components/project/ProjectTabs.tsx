@@ -7,11 +7,16 @@ import { DetailsTab } from "./tabs/DetailsTab";
 import { OperationTab } from "./tabs/OperationTab";
 import { OverviewTab } from "./tabs/OverviewTab";
 
+type TabValue = "overview" | "details" | "expenses" | "alerts";
+
 type ProjectTabsProps = {
 	projectId: number;
 };
 
 export function ProjectTabs({ projectId }: ProjectTabsProps) {
+	const [activeTab, setActiveTab] = useState<TabValue>("overview");
+	const [categoryFilter, setCategoryFilter] = useState<number | null>(null);
+
 	const [alerts, setAlerts] = useState<Alert[]>([]);
 
 	const fetchAlerts = useCallback(() => {
@@ -33,11 +38,21 @@ export function ProjectTabs({ projectId }: ProjectTabsProps) {
 			),
 		);
 	}
+
+	function handleCategoryClick(categoryId: number) {
+		setCategoryFilter(categoryId);
+		setActiveTab("expenses");
+	}
+
 	return (
-		<Tabs defaultValue="overview" className="pb-6">
+		<Tabs
+			value={activeTab}
+			onValueChange={(v) => setActiveTab(v as TabValue)}
+			className="pb-6"
+		>
 			<div className="mb-4 border-b">
 				<TabsList variant="line">
-					<TabsTrigger value="overview">Vue d’ensemble</TabsTrigger>
+					<TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
 					<TabsTrigger value="details">Détails</TabsTrigger>
 					<TabsTrigger value="expenses">Opérations</TabsTrigger>
 					<TabsTrigger value="alerts" className="relative">
@@ -51,15 +66,13 @@ export function ProjectTabs({ projectId }: ProjectTabsProps) {
 				</TabsList>
 			</div>
 			<TabsContent value="overview">
-				<OverviewTab />
+				<OverviewTab onCategoryClick={handleCategoryClick} />
 			</TabsContent>
-
 			<TabsContent value="details">
 				<DetailsTab />
 			</TabsContent>
-
 			<TabsContent value="expenses">
-				<OperationTab onOperationMutated={fetchAlerts} />
+				<OperationTab initialFilter={categoryFilter} onOperationMutated={fetchAlerts} />
 			</TabsContent>
 			<TabsContent value="alerts">
 				<AlertTab alerts={alerts} onAlertRead={handleAlertRead} />
