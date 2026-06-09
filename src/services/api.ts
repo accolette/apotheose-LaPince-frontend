@@ -64,6 +64,9 @@ async function handleResponse<T>(res: Response): Promise<T> {
 		const error = await res.json().catch(() => ({ error: res.statusText }));
 		throw error;
 	}
+	if (res.status === 204) {
+		return undefined as T;
+	}
 	return res.json();
 }
 
@@ -205,6 +208,20 @@ export async function apiGetOperations(
 	return data.operations;
 }
 
+export async function apiDeleteOperation(
+	operationId: number,
+	projectId: number,
+): Promise<void> {
+	const res = await fetch(
+		`${BASE_URL}/api/projects/${projectId}/operations/${operationId}`,
+		{
+			method: "DELETE",
+			headers: buildHeaders(true),
+		},
+	);
+	return handleResponse<void>(res);
+}
+
 export async function apiCreateOperation(
 	operationPayload: CreateOperationPayload,
 ): Promise<IOperation> {
@@ -223,6 +240,7 @@ export async function apiUpdateOperation(
 	operationId: number,
 	operationPayload: CreateOperationPayload,
 ): Promise<IOperation> {
+	console.log("payload envoyé", operationPayload);
 	const projectId = operationPayload.projectId;
 	const res = await fetch(
 		`${BASE_URL}/api/projects/${projectId}/operations/${operationId}`,
