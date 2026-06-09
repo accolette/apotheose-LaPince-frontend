@@ -42,7 +42,7 @@ export function ProjectPage() {
 	}
 
 	if (errorCode === 404) {
-		return <div>404 : Projet introuvable</div>;
+		return <Navigate to="/not-found" replace />;
 	}
 
 	if (isProjectLoading || !project) {

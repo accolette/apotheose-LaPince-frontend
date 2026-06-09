@@ -27,15 +27,16 @@ export function NotFoundPage() {
 						className="mb-6 flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
 					>
 						<ArrowLeft className="size-4" />
-						Retour à l'accueil
+						{user ? "Retour aux projets" : "Retour à l'accueil"}
 					</Link>
 					<h2 className="text-3xl font-semibold tracking-tight">
-						Politique de confidentialité
+						La Pince a fouillé partout, <br />
+						mais cette page est introuvable
 					</h2>
 					<img
 						src={isDark ? "/lapince404dark.png" : "/lapince404.png"}
-						alt="La Pince a fouillé partout, mais cette page reste introuvable"
-						className="w-full h-auto rounded-lg"
+						alt="La Pince a fouillé partout, mais cette page est introuvable"
+						className="mx-auto mt-8 w-64 md:w-80 lg:w-96 h-auto"
 					/>
 				</section>
 			</main>
