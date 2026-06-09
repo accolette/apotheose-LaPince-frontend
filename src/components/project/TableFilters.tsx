@@ -28,7 +28,7 @@ export function TableFilters({
 			? null
 			: options.find((option) => option.id === activeValue);
 
-	const operationQuantity = operations.length
+	const operationQuantity = operations.length;
 
 	return (
 		<div className="mb-3 flex items-center justify-between gap-3">
@@ -41,7 +41,11 @@ export function TableFilters({
 					}
 				>
 					<SelectTrigger className="w-full">
-						<span>{selectedOption?.name ? `${selectedOption?.name} (${selectedOption?.count})` : `Toutes les catégories (${operationQuantity})`}</span>
+						<span>
+							{selectedOption?.name
+								? `${selectedOption?.name} (${selectedOption?.count})`
+								: `Toutes les catégories (${operationQuantity})`}
+						</span>
 					</SelectTrigger>
 
 					<SelectContent>
@@ -84,7 +88,8 @@ export function TableFilters({
 									: "h-7 rounded-md border border-transparent px-3 font-medium text-muted-foreground transition hover:text-foreground"
 							}
 						>
-							{option?.name} <span className="font-light">({option?.count})</span>
+							{option?.name}{" "}
+							<span className="font-light">({option?.count})</span>
 						</button>
 					);
 				})}

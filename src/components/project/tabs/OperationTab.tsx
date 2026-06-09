@@ -58,11 +58,11 @@ export function OperationTab() {
 	);
 
 	const categoriesWithCount = categories
-		.map(cat => ({
+		.map((cat) => ({
 			...cat,
-			count: operations.filter(op => op.categoryId === cat.id).length,
+			count: operations.filter((op) => op.categoryId === cat.id).length,
 		}))
-		.filter(cat => cat.count > 0); // ← exclure les catégories vides
+		.filter((cat) => cat.count > 0); // ← exclure les catégories vides
 
 	const [operationDialogState, setOperationDialogState] =
 		useState<IOperationDialogState | null>(null);

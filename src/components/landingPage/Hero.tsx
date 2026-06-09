@@ -1,4 +1,4 @@
-import { ArrowRightIcon, LayoutDashboardIcon } from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/context/ThemesContext";
 
