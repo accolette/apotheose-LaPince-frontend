@@ -1,8 +1,20 @@
-import { CircleFadingArrowUpIcon, Save } from "lucide-react";
+import { CircleFadingArrowUpIcon, Save, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import { useProject } from "@/context/ProjectContext";
+import { apiDeleteProject } from "@/services/api";
 import type { IParticipant, UpdateProjectPayload } from "@/types/project";
 import { ParticipantsCard } from "../ParticipantsCard";
 import { ProjectDetailsForm } from "../ProjectDetailsForm";
@@ -10,6 +22,7 @@ import { ProjectDetailsForm } from "../ProjectDetailsForm";
 export function DetailsTab() {
 	const params = useParams();
 	const projectId = Number(params.id);
+	const navigate = useNavigate();
 
 	// Controls to check if inputs are editable
 	const [isEditingDetails, setIsEditingDetails] = useState(false);
@@ -75,32 +88,50 @@ export function DetailsTab() {
 	}
 
 	async function handleClickParticipantsForm() {
-		// Same logic as details section:
 		if (isEditingParticipants) {
-			// Capturer une snapshot stable avant tout await
-			const snapshot = [...participantsFormData];
+			if (!project) {
+				return;
+			}
+			// Snapshot depuis le context — état serveur stable, pas l'état local édité
+			const snapshot = project.projectParticipants
+				.map((pp) => pp.participant)
+				.filter((p): p is IParticipant => p !== undefined);
 
 			try {
 				const response = await updateProjectParticipantsById(
 					projectId,
-					snapshot,
+					participantsFormData,
 				);
-
-				// Reconstruire depuis la réponse API
 				const updated = response
 					.map((r) => r.participant)
 					.filter((p): p is IParticipant => p !== undefined);
 
-				// Resync explicit from API answer, not from project
 				setParticipantsFormData(updated);
 			} catch (err) {
-				console.error("Erreur PATCH participants :", err);
-				// Restaurer le snapshot en cas d'échec
+				toast.error(
+					"Impossible de supprimer le participant s'il a des opérations liées",
+				);
+				console.error("Error PATCH participants :", err);
+				// Restaure l'état serveur, pas l'état local édité
 				setParticipantsFormData(snapshot);
-				return; // Ne pas quitter le mode édition si erreur
+				return;
 			}
 		}
 		setIsEditingParticipants((prev) => !prev);
+	}
+
+	async function handleDelete() {
+		try {
+			const response = await apiDeleteProject(projectId);
+			if (response === 204) {
+				toast.success("Projet supprimé");
+				navigate("/projects");
+			}
+		} catch (err) {
+			toast.error("Erreur : Impossible de supprimer le projet");
+			console.error("Error DELETE project :", err);
+			return;
+		}
 	}
 
 	return (
@@ -121,7 +152,7 @@ export function DetailsTab() {
 				<Button
 					type="button"
 					variant="outline"
-					className={`w-full border-dashed ${isEditingDetails && "bg-yellow-400"}`}
+					className={`w-full border-dashed ${isEditingDetails ? "bg-yellow-400" : ""}`}
 					onClick={handleClickDetailsForm}
 				>
 					{isEditingDetails ? (
@@ -154,7 +185,7 @@ export function DetailsTab() {
 				<Button
 					type="button"
 					variant="outline"
-					className={`w-full border-dashed ${isEditingParticipants && "bg-yellow-400"}`}
+					className={`w-full border-dashed ${isEditingParticipants ? "bg-yellow-400" : ""}`}
 					onClick={handleClickParticipantsForm}
 				>
 					{isEditingParticipants ? (
@@ -169,6 +200,45 @@ export function DetailsTab() {
 						</>
 					)}
 				</Button>
+
+				{/* =========================
+			    DELETE PROJECT BUTTON
+			   ========================= */}
+
+				<Dialog>
+					<DialogTrigger
+						className="w-full border-dashed"
+						render={
+							<Button
+								type="button"
+								variant="destructive"
+								className="w-full border-dashed"
+							/>
+						}
+					>
+						<Trash2 className="size-4" />
+						Supprimer le projet
+					</DialogTrigger>
+					<DialogContent>
+						<DialogHeader className="p-3">
+							<DialogTitle>
+								Êtes-vous sûr de vouloir supprimer ce projet ?
+							</DialogTitle>
+							<DialogDescription>
+								Cette action est irréversible.
+							</DialogDescription>
+						</DialogHeader>
+						<DialogFooter>
+							<DialogClose render={<Button variant="outline" />}>
+								Annuler
+							</DialogClose>
+
+							<Button type="submit" onClick={handleDelete}>
+								Supprimer
+							</Button>
+						</DialogFooter>
+					</DialogContent>
+				</Dialog>
 			</div>
 		</div>
 	);

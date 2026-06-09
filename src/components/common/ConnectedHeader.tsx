@@ -1,9 +1,17 @@
-import { LandmarkIcon, LogOutIcon, MoonIcon, SunIcon } from "lucide-react";
+import {
+	FileTextIcon,
+	LandmarkIcon,
+	LogOutIcon,
+	MailIcon,
+	MoonIcon,
+	SunIcon,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/context/AuthContext";
@@ -58,6 +66,16 @@ export function ConnectedHeader() {
 							<div className="px-2 py-1.5">
 								<p className="text-sm font-medium">{user?.name}</p>
 							</div>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem onClick={() => navigate("/contact")}>
+								<MailIcon className="size-4" />
+								Contact
+							</DropdownMenuItem>
+							<DropdownMenuItem onClick={() => navigate("/privacy-policy")}>
+								<FileTextIcon className="size-4" />
+								Mentions légales
+							</DropdownMenuItem>
+							<DropdownMenuSeparator />
 							<DropdownMenuItem
 								className="text-destructive"
 								onClick={handleLogout}

@@ -33,7 +33,6 @@ export function OperationsTable({
 	if (isLoading) return <div>Loading...</div>;
 
 	if (error) return <div>{error}</div>;
-
 	return (
 		<>
 			<p>{operations.length} opérations</p>

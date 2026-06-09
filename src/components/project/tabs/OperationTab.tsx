@@ -16,6 +16,7 @@ import { recalculateOperationState } from "@/utils/recalculateOperationState";
 
 type OperationTabProps = {
 	initialFilter: number | null;
+	onOperationMutated: () => void;
 };
 
 export function buildDialogParticipants(
@@ -47,7 +48,7 @@ export function buildDialogParticipants(
 	});
 }
 
-export function OperationTab({ initialFilter }: OperationTabProps) {
+export function OperationTab({ onOperationMutated }: OperationTabProps) {
 	const { project } = useProject();
 	const { categories } = useCategories();
 
@@ -170,7 +171,10 @@ export function OperationTab({ initialFilter }: OperationTabProps) {
 				onOpenChange={setIsOperationDialogOpen}
 				operationDialogState={operationDialogState}
 				setOperationDialogState={setOperationDialogState}
-				onOperationChanged={loadOperations}
+				onOperationChanged={async () => {
+					await loadOperations();
+					onOperationMutated(); // ← refetch alertes après chaque mutation
+				}}
 			/>
 		</div>
 	);
