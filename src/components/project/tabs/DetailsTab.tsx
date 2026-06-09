@@ -1,8 +1,16 @@
-import { CircleFadingArrowUpIcon, Save } from "lucide-react";
+import { CircleFadingArrowUpIcon, Save, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import { useProject } from "@/context/ProjectContext";
 import type { IParticipant, UpdateProjectPayload } from "@/types/project";
 import { ParticipantsCard } from "../ParticipantsCard";
@@ -108,6 +116,26 @@ export function DetailsTab() {
 		setIsEditingParticipants((prev) => !prev);
 	}
 
+	function handleDelete() {
+		return (
+			<>
+				<Dialog>
+					<DialogTrigger>Open</DialogTrigger>
+					<DialogContent>
+						<DialogHeader>
+							<DialogTitle>Are you absolutely sure?</DialogTitle>
+							<DialogDescription>
+								This action cannot be undone. This will permanently delete your
+								account and remove your data from our servers.
+							</DialogDescription>
+						</DialogHeader>
+					</DialogContent>
+				</Dialog>
+				;
+			</>
+		);
+	}
+
 	return (
 		<div className="flex flex-col gap-6 md:flex-row">
 			{/* =========================
@@ -126,7 +154,7 @@ export function DetailsTab() {
 				<Button
 					type="button"
 					variant="outline"
-					className={`w-full border-dashed $isEditingDetails && "bg-yellow-400"`}
+					className={`w-full border-dashed ${isEditingDetails ? "bg-yellow-400" : ""}`}
 					onClick={handleClickDetailsForm}
 				>
 					{isEditingDetails ? (
@@ -159,7 +187,7 @@ export function DetailsTab() {
 				<Button
 					type="button"
 					variant="outline"
-					className={`w-full border-dashed $isEditingParticipants && "bg-yellow-400"`}
+					className={`w-full border-dashed ${isEditingParticipants ? "bg-yellow-400" : ""}`}
 					onClick={handleClickParticipantsForm}
 				>
 					{isEditingParticipants ? (
@@ -174,6 +202,23 @@ export function DetailsTab() {
 						</>
 					)}
 				</Button>
+
+				{/* =========================
+			    DELETE PROJECT BUTTON
+			   ========================= */}
+
+				<Dialog>
+					<DialogTrigger className="w-full border-dashed">
+						<Button
+							type="button"
+							variant="destructive"
+							className="w-full border-dashed"
+						>
+							<Trash2 className="size-4" />
+							Supprimer le projet
+						</Button>
+					</DialogTrigger>
+				</Dialog>
 			</div>
 		</div>
 	);
