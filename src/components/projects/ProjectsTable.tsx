@@ -68,11 +68,10 @@ export function ProjectsTable() {
 						key={tab.value}
 						type="button"
 						onClick={() => setFilter(tab.value)}
-						className={`px-3 py-1.5 text-sm rounded-t font-medium transition-colors ${
-							filter === tab.value
-								? "text-foreground border-b-2 border-primary"
-								: "text-muted-foreground hover:text-foreground"
-						}`}
+						className={`px-3 py-1.5 text-sm rounded-t font-medium transition-colors ${filter === tab.value
+							? "text-foreground border-b-2 border-primary"
+							: "text-muted-foreground hover:text-foreground"
+							}`}
 					>
 						{tab.label}
 					</button>
@@ -91,7 +90,9 @@ export function ProjectsTable() {
 						<TableHead className="hidden text-right sm:table-cell">
 							Ton solde
 						</TableHead>
-						<TableHead className="w-10" />
+						<TableHead className="w-10">
+							<span className="sr-only">Actions</span>
+						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>

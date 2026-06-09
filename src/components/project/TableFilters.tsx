@@ -34,13 +34,20 @@ export function TableFilters({
 		<div className="mb-3 flex items-center justify-between gap-3">
 			{/* Mobile */}
 			<div className="w-full md:hidden">
+				<label htmlFor="category-filter" className="sr-only">
+					Filtrer les opérations par catégorie
+				</label>
 				<Select
 					value={activeValue === null ? "all" : String(activeValue)}
 					onValueChange={(value) =>
 						onValueChange(value === "all" ? null : Number(value))
 					}
 				>
-					<SelectTrigger className="w-full">
+					<SelectTrigger
+						className="w-full"
+						id="category-filter"
+						aria-label="Filtrer les opérations par catégorie"
+					>
 						<span>
 							{selectedOption?.name
 								? `${selectedOption?.name} (${selectedOption?.count})`
@@ -85,7 +92,7 @@ export function TableFilters({
 							className={
 								isActive
 									? "h-7 rounded-md border border-border bg-background px-3 font-medium text-foreground shadow-sm transition"
-									: "h-7 rounded-md border border-transparent px-3 font-medium text-muted-foreground transition hover:text-foreground"
+									: "h-7 rounded-md border border-transparent px-3 font-medium text-foreground/80 transition hover:text-foreground"
 							}
 						>
 							{option?.name}{" "}
