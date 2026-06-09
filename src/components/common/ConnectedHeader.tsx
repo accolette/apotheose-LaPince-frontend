@@ -12,13 +12,12 @@ import { useTheme } from "@/context/ThemesContext";
 export function ConnectedHeader() {
 	const { logout, user } = useAuth();
 	const navigate = useNavigate();
-	const { theme, setTheme } = useTheme()
+	const { theme, setTheme } = useTheme();
 
 	const isDark = theme === "light";
 
 	function toggleDark() {
 		setTheme(isDark ? "dark" : "light");
-
 	}
 
 	async function handleLogout() {

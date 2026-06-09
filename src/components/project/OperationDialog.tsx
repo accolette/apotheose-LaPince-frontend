@@ -26,7 +26,10 @@ import type {
 	CreateOperationPayload,
 	IOperationDialogState,
 } from "@/types/operations";
-import { getOperationDialogError, recalculateOperationState } from "@/utils/recalculateOperationState";
+import {
+	getOperationDialogError,
+	recalculateOperationState,
+} from "@/utils/recalculateOperationState";
 
 type OperationDialogProps = {
 	open: boolean;
@@ -166,7 +169,7 @@ export function OperationDialog({
 									className="pr-8 text-right font-medium focus:placeholder-transparent"
 									value={
 										!operationDialogState?.isAmountCalculated
-											? operationDialogState?.amount ?? ""
+											? (operationDialogState?.amount ?? "")
 											: ""
 									}
 									onChange={(event) =>
@@ -275,11 +278,11 @@ export function OperationDialog({
 														(op) =>
 															op.participantId === participant.participantId
 																? {
-																	...op,
-																	isSelected: event.target.checked,
-																	repartitionAmount: "",
-																	isRepartitionAmountCalculated: true,
-																}
+																		...op,
+																		isSelected: event.target.checked,
+																		repartitionAmount: "",
+																		isRepartitionAmountCalculated: true,
+																	}
 																: op,
 													),
 												})
@@ -298,7 +301,6 @@ export function OperationDialog({
 
 									<div className="relative w-28 shrink-0">
 										<Input
-
 											type="number"
 											disabled={!participant.isSelected}
 											min="0"
@@ -313,25 +315,25 @@ export function OperationDialog({
 											className="h-8 pr-6 text-right text-xs tabular-nums placeholder:italic focus:placeholder-transparent"
 											value={
 												participant.isSelected &&
-													!participant.isRepartitionAmountCalculated
+												!participant.isRepartitionAmountCalculated
 													? participant.repartitionAmount
 													: ""
 											}
 											onChange={(event) =>
 												updateOperationDialogState({
-													participants: operationDialogState.participants.map((op) =>
-														op.participantId === participant.participantId
-															? {
-																...op,
-																repartitionAmount: event.target.value,
-																isRepartitionAmountCalculated:
-																	event.target.value === "",
-															}
-															: op,
+													participants: operationDialogState.participants.map(
+														(op) =>
+															op.participantId === participant.participantId
+																? {
+																		...op,
+																		repartitionAmount: event.target.value,
+																		isRepartitionAmountCalculated:
+																			event.target.value === "",
+																	}
+																: op,
 													),
 												})
 											}
-
 										/>
 
 										<span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
@@ -344,7 +346,6 @@ export function OperationDialog({
 					</div>
 
 					<DialogFooter className="!flex !flex-col !items-stretch gap-2">
-
 						{operationError && (
 							<p className="w-full text-center text-sm text-destructive">
 								{operationError}
@@ -353,23 +354,28 @@ export function OperationDialog({
 						<div className="flex w-full items-center justify-between">
 							<div>
 								{dialogMode === "edit" && (
-									<Button type="button" variant="destructive" onClick={handleDelete}>
+									<Button
+										type="button"
+										variant="destructive"
+										onClick={handleDelete}
+									>
 										<Trash2 className="size-4" />
 									</Button>
 								)}
 							</div>
 							<div className="flex gap-2">
-								<Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+								<Button
+									type="button"
+									variant="outline"
+									onClick={() => onOpenChange(false)}
+								>
 									Annuler
 								</Button>
-								<Button
-									type="submit"
-									disabled={Boolean(operationError)}>
+								<Button type="submit" disabled={Boolean(operationError)}>
 									{dialogMode === "edit" ? "Modifier" : "Créer"}
 								</Button>
 							</div>
 						</div>
-
 					</DialogFooter>
 				</form>
 			</DialogContent>

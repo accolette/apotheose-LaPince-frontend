@@ -14,9 +14,10 @@ import type IProject from "@/types/project";
 import { getAvatarColor } from "@/utils/avatarColors";
 import { recalculateOperationState } from "@/utils/recalculateOperationState";
 
-
-
-export function buildDialogParticipants(project: IProject, operation?: IOperation): IOperationDialogParticipant[] {
+export function buildDialogParticipants(
+	project: IProject,
+	operation?: IOperation,
+): IOperationDialogParticipant[] {
 	return project.projectParticipants.flatMap((projectParticipant) => {
 		const participant = projectParticipant.participant;
 		if (participant?.id === undefined) {
@@ -32,14 +33,14 @@ export function buildDialogParticipants(project: IProject, operation?: IOperatio
 				initials: participant.name.slice(0, 2).toUpperCase(),
 				avatarColor: getAvatarColor(participant.name),
 				isSelected: Boolean(operationParticipant),
-				isRepartitionAmountCalculated: operationParticipant?.isRepartitionAmountCalculated ?? true,
+				isRepartitionAmountCalculated:
+					operationParticipant?.isRepartitionAmountCalculated ?? true,
 				repartitionAmount: operationParticipant?.repartitionAmount
 					? String(operationParticipant.repartitionAmount)
 					: "",
 			},
 		];
 	});
-
 }
 
 export function OperationTab() {
@@ -102,7 +103,8 @@ export function OperationTab() {
 				hasNegativeDistribution: false,
 				payerParticipantId: selectedOperation.payerParticipantId,
 				participants: buildDialogParticipants(project, selectedOperation),
-			}));
+			}),
+		);
 	}, [selectedOperation, project]);
 
 	// ── Ouverture création ────────────────────────────────────

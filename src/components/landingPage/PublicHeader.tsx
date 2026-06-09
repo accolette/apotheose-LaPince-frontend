@@ -1,6 +1,5 @@
-import { Landmark, MoonIcon, SunIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useTheme } from "@/context/ThemesContext";
+
 
 export function PublicHeader() {
 	return (

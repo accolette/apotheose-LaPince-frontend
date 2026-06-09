@@ -3,7 +3,6 @@ import type {
 	IOperationDialogState,
 } from "@/types/operations";
 
-
 export function getOperationDialogError(
 	state: IOperationDialogState,
 ): string | null {
@@ -11,14 +10,11 @@ export function getOperationDialogError(
 		return null;
 	}
 
-	const selectedParticipants = state.participants.filter(
-		(p) => p.isSelected,
-	);
+	const selectedParticipants = state.participants.filter((p) => p.isSelected);
 	const fixedAmount = selectedParticipants
 		.filter((p) => !p.isRepartitionAmountCalculated)
 		.reduce(
-			(sum, participant) =>
-				sum + Number(participant.repartitionAmount || 0),
+			(sum, participant) => sum + Number(participant.repartitionAmount || 0),
 			0,
 		);
 	const operationAmount = Number(state.amount || 0);
@@ -107,10 +103,7 @@ export function recalculateOperationState(
 	// → on répartit le reste entre les participants calculés
 	const amountToSplit = Number(state.amount || 0) - fixedAmount;
 
-	const nextParticipants = applyCalculatedRepartition(
-		state,
-		amountToSplit,
-	);
+	const nextParticipants = applyCalculatedRepartition(state, amountToSplit);
 
 	const nextAmount = nextParticipants
 		.filter((p) => p.isSelected)
