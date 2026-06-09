@@ -1,11 +1,27 @@
+import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DetailsTab } from "./tabs/DetailsTab";
 import { OperationTab } from "./tabs/OperationTab";
 import { OverviewTab } from "./tabs/OverviewTab";
 
+type TabValue = "overview" | "details" | "expenses";
+
 export function ProjectTabs() {
+	const [activeTab, setActiveTab] = useState<TabValue>("overview");
+	const [categoryFilter, setCategoryFilter] = useState<number | null>(null);
+
+	function handleCategoryClick(categoryId: number) {
+		console.log("categoryId cliqué :", categoryId);
+		setCategoryFilter(categoryId);
+		setActiveTab("expenses");
+	}
+
 	return (
-		<Tabs defaultValue="overview" className="pb-6">
+		<Tabs
+			value={activeTab}
+			onValueChange={(v) => setActiveTab(v as TabValue)}
+			className="pb-6"
+		>
 			<div className="mb-4 border-b">
 				<TabsList variant="line">
 					<TabsTrigger value="overview">Vue d’ensemble</TabsTrigger>
@@ -14,7 +30,7 @@ export function ProjectTabs() {
 				</TabsList>
 			</div>
 			<TabsContent value="overview">
-				<OverviewTab />
+				<OverviewTab onCategoryClick={handleCategoryClick} />
 			</TabsContent>
 
 			<TabsContent value="details">
@@ -22,7 +38,7 @@ export function ProjectTabs() {
 			</TabsContent>
 
 			<TabsContent value="expenses">
-				<OperationTab />
+				<OperationTab initialFilter={categoryFilter} />
 			</TabsContent>
 		</Tabs>
 	);

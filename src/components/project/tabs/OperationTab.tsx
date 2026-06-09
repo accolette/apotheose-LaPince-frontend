@@ -14,6 +14,10 @@ import type IProject from "@/types/project";
 import { getAvatarColor } from "@/utils/avatarColors";
 import { recalculateOperationState } from "@/utils/recalculateOperationState";
 
+type OperationTabProps = {
+	initialFilter: number | null;
+};
+
 export function buildDialogParticipants(
 	project: IProject,
 	operation?: IOperation,
@@ -43,7 +47,7 @@ export function buildDialogParticipants(
 	});
 }
 
-export function OperationTab() {
+export function OperationTab({ initialFilter }: OperationTabProps) {
 	const { project } = useProject();
 	const { categories } = useCategories();
 
@@ -51,7 +55,13 @@ export function OperationTab() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
-	const [activeFilter, setActiveFilter] = useState<number | null>(null);
+	const [activeFilter, setActiveFilter] = useState<number | null>(
+		initialFilter,
+	);
+
+	useEffect(() => {
+		setActiveFilter(initialFilter);
+	}, [initialFilter]);
 
 	const [selectedOperation, setSelectedOperation] = useState<IOperation | null>(
 		null,
