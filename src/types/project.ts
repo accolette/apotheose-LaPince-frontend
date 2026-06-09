@@ -10,8 +10,8 @@ export default interface IProject {
 }
 
 export interface IProjectParticipants {
-	id?: number;
-	participant?: IParticipant;
+	id: number;
+	participant: IParticipant;
 }
 
 export interface IParticipant {
@@ -167,6 +167,7 @@ export interface IDashboardProject {
 	participants: IDashboardParticipant[];
 	budget: IDashboardBudget | null;
 	userBalance: number | null;
+	isArchived: boolean;
 }
 
 export interface IProjectsDashboardResponse {
@@ -185,5 +186,5 @@ export type CreateProjectPayload = {
 		alertEnabled: boolean;
 		limitCriteria: number;
 	};
-	participants?: { name: string }[];
+	participants?: { name: string; isMe?: boolean }[];
 };

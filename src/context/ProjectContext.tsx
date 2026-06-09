@@ -7,7 +7,11 @@ import {
 } from "@/services/api";
 import type { BudgetSummary } from "@/types/budget";
 import type IProject from "@/types/project";
-import type { IParticipant, UpdateProjectPayload } from "@/types/project";
+import type {
+	IParticipant,
+	UpdateProjectParticipantsResponse,
+	UpdateProjectPayload,
+} from "@/types/project";
 import type { Reimbursement } from "@/types/reimbursement";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
@@ -26,10 +30,11 @@ type ProjectContextType = {
 	updateProjectParticipantsById: (
 		projectId: number,
 		data: IParticipant[],
-	) => void;
+	) => Promise<UpdateProjectParticipantsResponse>;
 	// Re-fetche le budget et la balance sans recharger le projet complet.
 	// À appeler après toute mutation qui affecte les montants (opération, modification budget).
 	refreshBudget: (projectId: number) => Promise<void>;
+	isHydrating: boolean;
 };
 
 // ── Project context creation ──────────────────────────────────────────────────
@@ -65,81 +70,84 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 		setReimbursements(balanceData);
 	}, []);
 
-	const getProjectById = useCallback(
-		async (projectId: number) => {
-			const token = localStorage.getItem("token");
-			setIsLoading(true);
+	const getProjectById = useCallback(async (projectId: number) => {
+		const token = localStorage.getItem("token");
+		setIsLoading(true);
+		try {
+			// TODO: replace with apiGetProjectById
+			const response = await fetch(`${BASE_URL}/api/projects/${projectId}`, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+			if (!response.ok) {
+				setErrorCode(response.status);
+				return;
+			}
+			const data = await response.json();
+			setProject(data.project);
+			// Utilise refreshBudget pour éviter de dupliquer la logique de fetch budget/balance
+			// await refreshBudget(projectId);
+			setError(null);
+			setErrorCode(null);
+		} catch (err: unknown) {
+			setProject(null);
+			setBudgetSummary(null);
+			setReimbursements([]);
+			setError(
+				err instanceof Error
+					? err.message
+					: `Error fetching project: ${projectId}`,
+			);
+		} finally {
+			setIsLoading(false);
+		}
+	}, []);
+
+	const updateProjectById = useCallback(
+		async (projectId: number, data: UpdateProjectPayload) => {
 			try {
-				// TODO: replace with apiGetProjectById
-				const response = await fetch(`${BASE_URL}/api/projects/${projectId}`, {
-					headers: { Authorization: `Bearer ${token}` },
-				});
-				if (!response.ok) {
-					setErrorCode(response.status);
-					return;
-				}
-				const data = await response.json();
-				setProject(data.project);
-				// Utilise refreshBudget pour éviter de dupliquer la logique de fetch budget/balance
-				await refreshBudget(projectId);
-				setError(null);
-				setErrorCode(null);
-			} catch (err: unknown) {
-				setProject(null);
-				setBudgetSummary(null);
-				setReimbursements([]);
-				setError(
-					err instanceof Error
-						? err.message
-						: `Error fetching project: ${projectId}`,
-				);
-			} finally {
-				setIsLoading(false);
+				const response = await apiUpdateProject(projectId, data);
+				setProject((prev) => ({
+					...prev,
+					...response.projectUpdate.project,
+					budget: response.projectUpdate.budget,
+				}));
+				return response;
+			} catch (error) {
+				console.error(error);
+				throw error;
 			}
 		},
-		[refreshBudget],
+		[],
 	);
 
-	const updateProjectById = async (
-		projectId: number,
-		data: UpdateProjectPayload,
-	) => {
-		try {
-			const response = await apiUpdateProject(projectId, data);
-			setProject((prev) => ({
-				...prev,
-				...response.projectUpdate.project,
-				budget: response.projectUpdate.budget,
-			}));
+	const [isHydrating, setIsHydrating] = useState(false);
+	const updateProjectParticipantsById = useCallback(
+		async (
+			projectId: number,
+			data: IParticipant[],
+		): Promise<UpdateProjectParticipantsResponse> => {
+			try {
+				setIsHydrating(true);
+				const response = await apiUpdateParticipantsProject(projectId, data);
 
-			return response;
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	};
-
-	const updateProjectParticipantsById = async (
-		projectId: number,
-		data: IParticipant[],
-	) => {
-		try {
-			const response = await apiUpdateParticipantsProject(projectId, data);
-			setProject((prev) =>
-				prev
-					? {
-							...prev,
-							projectParticipants: response,
-						}
-					: prev,
-			);
-			console.log("PATCH RESPONSE", response);
-			return response;
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	};
+				setProject((prev) =>
+					prev
+						? {
+								...prev,
+								projectParticipants: response.map((r) => ({
+									id: r.participantId,
+									participant: r.participant,
+								})),
+							}
+						: prev,
+				);
+				return response;
+			} finally {
+				setIsHydrating(false);
+			}
+		},
+		[],
+	);
 
 	const value = {
 		project,
@@ -152,6 +160,7 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 		updateProjectById,
 		updateProjectParticipantsById,
 		refreshBudget,
+		isHydrating,
 	};
 
 	return (

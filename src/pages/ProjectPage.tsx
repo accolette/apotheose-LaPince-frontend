@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Navigate, useParams } from "react-router";
 import { ConnectedHeader } from "@/components/common/ConnectedHeader";
-import { BudgetAlerts } from "@/components/project/BudgetAlerts";
 import { ProjectHeading } from "@/components/project/ProjectHeading";
 import { ProjectTabs } from "@/components/project/ProjectTabs";
 import { useAuth } from "@/context/AuthContext";
@@ -19,7 +18,6 @@ export function ProjectPage() {
 	const { user, isLoading: isAuthLoading } = useAuth();
 
 	useEffect(() => {
-		console.log("REFETCH PROJECT TRIGGERED");
 		if (user) {
 			getProjectById(projectId);
 		}
