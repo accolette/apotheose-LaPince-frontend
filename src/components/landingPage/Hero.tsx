@@ -1,6 +1,7 @@
-import { ArrowRightIcon, LayoutDashboardIcon } from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/context/ThemesContext";
+import { Link } from "react-router";
 
 export function Hero() {
 	const { theme } = useTheme();
@@ -24,7 +25,7 @@ export function Hero() {
 					<div className="mt-8 flex flex-wrap items-center gap-4">
 						<Button
 							className="bg-primary text-primary-foreground hover:bg-primary/80"
-							render={<a href="/register">Commencer</a>}
+							render={<Link to="/register">Commencer</Link>}
 						>
 							Commencer
 							<ArrowRightIcon />
@@ -32,7 +33,7 @@ export function Hero() {
 
 						<Button
 							variant="outline"
-							render={<a href="/login">J'ai déjà un compte</a>}
+							render={<Link to="/login">J'ai déjà un compte</Link>}
 						></Button>
 					</div>
 				</div>
