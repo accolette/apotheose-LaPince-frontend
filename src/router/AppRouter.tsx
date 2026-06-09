@@ -6,6 +6,7 @@ import { HomePage } from "@/pages/HomePage";
 import { LegalsPage } from "@/pages/LegalsPage";
 import { ProjectPage } from "@/pages/ProjectPage";
 import { ProjectsPage } from "@/pages/ProjectsPage";
+import ContactPage from "@/pages/ContactPage";
 
 export function AppRouter() {
 	return (
@@ -22,6 +23,7 @@ export function AppRouter() {
 					<Route path="/projects" element={<ProjectsPage />} />
 					<Route path="/project/:id" element={<ProjectPage />} />
 					<Route path="/privacy-policy" element={<LegalsPage />} />
+					<Route path="/contact" element={<ContactPage />} />
 				</Routes>
 			</BrowserRouter>
 		</StrictMode>
