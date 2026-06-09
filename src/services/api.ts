@@ -239,6 +239,7 @@ export async function apiUpdateOperation(
 	operationId: number,
 	operationPayload: CreateOperationPayload,
 ): Promise<IOperation> {
+	console.log("payload envoyé", operationPayload);
 	const projectId = operationPayload.projectId;
 	const res = await fetch(
 		`${BASE_URL}/api/projects/${projectId}/operations/${operationId}`,

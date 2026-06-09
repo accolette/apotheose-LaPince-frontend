@@ -12,35 +12,34 @@ import type {
 } from "@/types/operations";
 import type IProject from "@/types/project";
 import { getAvatarColor } from "@/utils/avatarColors";
+import { recalculateOperationState } from "@/utils/recalculateOperationState";
 
-export function buildDialogParticipants(
-	project: IProject,
-	operation?: IOperation,
-) {
-	if (!project) return [];
 
-	return project.projectParticipants.reduce<IOperationDialogParticipant[]>(
-		(acc, projectParticipant) => {
-			const participant = projectParticipant.participant;
-			if (!participant?.id) return acc;
 
-			const operationParticipant = operation?.operationParticipants.find(
-				(op) => op.participant.id === participant.id,
-			);
-			acc.push({
+export function buildDialogParticipants(project: IProject, operation?: IOperation): IOperationDialogParticipant[] {
+	return project.projectParticipants.flatMap((projectParticipant) => {
+		const participant = projectParticipant.participant;
+		if (participant?.id === undefined) {
+			return [];
+		}
+		const operationParticipant = operation?.operationParticipants.find(
+			(op) => op.participant.id === participant.id,
+		);
+		return [
+			{
 				participantId: participant.id,
 				name: participant.name,
 				initials: participant.name.slice(0, 2).toUpperCase(),
 				avatarColor: getAvatarColor(participant.name),
 				isSelected: Boolean(operationParticipant),
+				isRepartitionAmountCalculated: operationParticipant?.isRepartitionAmountCalculated ?? true,
 				repartitionAmount: operationParticipant?.repartitionAmount
 					? String(operationParticipant.repartitionAmount)
 					: "",
-			});
-			return acc;
-		},
-		[],
-	);
+			},
+		];
+	});
+
 }
 
 export function OperationTab() {
@@ -65,7 +64,6 @@ export function OperationTab() {
 	// ── Chargement des opérations ─────────────────────────────
 
 	const loadOperations = useCallback(async () => {
-
 		if (!project?.id) return;
 		setIsLoading(true);
 		setError(null);
@@ -79,7 +77,6 @@ export function OperationTab() {
 		} finally {
 			setIsLoading(false);
 		}
-
 	}, [project?.id]);
 
 	useEffect(() => {
@@ -91,17 +88,21 @@ export function OperationTab() {
 	useEffect(() => {
 		if (!selectedOperation || !project) return;
 
-		setOperationDialogState({
-			mode: "edit",
-			projectId: project.id,
-			operationId: selectedOperation.id,
-			name: selectedOperation.name,
-			amount: selectedOperation.amount,
-			categoryId: selectedOperation.categoryId,
-			date: selectedOperation.date.slice(0, 10),
-			payerParticipantId: selectedOperation.payerParticipantId,
-			participants: buildDialogParticipants(project, selectedOperation),
-		});
+		setOperationDialogState(
+			recalculateOperationState({
+				mode: "edit",
+				projectId: project.id,
+				operationId: selectedOperation.id,
+				name: selectedOperation.name,
+				amount: String(selectedOperation.amount),
+				isAmountCalculated: selectedOperation.isAmountCalculated,
+				categoryId: selectedOperation.categoryId,
+				date: selectedOperation.date.slice(0, 10),
+				isBalancedAmount: true,
+				hasNegativeDistribution: false,
+				payerParticipantId: selectedOperation.payerParticipantId,
+				participants: buildDialogParticipants(project, selectedOperation),
+			}));
 	}, [selectedOperation, project]);
 
 	// ── Ouverture création ────────────────────────────────────
@@ -116,8 +117,11 @@ export function OperationTab() {
 			projectId: project.id,
 			operationId: null,
 			name: "",
-			amount: 0,
+			amount: "",
+			isAmountCalculated: true,
 			categoryId: undefined,
+			isBalancedAmount: true,
+			hasNegativeDistribution: false,
 			date: new Date().toISOString().slice(0, 10),
 			payerParticipantId: undefined,
 			participants: buildDialogParticipants(project),

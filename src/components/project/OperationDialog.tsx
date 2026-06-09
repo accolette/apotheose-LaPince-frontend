@@ -26,6 +26,7 @@ import type {
 	CreateOperationPayload,
 	IOperationDialogState,
 } from "@/types/operations";
+import { getOperationDialogError, recalculateOperationState } from "@/utils/recalculateOperationState";
 
 type OperationDialogProps = {
 	open: boolean;
@@ -44,36 +45,19 @@ export function OperationDialog({
 }: OperationDialogProps) {
 	const { categories } = useCategories();
 	const dialogMode = operationDialogState?.mode ?? "create";
-
 	const selectedCategory = categories.find(
 		(category) => category.id === operationDialogState?.categoryId,
 	);
-
 	const selectedPayerParticipant = operationDialogState?.participants.find(
 		(participant) =>
 			participant.participantId === operationDialogState.payerParticipantId,
 	);
 
-	function buildCreateOperationPayload(
-		operationDialogState: IOperationDialogState,
-	): CreateOperationPayload {
-		return {
-			name: operationDialogState.name,
-			amount: operationDialogState.amount,
-			date: operationDialogState.date,
-			categoryId: Number(operationDialogState.categoryId),
-			projectId: Number(operationDialogState.projectId),
-			payerParticipantId: Number(operationDialogState.payerParticipantId),
-			operationParticipants: operationDialogState.participants
-				.filter((participant) => participant.isSelected)
-				.map((participant) => ({
-					participantId: participant.participantId,
-					repartitionAmount: Number(participant.repartitionAmount),
-				})),
-		};
-	}
+	const operationError = operationDialogState
+		? getOperationDialogError(operationDialogState)
+		: null;
 
-	async function handleDelete(event: React.SyntheticEvent) {
+	async function handleDelete() {
 		if (
 			!operationDialogState ||
 			operationDialogState.operationId == null ||
@@ -82,17 +66,16 @@ export function OperationDialog({
 			return;
 		}
 		await apiDeleteOperation(
-			operationDialogState?.operationId,
-			operationDialogState?.projectId,
+			operationDialogState.operationId,
+			operationDialogState.projectId,
 		);
 		await onOperationChanged();
 		onOpenChange(false);
-		console.log("l'op à sup est la num", operationDialogState?.operationId);
+		setOperationDialogState(null);
 	}
 
 	async function handleSubmit(event: React.SyntheticEvent) {
 		event.preventDefault();
-		event.stopPropagation();
 		if (!operationDialogState) return;
 		try {
 			const payload = buildCreateOperationPayload(operationDialogState);
@@ -110,13 +93,35 @@ export function OperationDialog({
 		}
 	}
 
+	function buildCreateOperationPayload(
+		operationDialogState: IOperationDialogState,
+	): CreateOperationPayload {
+		return {
+			name: operationDialogState.name,
+			amount: Number(operationDialogState.amount),
+			date: operationDialogState.date,
+			categoryId: Number(operationDialogState.categoryId),
+			isAmountCalculated: operationDialogState.isAmountCalculated,
+			projectId: Number(operationDialogState.projectId),
+			payerParticipantId: Number(operationDialogState.payerParticipantId),
+			operationParticipants: operationDialogState.participants
+				.filter((participant) => participant.isSelected)
+				.map((participant) => ({
+					participantId: participant.participantId,
+					repartitionAmount: Number(participant.repartitionAmount),
+					isRepartitionAmountCalculated:
+						participant.isRepartitionAmountCalculated,
+				})),
+		};
+	}
+
 	function updateOperationDialogState(updates: Partial<IOperationDialogState>) {
 		if (!operationDialogState) return;
-
-		setOperationDialogState({
+		const nextState = {
 			...operationDialogState,
 			...updates,
-		});
+		};
+		setOperationDialogState(recalculateOperationState(nextState));
 	}
 
 	return (
@@ -149,16 +154,25 @@ export function OperationDialog({
 							<Label htmlFor="operation-amount">Montant</Label>
 							<div className="relative">
 								<Input
-									required
 									id="operation-amount"
 									type="number"
+									// min="0.01"
 									step="0.01"
-									placeholder="128,40"
-									className="pr-8 text-right font-medium"
-									value={operationDialogState?.amount ?? ""}
+									placeholder={
+										operationDialogState?.isAmountCalculated
+											? operationDialogState.amount || "auto"
+											: "auto"
+									}
+									className="pr-8 text-right font-medium focus:placeholder-transparent"
+									value={
+										!operationDialogState?.isAmountCalculated
+											? operationDialogState?.amount ?? ""
+											: ""
+									}
 									onChange={(event) =>
 										updateOperationDialogState({
-											amount: Number(event.target.value),
+											amount: event.target.value,
+											isAmountCalculated: event.target.value === "",
 										})
 									}
 								/>
@@ -169,11 +183,12 @@ export function OperationDialog({
 						</div>
 					</div>
 
-					<div className="grid grid-cols-5 gap-3">
-						<div className="col-span-3 space-y-2">
+					<div className="grid grid-cols-10 gap-3">
+						<div className="col-span-5 space-y-2">
 							<Label>Catégorie</Label>
 
 							<Select
+								required
 								value={String(operationDialogState?.categoryId ?? "")}
 								onValueChange={(value) =>
 									updateOperationDialogState({
@@ -196,10 +211,11 @@ export function OperationDialog({
 							</Select>
 						</div>
 
-						<div className="col-span-2 space-y-2">
+						<div className="col-span-5 space-y-2">
 							<Label htmlFor="operation-date">Date</Label>
 
 							<Input
+								required
 								id="operation-date"
 								type="date"
 								value={operationDialogState?.date ?? ""}
@@ -214,6 +230,7 @@ export function OperationDialog({
 						<Label>Payé par</Label>
 
 						<Select
+							required
 							value={String(operationDialogState?.payerParticipantId ?? "")}
 							onValueChange={(payerParticipantId) =>
 								updateOperationDialogState({
@@ -255,13 +272,15 @@ export function OperationDialog({
 											onChange={(event) =>
 												updateOperationDialogState({
 													participants: operationDialogState.participants.map(
-														(item) =>
-															item.participantId === participant.participantId
+														(op) =>
+															op.participantId === participant.participantId
 																? {
-																	...item,
+																	...op,
 																	isSelected: event.target.checked,
+																	repartitionAmount: "",
+																	isRepartitionAmountCalculated: true,
 																}
-																: item,
+																: op,
 													),
 												})
 											}
@@ -279,25 +298,40 @@ export function OperationDialog({
 
 									<div className="relative w-28 shrink-0">
 										<Input
+
 											type="number"
+											disabled={!participant.isSelected}
 											min="0"
 											step="0.01"
-											placeholder="auto"
-											className="h-8 pr-6 text-right text-xs tabular-nums placeholder:italic"
-											value={participant.repartitionAmount}
+											placeholder={
+												!participant.isSelected
+													? "-"
+													: participant.isRepartitionAmountCalculated
+														? participant.repartitionAmount || "auto"
+														: ""
+											}
+											className="h-8 pr-6 text-right text-xs tabular-nums placeholder:italic focus:placeholder-transparent"
+											value={
+												participant.isSelected &&
+													!participant.isRepartitionAmountCalculated
+													? participant.repartitionAmount
+													: ""
+											}
 											onChange={(event) =>
 												updateOperationDialogState({
-													participants: operationDialogState.participants.map(
-														(item) =>
-															item.participantId === participant.participantId
-																? {
-																	...item,
-																	repartitionAmount: event.target.value,
-																}
-																: item,
+													participants: operationDialogState.participants.map((op) =>
+														op.participantId === participant.participantId
+															? {
+																...op,
+																repartitionAmount: event.target.value,
+																isRepartitionAmountCalculated:
+																	event.target.value === "",
+															}
+															: op,
 													),
 												})
 											}
+
 										/>
 
 										<span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
@@ -309,31 +343,33 @@ export function OperationDialog({
 						</ul>
 					</div>
 
-					<DialogFooter className="flex">
-						<div className="flex-1">
-							{dialogMode === "edit"
-								? <Button
-									type="button"
-									variant="destructive"
-									onClick={handleDelete}
-								>
-									<Trash2 className="size-4" />
-								</Button>
-								: ""}
-						</div>
-						<div className="flex-1 flex justify-end gap-2">
-							<Button
-								type="button"
-								variant="outline"
-								onClick={() => onOpenChange(false)}
-							>
-								Annuler
-							</Button>
+					<DialogFooter className="!flex !flex-col !items-stretch gap-2">
 
-							<Button type="submit">
-								{dialogMode === "edit" ? "Modifier" : "Créer"}
-							</Button>
+						{operationError && (
+							<p className="w-full text-center text-sm text-destructive">
+								{operationError}
+							</p>
+						)}
+						<div className="flex w-full items-center justify-between">
+							<div>
+								{dialogMode === "edit" && (
+									<Button type="button" variant="destructive" onClick={handleDelete}>
+										<Trash2 className="size-4" />
+									</Button>
+								)}
+							</div>
+							<div className="flex gap-2">
+								<Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+									Annuler
+								</Button>
+								<Button
+									type="submit"
+									disabled={Boolean(operationError)}>
+									{dialogMode === "edit" ? "Modifier" : "Créer"}
+								</Button>
+							</div>
 						</div>
+
 					</DialogFooter>
 				</form>
 			</DialogContent>
