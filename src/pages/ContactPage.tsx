@@ -1,6 +1,5 @@
-import { useState } from "react";
-
 import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router";
 
 type ResultStatus = "idle" | "loading" | "success" | "error";
@@ -36,7 +35,7 @@ export default function ContactForm() {
     };
 
     return (
-        <div className="min-h-screen bg-zinc-100 flex items-center justify-center px-4 py-12">
+        <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
             <div className="w-full max-w-lg">
                 <Link
                     to="/"
@@ -45,10 +44,10 @@ export default function ContactForm() {
                     <ArrowLeft className="size-4" />
                     Retour à l'accueil
                 </Link>
-                <div className="bg-white rounded-2xl shadow-sm p-8">
+                <div className="bg-card rounded-2xl shadow-sm p-8">
                     <div className="mb-8 text-center">
-                        <h1 className="text-2xl font-bold text-zinc-900">Nous contacter</h1>
-                        <p className="mt-1 text-sm text-zinc-500">
+                        <h1 className="text-2xl font-bold text-foreground">Nous contacter</h1>
+                        <p className="mt-1 text-sm text-muted-foreground">
                             Une question, un bug, une idée ?
                         </p>
                     </div>
@@ -57,7 +56,7 @@ export default function ContactForm() {
                         <div>
                             <label
                                 htmlFor="name"
-                                className="block text-sm font-medium text-zinc-700 mb-1"
+                                className="block text-sm font-medium text-foreground mb-1"
                             >
                                 Nom
                             </label>
@@ -67,14 +66,14 @@ export default function ContactForm() {
                                 name="name"
                                 placeholder="Jean Lapince"
                                 required
-                                className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition"
+                                className="w-full rounded-lg border border-border bg-muted px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition"
                             />
                         </div>
 
                         <div>
                             <label
                                 htmlFor="email"
-                                className="block text-sm font-medium text-zinc-700 mb-1"
+                                className="block text-sm font-medium text-foreground mb-1"
                             >
                                 Email
                             </label>
@@ -84,14 +83,14 @@ export default function ContactForm() {
                                 name="email"
                                 placeholder="lapince@lapince.fr"
                                 required
-                                className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition"
+                                className="w-full rounded-lg border border-border bg-muted px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition"
                             />
                         </div>
 
                         <div>
                             <label
                                 htmlFor="subject"
-                                className="block text-sm font-medium text-zinc-700 mb-1"
+                                className="block text-sm font-medium text-foreground mb-1"
                             >
                                 Objet
                             </label>
@@ -100,7 +99,7 @@ export default function ContactForm() {
                                 name="subject"
                                 required
                                 defaultValue=""
-                                className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition"
+                                className="w-full rounded-lg border border-border bg-muted px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition"
                             >
                                 <option value="" disabled>
                                     -- Choisir un objet --
@@ -116,7 +115,7 @@ export default function ContactForm() {
                         <div>
                             <label
                                 htmlFor="message"
-                                className="block text-sm font-medium text-zinc-700 mb-1"
+                                className="block text-sm font-medium text-foreground mb-1"
                             >
                                 Message
                             </label>
@@ -128,12 +127,11 @@ export default function ContactForm() {
                                 required
                                 minLength={20}
                                 maxLength={1000}
-                                // CharCount
                                 onChange={(e) => setCharCount(e.target.value.length)}
-                                className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition resize-none"
+                                className="w-full rounded-lg border border-border bg-muted px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition resize-none"
                             />
                             <p
-                                className={`text-xs mt-1 text-right ${charCount < 20 ? "text-red-400" : "text-zinc-400"}`}
+                                className={`text-xs mt-1 text-right ${charCount < 20 ? "text-red-400" : "text-muted-foreground"}`}
                             >
                                 {charCount} / 1000 {charCount < 20 && `(minimum 20 caractères)`}
                             </p>
