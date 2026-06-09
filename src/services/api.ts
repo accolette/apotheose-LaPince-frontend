@@ -58,8 +58,11 @@ function buildHeaders(withAuth = false): HeadersInit {
 	return headers;
 }
 
-// Throws the error body if the response is not ok
-async function handleResponse<T>(res: Response): Promise<T> {
+async function handleResponse<T>(res: Response, skipUnauthorized: boolean = false): Promise<T> {
+	if (res.status === 401 && !skipUnauthorized) {
+		// Token expired — notify the app to log out
+		window.dispatchEvent(new Event("auth:unauthorized"));
+	}
 	if (!res.ok) {
 		const error = await res.json().catch(() => ({ error: res.statusText }));
 		throw error;
@@ -101,7 +104,7 @@ export async function apiLogin(payload: LoginPayload): Promise<LoginResponse> {
 		headers: buildHeaders(),
 		body: JSON.stringify(payload),
 	});
-	return handleResponse(res);
+	return handleResponse(res, true);
 }
 
 export async function apiLogout(): Promise<void> {
