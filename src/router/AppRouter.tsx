@@ -2,11 +2,11 @@ import { StrictMode } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { AuthPage } from "@/pages/AuthPage";
 import { CategoriesPage } from "@/pages/CategoriesPage";
+import ContactPage from "@/pages/ContactPage";
 import { HomePage } from "@/pages/HomePage";
 import { LegalsPage } from "@/pages/LegalsPage";
 import { ProjectPage } from "@/pages/ProjectPage";
 import { ProjectsPage } from "@/pages/ProjectsPage";
-import ContactPage from "@/pages/ContactPage";
 
 export function AppRouter() {
 	return (
