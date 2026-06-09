@@ -1,5 +1,6 @@
 import { ArrowRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router";
 
 export function CtaSection() {
 	return (
@@ -11,9 +12,9 @@ export function CtaSection() {
 			<Button
 				className="mt-8 bg-accent text-accent-foreground hover:bg-accent/80"
 				render={
-					<a href="/register">
+					<Link to="/register">
 						Créer mon compte <ArrowRightIcon />
-					</a>
+					</Link>
 				}
 			></Button>
 		</section>
