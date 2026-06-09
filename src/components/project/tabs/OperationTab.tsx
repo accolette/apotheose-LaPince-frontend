@@ -43,7 +43,11 @@ export function buildDialogParticipants(
 	});
 }
 
-export function OperationTab() {
+type OperationTabProps = {
+	onOperationMutated: () => void;
+};
+
+export function OperationTab({ onOperationMutated }: OperationTabProps) {
 	const { project } = useProject();
 	const { categories } = useCategories();
 
@@ -160,7 +164,10 @@ export function OperationTab() {
 				onOpenChange={setIsOperationDialogOpen}
 				operationDialogState={operationDialogState}
 				setOperationDialogState={setOperationDialogState}
-				onOperationChanged={loadOperations}
+				onOperationChanged={async () => {
+					await loadOperations();
+					onOperationMutated(); // ← refetch alertes après chaque mutation
+				}}
 			/>
 		</div>
 	);

@@ -4,6 +4,7 @@ import type {
 	LoginResponse,
 	UserResponse,
 } from "@/types";
+import type { Alert, UpdateAlertPayload } from "@/types/alert";
 import type { BudgetSummary } from "@/types/budget";
 import type {
 	CreateOperationPayload,
@@ -57,14 +58,29 @@ function buildHeaders(withAuth = false): HeadersInit {
 	return headers;
 }
 
-// Throws the error body if the response is not ok
-async function handleResponse<T>(res: Response): Promise<T> {
+async function handleResponse<T>(res: Response, skipUnauthorized: boolean = false): Promise<T> {
+	if (res.status === 401 && !skipUnauthorized) {
+		// Token expired — notify the app to log out
+		window.dispatchEvent(new Event("auth:unauthorized"));
+	}
 	if (!res.ok) {
 		const error = await res.json().catch(() => ({ error: res.statusText }));
 		throw error;
 	}
 	if (res.status === 204) {
 		return undefined as T;
+	}
+	return res.json();
+}
+
+// Throws 204 if deletion is done
+async function handleDeleteResponse(res: Response): Promise<number> {
+	if (!res.ok) {
+		const error = await res.json().catch(() => ({ error: res.statusText }));
+		throw error;
+	}
+	if (res.status === 204) {
+		return res.status;
 	}
 	return res.json();
 }
@@ -88,7 +104,7 @@ export async function apiLogin(payload: LoginPayload): Promise<LoginResponse> {
 		headers: buildHeaders(),
 		body: JSON.stringify(payload),
 	});
-	return handleResponse(res);
+	return handleResponse(res, true);
 }
 
 export async function apiLogout(): Promise<void> {
@@ -159,6 +175,14 @@ export async function apiUpdateParticipantsProject(
 		},
 	);
 	return handleResponse<UpdateProjectParticipantsResponse>(res);
+}
+
+export async function apiDeleteProject(projectId: number): Promise<number> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}`, {
+		method: "DELETE",
+		headers: buildHeaders(true),
+	});
+	return handleDeleteResponse(res);
 }
 
 // ── Budget endpoints ─────────────────────────────────────────────────────────
@@ -266,4 +290,36 @@ export async function apiGetGlobalBalance(): Promise<GlobalBalance> {
 		headers: buildHeaders(true),
 	});
 	return handleResponse<GlobalBalance>(res);
+}
+
+// ── Alert endpoints ──────────────────────────────────────────────────────────
+
+export async function apiGetAlerts(): Promise<Alert[]> {
+	const res = await fetch(`${BASE_URL}/api/alertes`, {
+		method: "GET",
+		headers: buildHeaders(true),
+	});
+	const data = await handleResponse<{ alerts: Alert[] }>(res);
+	return data.alerts;
+}
+
+export async function apiGetProjectAlerts(projectId: number): Promise<Alert[]> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}/alertes`, {
+		method: "GET",
+		headers: buildHeaders(true),
+	});
+	const data = await handleResponse<{ alerts: Alert[] }>(res);
+	return data.alerts;
+}
+
+export async function apiMarkAlertAsRead(
+	alertId: number,
+	payload: UpdateAlertPayload,
+): Promise<Alert> {
+	const res = await fetch(`${BASE_URL}/api/alertes/${alertId}`, {
+		method: "PATCH",
+		headers: buildHeaders(true),
+		body: JSON.stringify(payload),
+	});
+	return handleResponse<Alert>(res);
 }
