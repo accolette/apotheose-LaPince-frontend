@@ -12,6 +12,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useProject } from "@/context/ProjectContext";
+import { PROJECT_TYPE_LABELS } from "@/lib/utils";
 import type { UpdateProjectPayload } from "@/types/project";
 
 type ProjectDetailsFormProps = {
@@ -33,8 +34,9 @@ export function ProjectDetailsForm({
 
 	return (
 		<form
-			className={`space-y-5 rounded-lg border bg-card p-6 ${isEditingDetails ? "border-amber-400" : "border-border"
-				}`}
+			className={`space-y-5 rounded-lg border bg-card p-6 ${
+				isEditingDetails ? "border-amber-400" : "border-border"
+			}`}
 		>
 			<div className="space-y-2">
 				<Label htmlFor="project-name">Nom du projet</Label>
@@ -85,7 +87,11 @@ export function ProjectDetailsForm({
 					disabled={!isEditingDetails}
 				>
 					<SelectTrigger>
-						<SelectValue placeholder="Choisir un type" />
+						{/* To display correctly type label */}
+						<SelectValue>
+							{PROJECT_TYPE_LABELS[formData.type ?? project.type] ??
+								"Choisir un type"}
+						</SelectValue>
 					</SelectTrigger>
 					<SelectContent>
 						<SelectItem value="Voyage">Voyage</SelectItem>
@@ -111,10 +117,10 @@ export function ProjectDetailsForm({
 								// OFF => remove budget from payload
 								budget: checked
 									? {
-										id: prev.budget?.id ?? 0,
-										amount: prev.budget?.amount ?? 0,
-										limitCriteria: prev.budget?.limitCriteria ?? 80,
-									}
+											id: prev.budget?.id ?? 0,
+											amount: prev.budget?.amount ?? 0,
+											limitCriteria: prev.budget?.limitCriteria ?? 80,
+										}
 									: undefined,
 							}))
 						}
