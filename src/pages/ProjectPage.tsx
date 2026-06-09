@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Navigate, useParams } from "react-router";
 import { ConnectedHeader } from "@/components/common/ConnectedHeader";
-import { BudgetAlerts } from "@/components/project/BudgetAlerts";
 import { ProjectHeading } from "@/components/project/ProjectHeading";
 import { ProjectTabs } from "@/components/project/ProjectTabs";
 import { useAuth } from "@/context/AuthContext";
