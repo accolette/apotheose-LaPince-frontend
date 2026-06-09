@@ -57,7 +57,10 @@ function buildHeaders(withAuth = false): HeadersInit {
 	return headers;
 }
 
-async function handleResponse<T>(res: Response, skipUnauthorized: boolean = false): Promise<T> {
+async function handleResponse<T>(
+	res: Response,
+	skipUnauthorized: boolean = false,
+): Promise<T> {
 	if (res.status === 401 && !skipUnauthorized) {
 		// Token expired — notify the app to log out
 		window.dispatchEvent(new Event("auth:unauthorized"));

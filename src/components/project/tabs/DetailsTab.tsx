@@ -27,6 +27,8 @@ export function DetailsTab() {
 		type: undefined,
 	});
 
+	const isArchived = project?.isArchived ?? false;
+
 	// Local state dedicated to participants editing
 	const [participantsFormData, setParticipantsFormData] = useState<
 		IParticipant[]
@@ -45,10 +47,10 @@ export function DetailsTab() {
 			type: project.type,
 			budget: project.budget
 				? {
-						id: project.budget.id,
-						amount: Number(project.budget.amount),
-						limitCriteria: Number(project.budget.limitCriteria),
-					}
+					id: project.budget.id,
+					amount: Number(project.budget.amount),
+					limitCriteria: Number(project.budget.limitCriteria),
+				}
 				: undefined,
 		});
 
@@ -123,6 +125,7 @@ export function DetailsTab() {
 					variant="outline"
 					className={`w-full border-dashed ${isEditingDetails && "bg-yellow-400"}`}
 					onClick={handleClickDetailsForm}
+					disabled={isArchived}
 				>
 					{isEditingDetails ? (
 						<>
@@ -156,6 +159,7 @@ export function DetailsTab() {
 					variant="outline"
 					className={`w-full border-dashed ${isEditingParticipants && "bg-yellow-400"}`}
 					onClick={handleClickParticipantsForm}
+					disabled={isArchived}
 				>
 					{isEditingParticipants ? (
 						<>

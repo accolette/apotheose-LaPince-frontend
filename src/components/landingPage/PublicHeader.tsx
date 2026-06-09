@@ -1,8 +1,8 @@
 import { Landmark, MoonIcon, SunIcon } from "lucide-react";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
-import { useTheme } from "@/context/ThemesContext";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/context/ThemesContext";
 
 export function PublicHeader() {
 	const { theme, setTheme } = useTheme();
@@ -39,7 +39,10 @@ export function PublicHeader() {
 							<Button render={<Link to="/projects">Retour aux projets</Link>} />
 						) : (
 							<>
-								<Button variant="ghost" render={<Link to="/login">Connexion</Link>} />
+								<Button
+									variant="ghost"
+									render={<Link to="/login">Connexion</Link>}
+								/>
 								<Button render={<Link to="/register">S'inscrire</Link>} />
 							</>
 						)}
@@ -49,4 +52,3 @@ export function PublicHeader() {
 		</header>
 	);
 }
-
