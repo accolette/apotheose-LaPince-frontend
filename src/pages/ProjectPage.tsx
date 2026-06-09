@@ -38,7 +38,7 @@ export function ProjectPage() {
 	}
 
 	if (errorCode === 403) {
-		return <div>403 : Accés refusé</div>;
+		return <Navigate to="/forbidden" replace />;
 	}
 
 	if (errorCode === 404) {

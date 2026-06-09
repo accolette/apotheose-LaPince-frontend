@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { useAuth } from "@/context/AuthContext";
 import { AuthPage } from "@/pages/AuthPage";
 import ContactPage from "@/pages/ContactPage";
+import { ForbiddenPage } from "@/pages/ForbiddenPage";
 import { HomePage } from "@/pages/HomePage";
 import { LegalsPage } from "@/pages/LegalsPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
@@ -68,6 +69,7 @@ export function AppRouter() {
 					/>
 					<Route path="/privacy-policy" element={<LegalsPage />} />
 					<Route path="/contact" element={<ContactPage />} />
+					<Route path="/forbidden" element={<ForbiddenPage />} />
 					<Route path="*" element={<NotFoundPage />} />
 				</Routes>
 			</BrowserRouter>

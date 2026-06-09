@@ -54,7 +54,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 			setUser(null);
 		}
 		window.addEventListener("auth:unauthorized", handleUnauthorized);
-		return () => window.removeEventListener("auth:unauthorized", handleUnauthorized);
+		return () =>
+			window.removeEventListener("auth:unauthorized", handleUnauthorized);
 	}, []);
 
 	// Calls POST /api/auth/login, stores the token, sets the user
