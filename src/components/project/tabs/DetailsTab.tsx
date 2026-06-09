@@ -1,6 +1,7 @@
 import { CircleFadingArrowUpIcon, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useProject } from "@/context/ProjectContext";
 import type { IParticipant, UpdateProjectPayload } from "@/types/project";
@@ -75,29 +76,33 @@ export function DetailsTab() {
 	}
 
 	async function handleClickParticipantsForm() {
-		// Same logic as details section:
 		if (isEditingParticipants) {
-			// Capturer une snapshot stable avant tout await
-			const snapshot = [...participantsFormData];
+			if (!project) {
+				return;
+			}
+			// Snapshot depuis le context — état serveur stable, pas l'état local édité
+			const snapshot = project.projectParticipants
+				.map((pp) => pp.participant)
+				.filter((p): p is IParticipant => p !== undefined);
 
 			try {
 				const response = await updateProjectParticipantsById(
 					projectId,
-					snapshot,
+					participantsFormData,
 				);
-
-				// Reconstruire depuis la réponse API
 				const updated = response
 					.map((r) => r.participant)
 					.filter((p): p is IParticipant => p !== undefined);
 
-				// Resync explicit from API answer, not from project
 				setParticipantsFormData(updated);
 			} catch (err) {
+				toast.error(
+					"Impossible de supprimer le participant s'il a des opérations liées",
+				);
 				console.error("Erreur PATCH participants :", err);
-				// Restaurer le snapshot en cas d'échec
+				// Restaure l'état serveur, pas l'état local édité
 				setParticipantsFormData(snapshot);
-				return; // Ne pas quitter le mode édition si erreur
+				return;
 			}
 		}
 		setIsEditingParticipants((prev) => !prev);
@@ -121,7 +126,7 @@ export function DetailsTab() {
 				<Button
 					type="button"
 					variant="outline"
-					className={`w-full border-dashed ${isEditingDetails && "bg-yellow-400"}`}
+					className={`w-full border-dashed $isEditingDetails && "bg-yellow-400"`}
 					onClick={handleClickDetailsForm}
 				>
 					{isEditingDetails ? (
@@ -154,7 +159,7 @@ export function DetailsTab() {
 				<Button
 					type="button"
 					variant="outline"
-					className={`w-full border-dashed ${isEditingParticipants && "bg-yellow-400"}`}
+					className={`w-full border-dashed $isEditingParticipants && "bg-yellow-400"`}
 					onClick={handleClickParticipantsForm}
 				>
 					{isEditingParticipants ? (

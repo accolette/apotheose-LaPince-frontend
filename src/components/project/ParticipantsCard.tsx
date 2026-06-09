@@ -1,7 +1,9 @@
 import { Plus, Trash2 } from "lucide-react";
-import type { Dispatch, SetStateAction } from "react";
+import { type Dispatch, type SetStateAction, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useProject } from "@/context/ProjectContext";
+import { apiGetOperations } from "@/services/api";
 import type { IParticipant } from "@/types/project";
 
 // Props received from the parent component (DetailsTab)
@@ -42,7 +44,6 @@ export function ParticipantsCard({
 			},
 		]);
 	}
-	console.log(participantsFormData);
 
 	return (
 		<div className="space-y-3">
