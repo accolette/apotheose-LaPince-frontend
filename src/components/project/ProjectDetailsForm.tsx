@@ -1,4 +1,4 @@
-import { type Dispatch, type SetStateAction, useEffect } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -33,9 +33,8 @@ export function ProjectDetailsForm({
 
 	return (
 		<form
-			className={`space-y-5 rounded-lg border bg-card p-6 ${
-				isEditingDetails ? "border-amber-400" : "border-border"
-			}`}
+			className={`space-y-5 rounded-lg border bg-card p-6 ${isEditingDetails ? "border-amber-400" : "border-border"
+				}`}
 		>
 			<div className="space-y-2">
 				<Label htmlFor="project-name">Nom du projet</Label>
@@ -112,10 +111,10 @@ export function ProjectDetailsForm({
 								// OFF => remove budget from payload
 								budget: checked
 									? {
-											id: prev.budget?.id ?? 0,
-											amount: prev.budget?.amount ?? 0,
-											limitCriteria: prev.budget?.limitCriteria ?? 80,
-										}
+										id: prev.budget?.id ?? 0,
+										amount: prev.budget?.amount ?? 0,
+										limitCriteria: prev.budget?.limitCriteria ?? 80,
+									}
 									: undefined,
 							}))
 						}

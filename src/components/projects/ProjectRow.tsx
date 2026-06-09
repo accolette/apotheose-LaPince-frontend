@@ -40,7 +40,7 @@ export function ProjectRow({ project }: ProjectRowProps) {
 
 	return (
 		<tr
-			className="cursor-pointer transition hover:bg-muted/60"
+			className={`cursor-pointer transition hover:bg-muted/60 ${project.isArchived ? "opacity-30" : ""}`}
 			onClick={() => navigate(`/project/${project.id}`)}
 		>
 			<td className="px-6 py-4">

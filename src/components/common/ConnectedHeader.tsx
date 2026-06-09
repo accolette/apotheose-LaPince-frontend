@@ -14,10 +14,10 @@ export function ConnectedHeader() {
 	const navigate = useNavigate();
 	const { theme, setTheme } = useTheme();
 
-	const isDark = theme === "dark";
+	const isDark = theme === "light";
 
 	function toggleDark() {
-		setTheme(isDark ? "light" : "dark");
+		setTheme(isDark ? "dark" : "light");
 	}
 
 	async function handleLogout() {
