@@ -55,8 +55,7 @@ export function ProjectPage() {
 			<ConnectedHeader />
 			<main className="mx-auto max-w-5xl px-6 py-10">
 				<ProjectHeading project={project} />
-				{/* <BudgetAlerts /> */}
-				<ProjectTabs />
+				<ProjectTabs projectId={projectId} />
 			</main>
 		</>
 	);

@@ -8,7 +8,11 @@ import { apiGetOperations } from "@/services/api";
 import type { IOperation, IOperationDialogState } from "@/types/operations";
 import { getAvatarColor } from "@/utils/avatarColors";
 
-export function OperationTab() {
+type OperationTabProps = {
+	onOperationMutated: () => void;
+};
+
+export function OperationTab({ onOperationMutated }: OperationTabProps) {
 	const { project } = useProject();
 	const { categories } = useCategories();
 
@@ -139,7 +143,10 @@ export function OperationTab() {
 				onOpenChange={setIsOperationDialogOpen}
 				operationDialogState={operationDialogState}
 				setOperationDialogState={setOperationDialogState}
-				onOperationCreated={loadOperations}
+				onOperationCreated={async () => {
+					await loadOperations();
+					onOperationMutated(); // ← refetch alertes après chaque mutation
+				}}
 			/>
 		</div>
 	);
