@@ -48,7 +48,10 @@ export function buildDialogParticipants(
 	});
 }
 
-export function OperationTab({ onOperationMutated }: OperationTabProps) {
+export function OperationTab({
+	initialFilter,
+	onOperationMutated,
+}: OperationTabProps) {
 	const { project } = useProject();
 	const { categories } = useCategories();
 
@@ -81,7 +84,6 @@ export function OperationTab({ onOperationMutated }: OperationTabProps) {
 		setError(null);
 		try {
 			const data = await apiGetOperations(project.id);
-			console.log("operations rechargées", data);
 			setOperations(data);
 		} catch (error) {
 			console.error("Erreur apiGetOperations:", error);
@@ -143,7 +145,7 @@ export function OperationTab({ onOperationMutated }: OperationTabProps) {
 		setIsOperationDialogOpen(true);
 	}
 
-	// ── Filtre (préparation future) ───────────────────────────
+	// ── Filtre ───────────────────────────────────────────────
 
 	const filteredOperations = activeFilter
 		? operations.filter((operation) => operation.categoryId === activeFilter)
@@ -173,7 +175,7 @@ export function OperationTab({ onOperationMutated }: OperationTabProps) {
 				setOperationDialogState={setOperationDialogState}
 				onOperationChanged={async () => {
 					await loadOperations();
-					onOperationMutated(); // ← refetch alertes après chaque mutation
+					onOperationMutated();
 				}}
 			/>
 		</div>
