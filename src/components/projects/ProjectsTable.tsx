@@ -68,10 +68,11 @@ export function ProjectsTable() {
 						key={tab.value}
 						type="button"
 						onClick={() => setFilter(tab.value)}
-						className={`px-3 py-1.5 text-sm rounded-t font-medium transition-colors ${filter === tab.value
-							? "text-foreground border-b-2 border-primary"
-							: "text-muted-foreground hover:text-foreground"
-							}`}
+						className={`px-3 py-1.5 text-sm rounded-t font-medium transition-colors ${
+							filter === tab.value
+								? "text-foreground border-b-2 border-primary"
+								: "text-muted-foreground hover:text-foreground"
+						}`}
 					>
 						{tab.label}
 					</button>
