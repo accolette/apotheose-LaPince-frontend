@@ -98,7 +98,7 @@ export function ProjectDialog({
 					: undefined,
 				// Prepend the current user if includeMe is checkek
 				participants: [
-					...(includeMe && user ? [{ name: user.name }] : []),
+					...(includeMe && user ? [{ name: user.name, isMe: true }] : []),
 					...participants.filter((p) => p.name.trim() !== ""),
 				],
 			},

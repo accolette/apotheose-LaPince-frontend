@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,9 +29,15 @@ export function RegisterForm({ onLoginClick }: RegisterFormProps) {
 		try {
 			await register({ name, email, password });
 			// Registration successful → switch to login form
+			toast.success("Compte créé !", {
+				description: "Bienvenue sur La Pince 🎉",
+			});
 			onLoginClick();
 		} catch {
 			setErrorMessage("Une erreur est survenue, veuillez réessayer");
+			toast.error("Inscription échouée", {
+				description: "Une erreur est survenue, veuillez réessayer",
+			});
 		}
 	}
 
