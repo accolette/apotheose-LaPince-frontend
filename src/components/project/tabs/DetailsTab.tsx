@@ -1,17 +1,20 @@
 import { CircleFadingArrowUpIcon, Save, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { useProject } from "@/context/ProjectContext";
+import { apiDeleteProject } from "@/services/api";
 import type { IParticipant, UpdateProjectPayload } from "@/types/project";
 import { ParticipantsCard } from "../ParticipantsCard";
 import { ProjectDetailsForm } from "../ProjectDetailsForm";
@@ -19,6 +22,7 @@ import { ProjectDetailsForm } from "../ProjectDetailsForm";
 export function DetailsTab() {
 	const params = useParams();
 	const projectId = Number(params.id);
+	const navigate = useNavigate();
 
 	// Controls to check if inputs are editable
 	const [isEditingDetails, setIsEditingDetails] = useState(false);
@@ -107,7 +111,7 @@ export function DetailsTab() {
 				toast.error(
 					"Impossible de supprimer le participant s'il a des opérations liées",
 				);
-				console.error("Erreur PATCH participants :", err);
+				console.error("Error PATCH participants :", err);
 				// Restaure l'état serveur, pas l'état local édité
 				setParticipantsFormData(snapshot);
 				return;
@@ -116,24 +120,18 @@ export function DetailsTab() {
 		setIsEditingParticipants((prev) => !prev);
 	}
 
-	function handleDelete() {
-		return (
-			<>
-				<Dialog>
-					<DialogTrigger>Open</DialogTrigger>
-					<DialogContent>
-						<DialogHeader>
-							<DialogTitle>Are you absolutely sure?</DialogTitle>
-							<DialogDescription>
-								This action cannot be undone. This will permanently delete your
-								account and remove your data from our servers.
-							</DialogDescription>
-						</DialogHeader>
-					</DialogContent>
-				</Dialog>
-				;
-			</>
-		);
+	async function handleDelete() {
+		try {
+			const response = await apiDeleteProject(projectId);
+			if (response === 204) {
+				toast.success("Projet supprimé");
+				navigate("/projects");
+			}
+		} catch (err) {
+			toast.error("Erreur : Impossible de supprimer le projet");
+			console.error("Error DELETE project :", err);
+			return;
+		}
 	}
 
 	return (
@@ -208,16 +206,38 @@ export function DetailsTab() {
 			   ========================= */}
 
 				<Dialog>
-					<DialogTrigger className="w-full border-dashed">
-						<Button
-							type="button"
-							variant="destructive"
-							className="w-full border-dashed"
-						>
-							<Trash2 className="size-4" />
-							Supprimer le projet
-						</Button>
+					<DialogTrigger
+						className="w-full border-dashed"
+						render={
+							<Button
+								type="button"
+								variant="destructive"
+								className="w-full border-dashed"
+							/>
+						}
+					>
+						<Trash2 className="size-4" />
+						Supprimer le projet
 					</DialogTrigger>
+					<DialogContent>
+						<DialogHeader className="p-3">
+							<DialogTitle>
+								Êtes-vous sûr de vouloir supprimer ce projet ?
+							</DialogTitle>
+							<DialogDescription>
+								Cette action est irréversible.
+							</DialogDescription>
+						</DialogHeader>
+						<DialogFooter>
+							<DialogClose render={<Button variant="outline" />}>
+								Annuler
+							</DialogClose>
+
+							<Button type="submit" onClick={handleDelete}>
+								Supprimer
+							</Button>
+						</DialogFooter>
+					</DialogContent>
 				</Dialog>
 			</div>
 		</div>
