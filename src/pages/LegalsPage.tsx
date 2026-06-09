@@ -1,9 +1,8 @@
+import { ArrowLeft } from "lucide-react";
 import { useEffect } from "react";
+import { Link } from "react-router";
 import { PublicFooter } from "@/components/landingPage/PublicFooter";
 import { PublicHeader } from "@/components/landingPage/PublicHeader";
-
-import { ArrowLeft } from "lucide-react";
-import { Link } from "react-router";
 
 export function LegalsPage() {
 	useEffect(() => {
@@ -56,7 +55,8 @@ export function LegalsPage() {
 							Contact :{" "}
 							<Link to="/contact" className="text-yellow-500 hover:underline">
 								formulaire de contact
-							</Link></p>
+							</Link>
+						</p>
 						<h3 className="text-2xl text-center font-semibold tracking-tight py-6">
 							3. Données collectées
 						</h3>
@@ -254,7 +254,8 @@ export function LegalsPage() {
 							Projet pédagogique réalisé par l’équipe <b>La Pince</b> dans le
 							cadre de la formation CDA de O’clock.
 						</p>
-						<p>Contact :{" "}
+						<p>
+							Contact :{" "}
 							<Link to="/contact" className="text-yellow-500 hover:underline">
 								formulaire de contact
 							</Link>
