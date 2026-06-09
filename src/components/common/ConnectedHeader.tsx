@@ -67,15 +67,11 @@ export function ConnectedHeader() {
 								<p className="text-sm font-medium">{user?.name}</p>
 							</div>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem
-								onClick={() => window.open("/contact", "_blank")}
-							>
+							<DropdownMenuItem onClick={() => navigate("/contact")}>
 								<MailIcon className="size-4" />
 								Contact
 							</DropdownMenuItem>
-							<DropdownMenuItem
-								onClick={() => window.open("/privacy-policy", "_blank")}
-							>
+							<DropdownMenuItem onClick={() => navigate("/privacy-policy")}>
 								<FileTextIcon className="size-4" />
 								Mentions légales
 							</DropdownMenuItem>
