@@ -3,7 +3,6 @@ import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/context/ThemesContext";
 
-
 export function PublicHeader() {
 	const { theme, setTheme } = useTheme();
 	const isDark =

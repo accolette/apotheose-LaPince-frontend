@@ -70,6 +70,18 @@ async function handleResponse<T>(res: Response): Promise<T> {
 	return res.json();
 }
 
+// Throws 204 if deletion is done
+async function handleDeleteResponse(res: Response): Promise<number> {
+	if (!res.ok) {
+		const error = await res.json().catch(() => ({ error: res.statusText }));
+		throw error;
+	}
+	if (res.status === 204) {
+		return res.status;
+	}
+	return res.json();
+}
+
 // ── Auth endpoints ───────────────────────────────────────────────────────────
 
 export async function apiRegister(
@@ -160,6 +172,14 @@ export async function apiUpdateParticipantsProject(
 		},
 	);
 	return handleResponse<UpdateProjectParticipantsResponse>(res);
+}
+
+export async function apiDeleteProject(projectId: number): Promise<number> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}`, {
+		method: "DELETE",
+		headers: buildHeaders(true),
+	});
+	return handleDeleteResponse(res);
 }
 
 // ── Budget endpoints ─────────────────────────────────────────────────────────
