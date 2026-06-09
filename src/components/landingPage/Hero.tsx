@@ -1,7 +1,7 @@
 import { ArrowRightIcon } from "lucide-react";
+import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/context/ThemesContext";
-import { Link } from "react-router";
 
 export function Hero() {
 	const { theme } = useTheme();

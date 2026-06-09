@@ -1,7 +1,7 @@
 import { Landmark, MoonIcon, SunIcon } from "lucide-react";
+import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/context/ThemesContext";
-import { Link } from "react-router";
 
 
 export function PublicHeader() {
@@ -14,10 +14,11 @@ export function PublicHeader() {
 		<header className="w-full border-b bg-background">
 			<div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
 				<div className="flex h-16 items-center justify-between">
-					<Link to="/" className="flex items-center gap-2 font-semibold">						<span className="bg-primary text-primary-foreground inline-flex h-8 w-8 items-center justify-center rounded-md">
-						<Landmark className="h-4 w-4" />
-					</span>
-
+					<Link to="/" className="flex items-center gap-2 font-semibold">
+						{" "}
+						<span className="bg-primary text-primary-foreground inline-flex h-8 w-8 items-center justify-center rounded-md">
+							<Landmark className="h-4 w-4" />
+						</span>
 						<span>LaPince</span>
 					</Link>
 					<nav className="flex items-center gap-4">
@@ -32,7 +33,10 @@ export function PublicHeader() {
 								<MoonIcon className="size-4" />
 							)}
 						</button>
-						<Button variant="ghost" render={<Link to="/login">Connexion</Link>} />
+						<Button
+							variant="ghost"
+							render={<Link to="/login">Connexion</Link>}
+						/>
 						<Button render={<Link to="/register">S'inscrire</Link>} />
 					</nav>
 				</div>
