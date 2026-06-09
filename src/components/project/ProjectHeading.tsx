@@ -1,8 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router";
-import { Archive, ArrowLeft } from "lucide-react";
-import { Link } from "react-router";
-import { Label } from "@/components/ui/label";
+
 import { Switch } from "@/components/ui/switch";
 import { useProject } from "@/context/ProjectContext";
 import type IProject from "@/types/project";

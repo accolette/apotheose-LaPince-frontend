@@ -6,8 +6,10 @@ import {
 	SelectTrigger,
 } from "@/components/ui/select";
 import type { ICategories } from "@/types";
+import type { IOperation } from "@/types/operations";
 
 type TableFiltersProps = {
+	operations: IOperation[];
 	options: ICategories[];
 	activeValue: number | null;
 	onValueChange: (value: number | null) => void;
@@ -15,6 +17,7 @@ type TableFiltersProps = {
 };
 
 export function TableFilters({
+	operations,
 	options,
 	activeValue,
 	onValueChange,
@@ -24,6 +27,8 @@ export function TableFilters({
 		activeValue === null
 			? null
 			: options.find((option) => option.id === activeValue);
+
+	const operationQuantity = operations.length
 
 	return (
 		<div className="mb-3 flex items-center justify-between gap-3">
@@ -36,7 +41,7 @@ export function TableFilters({
 					}
 				>
 					<SelectTrigger className="w-full">
-						<span>{selectedOption?.name ?? "Toutes les catégories"}</span>
+						<span>{selectedOption?.name ? `${selectedOption?.name} (${selectedOption?.count})` : `Toutes les catégories (${operationQuantity})`}</span>
 					</SelectTrigger>
 
 					<SelectContent>
@@ -44,7 +49,7 @@ export function TableFilters({
 
 						{options.map((option) => (
 							<SelectItem key={option.id} value={String(option.id)}>
-								{option.name}
+								{option.name} ({option.count})
 							</SelectItem>
 						))}
 					</SelectContent>
@@ -79,7 +84,7 @@ export function TableFilters({
 									: "h-7 rounded-md border border-transparent px-3 font-medium text-muted-foreground transition hover:text-foreground"
 							}
 						>
-							{option.name}
+							{option?.name} <span className="font-light">({option?.count})</span>
 						</button>
 					);
 				})}
