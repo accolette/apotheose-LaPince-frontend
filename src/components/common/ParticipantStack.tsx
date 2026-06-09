@@ -37,7 +37,9 @@ export function ParticipantStack({
 					</span>
 				))}
 				{remaining > 0 && (
-					<span className={sizeClasses[size]}>+{remaining}</span>
+					<span className={`${sizeClasses[size]} bg-muted border-border`}>
+						+{remaining}
+					</span>
 				)}
 			</div>
 			<span className="text-xs text-muted-foreground">
