@@ -54,6 +54,7 @@ export function OperationTab({
 }: OperationTabProps) {
 	const { project } = useProject();
 	const { categories } = useCategories();
+	const isArchived = project?.isArchived ?? false;
 
 	const [operations, setOperations] = useState<IOperation[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
@@ -165,7 +166,7 @@ export function OperationTab({
 				options={categoriesWithCount}
 				activeValue={activeFilter}
 				onValueChange={setActiveFilter}
-				onActionClick={openCreateOperationDialog}
+				onActionClick={isArchived ? undefined : openCreateOperationDialog}
 			/>
 
 			<OperationsTable
