@@ -5,13 +5,13 @@ import {
 	TrainFront,
 	Utensils,
 } from "lucide-react";
+import { toast } from "sonner";
 import { ParticipantStack } from "@/components/common/ParticipantStack";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useCategories } from "@/context/CategoriesContext";
 import { useProject } from "@/context/ProjectContext";
 import type { IOperation } from "@/types/operations";
 import { getAvatarColor } from "@/utils/avatarColors";
-import { toast } from "sonner";
 
 type OperationsRowProps = {
 	operation: IOperation;

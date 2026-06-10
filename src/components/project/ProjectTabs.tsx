@@ -72,7 +72,10 @@ export function ProjectTabs({ projectId }: ProjectTabsProps) {
 				<DetailsTab />
 			</TabsContent>
 			<TabsContent value="expenses">
-				<OperationTab initialFilter={categoryFilter} onOperationMutated={fetchAlerts} />
+				<OperationTab
+					initialFilter={categoryFilter}
+					onOperationMutated={fetchAlerts}
+				/>
 			</TabsContent>
 			<TabsContent value="alerts">
 				<AlertTab alerts={alerts} onAlertRead={handleAlertRead} />

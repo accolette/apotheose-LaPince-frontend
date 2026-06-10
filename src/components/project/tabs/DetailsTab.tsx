@@ -61,10 +61,10 @@ export function DetailsTab() {
 			type: project.type,
 			budget: project.budget
 				? {
-					id: project.budget.id,
-					amount: Number(project.budget.amount),
-					limitCriteria: Number(project.budget.limitCriteria),
-				}
+						id: project.budget.id,
+						amount: Number(project.budget.amount),
+						limitCriteria: Number(project.budget.limitCriteria),
+					}
 				: undefined,
 		});
 
@@ -203,7 +203,8 @@ export function DetailsTab() {
 				<Button
 					type="button"
 					variant="outline"
-					className={`w-full border-dashed ${isEditingParticipants ? "bg-yellow-400" : ""} ${isArchived ? "opacity-50" : ""}`} onClick={handleClickParticipantsForm}
+					className={`w-full border-dashed ${isEditingParticipants ? "bg-yellow-400" : ""} ${isArchived ? "opacity-50" : ""}`}
+					onClick={handleClickParticipantsForm}
 				>
 					{isEditingParticipants ? (
 						<>

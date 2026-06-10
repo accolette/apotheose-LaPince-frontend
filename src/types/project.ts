@@ -42,7 +42,7 @@ export type UpdateProjectPayload = {
 		limitCriteria?: number;
 	};
 	participants?: IParticipant[];
-	deleteBudget?: boolean
+	deleteBudget?: boolean;
 };
 
 export type UpdateProjectResponse = {

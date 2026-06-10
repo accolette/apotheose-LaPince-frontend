@@ -50,17 +50,17 @@ export function OperationsTable({
 					</TableRow>
 				</TableHeader>
 
-					<TableBody>
-						{operations.map((operation) => (
-							<OperationsRow
-								key={operation.id}
-								operation={operation}
-								isArchived={isArchived}
-								setSelectedOperation={setSelectedOperation}
-								setIsOperationDialogOpen={setIsOperationDialogOpen}
-							/>
-						))}
-					</TableBody>
+				<TableBody>
+					{operations.map((operation) => (
+						<OperationsRow
+							key={operation.id}
+							operation={operation}
+							isArchived={isArchived}
+							setSelectedOperation={setSelectedOperation}
+							setIsOperationDialogOpen={setIsOperationDialogOpen}
+						/>
+					))}
+				</TableBody>
 
 				<TableFooter>
 					<TableRow className="sm:hidden">
