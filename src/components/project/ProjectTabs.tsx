@@ -69,10 +69,13 @@ export function ProjectTabs({ projectId }: ProjectTabsProps) {
 				<OverviewTab onCategoryClick={handleCategoryClick} />
 			</TabsContent>
 			<TabsContent value="details">
-				<DetailsTab />
+				<DetailsTab onBudgetUpdated={fetchAlerts} />
 			</TabsContent>
 			<TabsContent value="expenses">
-				<OperationTab initialFilter={categoryFilter} onOperationMutated={fetchAlerts} />
+				<OperationTab
+					initialFilter={categoryFilter}
+					onOperationMutated={fetchAlerts}
+				/>
 			</TabsContent>
 			<TabsContent value="alerts">
 				<AlertTab alerts={alerts} onAlertRead={handleAlertRead} />

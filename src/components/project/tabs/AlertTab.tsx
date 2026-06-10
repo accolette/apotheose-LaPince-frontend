@@ -98,7 +98,7 @@ export function AlertTab({ alerts, onAlertRead }: AlertTabProps) {
 									<AlertTriangle className="h-3.5 w-3.5 text-zinc-400" />
 								</span>
 								<div className="flex-1">
-									<AlertTitle className="mb-1 line-through opacity-60">
+									<AlertTitle className="mb-1 opacity-60">
 										{alert.message}
 									</AlertTitle>
 									<p className="text-xs opacity-50">
