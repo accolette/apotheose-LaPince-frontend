@@ -22,10 +22,10 @@ export function ConnectedHeader() {
 	const navigate = useNavigate();
 	const { theme, setTheme } = useTheme();
 
-	const isDark = theme === "dark";
+	const isDark = theme === "light";
 
 	function toggleDark() {
-		setTheme(isDark ? "light" : "dark");
+		setTheme(isDark ? "dark" : "light");
 	}
 
 	async function handleLogout() {
@@ -47,6 +47,12 @@ export function ConnectedHeader() {
 					<button
 						type="button"
 						onClick={toggleDark}
+						aria-label={
+							isDark ? "Activer le thème clair" : "Activer le thème sombre"
+						}
+						title={
+							isDark ? "Activer le thème clair" : "Activer le thème sombre"
+						}
 						className="flex size-8 items-center justify-center rounded-full border border-border text-muted-foreground transition hover:border-foreground hover:text-foreground"
 					>
 						{isDark ? (

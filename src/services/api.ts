@@ -4,6 +4,7 @@ import type {
 	LoginResponse,
 	UserResponse,
 } from "@/types";
+import type { Alert, UpdateAlertPayload } from "@/types/alert";
 import type { BudgetSummary } from "@/types/budget";
 import type {
 	CreateOperationPayload,
@@ -68,6 +69,21 @@ async function handleResponse<T>(
 	if (!res.ok) {
 		const error = await res.json().catch(() => ({ error: res.statusText }));
 		throw error;
+	}
+	if (res.status === 204) {
+		return undefined as T;
+	}
+	return res.json();
+}
+
+// Throws 204 if deletion is done
+async function handleDeleteResponse(res: Response): Promise<number> {
+	if (!res.ok) {
+		const error = await res.json().catch(() => ({ error: res.statusText }));
+		throw error;
+	}
+	if (res.status === 204) {
+		return res.status;
 	}
 	return res.json();
 }
@@ -164,6 +180,14 @@ export async function apiUpdateParticipantsProject(
 	return handleResponse<UpdateProjectParticipantsResponse>(res);
 }
 
+export async function apiDeleteProject(projectId: number): Promise<number> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}`, {
+		method: "DELETE",
+		headers: buildHeaders(true),
+	});
+	return handleDeleteResponse(res);
+}
+
 // ── Budget endpoints ─────────────────────────────────────────────────────────
 
 export async function apiGetBudgets(projectId: number): Promise<BudgetSummary> {
@@ -210,6 +234,20 @@ export async function apiGetOperations(
 	return data.operations;
 }
 
+export async function apiDeleteOperation(
+	operationId: number,
+	projectId: number,
+): Promise<void> {
+	const res = await fetch(
+		`${BASE_URL}/api/projects/${projectId}/operations/${operationId}`,
+		{
+			method: "DELETE",
+			headers: buildHeaders(true),
+		},
+	);
+	return handleResponse<void>(res);
+}
+
 export async function apiCreateOperation(
 	operationPayload: CreateOperationPayload,
 ): Promise<IOperation> {
@@ -228,6 +266,7 @@ export async function apiUpdateOperation(
 	operationId: number,
 	operationPayload: CreateOperationPayload,
 ): Promise<IOperation> {
+	console.log("payload envoyé", operationPayload);
 	const projectId = operationPayload.projectId;
 	const res = await fetch(
 		`${BASE_URL}/api/projects/${projectId}/operations/${operationId}`,
@@ -254,4 +293,36 @@ export async function apiGetGlobalBalance(): Promise<GlobalBalance> {
 		headers: buildHeaders(true),
 	});
 	return handleResponse<GlobalBalance>(res);
+}
+
+// ── Alert endpoints ──────────────────────────────────────────────────────────
+
+export async function apiGetAlerts(): Promise<Alert[]> {
+	const res = await fetch(`${BASE_URL}/api/alertes`, {
+		method: "GET",
+		headers: buildHeaders(true),
+	});
+	const data = await handleResponse<{ alerts: Alert[] }>(res);
+	return data.alerts;
+}
+
+export async function apiGetProjectAlerts(projectId: number): Promise<Alert[]> {
+	const res = await fetch(`${BASE_URL}/api/projects/${projectId}/alertes`, {
+		method: "GET",
+		headers: buildHeaders(true),
+	});
+	const data = await handleResponse<{ alerts: Alert[] }>(res);
+	return data.alerts;
+}
+
+export async function apiMarkAlertAsRead(
+	alertId: number,
+	payload: UpdateAlertPayload,
+): Promise<Alert> {
+	const res = await fetch(`${BASE_URL}/api/alertes/${alertId}`, {
+		method: "PATCH",
+		headers: buildHeaders(true),
+		body: JSON.stringify(payload),
+	});
+	return handleResponse<Alert>(res);
 }
