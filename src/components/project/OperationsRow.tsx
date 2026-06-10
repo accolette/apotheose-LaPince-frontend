@@ -12,6 +12,7 @@ import { useCategories } from "@/context/CategoriesContext";
 import { useProject } from "@/context/ProjectContext";
 import type { IOperation } from "@/types/operations";
 import { getAvatarColor } from "@/utils/avatarColors";
+import { toast } from "sonner";
 
 type OperationsRowProps = {
 	operation: IOperation;
@@ -53,14 +54,18 @@ export function OperationsRow({
 	const payerParticipantName = getPayerParticipantName();
 
 	function openOperationDialog() {
+		if (isArchived) {
+			toast.warning("Veuillez dé-archiver le projet pour pouvoir le modifier");
+			return;
+		}
 		setSelectedOperation(operation);
 		setIsOperationDialogOpen(true);
 	}
 
 	return (
 		<TableRow
-			className={`hover:bg-muted/50 ${isArchived ? "opacity-50 cursor-default" : "cursor-pointer"}`}
-			onClick={isArchived ? undefined : openOperationDialog}
+			className={`hover:bg-muted/50 ${isArchived ? "opacity-50" : "cursor-pointer"}`}
+			onClick={openOperationDialog}
 		>
 			<TableCell>
 				<div className="flex items-center gap-3">

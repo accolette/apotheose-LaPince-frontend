@@ -62,10 +62,10 @@ export function DetailsTab() {
 			type: project.type,
 			budget: project.budget
 				? {
-						id: project.budget.id,
-						amount: Number(project.budget.amount),
-						limitCriteria: Number(project.budget.limitCriteria),
-					}
+					id: project.budget.id,
+					amount: Number(project.budget.amount),
+					limitCriteria: Number(project.budget.limitCriteria),
+				}
 				: undefined,
 		});
 
@@ -80,6 +80,10 @@ export function DetailsTab() {
 	}, [project]); // Re-runs whenever project context changes (e.g. after save, budget deletion)
 
 	function handleClickDetailsForm() {
+		if (isArchived) {
+			toast.warning("Veuillez dé-archiver le projet pour pouvoir le modifier");
+			return;
+		}
 		// Build the payload from current form state.
 		// If the project had a budget and the user disabled the switch (formData.budget is now undefined),
 		// add deleteBudget: true to signal the backend to remove it.
@@ -99,6 +103,10 @@ export function DetailsTab() {
 	}
 
 	async function handleClickParticipantsForm() {
+		if (isArchived) {
+			toast.warning("Veuillez dé-archiver le projet pour pouvoir le modifier");
+			return;
+		}
 		if (isEditingParticipants) {
 			if (!project) {
 				return;
@@ -163,9 +171,8 @@ export function DetailsTab() {
 				<Button
 					type="button"
 					variant="outline"
-					className={`w-full border-dashed ${isEditingDetails ? "bg-yellow-400" : ""}`}
+					className={`w-full border-dashed ${isEditingDetails ? "bg-yellow-400" : ""} ${isArchived ? "opacity-50" : ""}`}
 					onClick={handleClickDetailsForm}
-					disabled={isArchived}
 				>
 					{isEditingDetails ? (
 						<>
@@ -197,9 +204,7 @@ export function DetailsTab() {
 				<Button
 					type="button"
 					variant="outline"
-					className={`w-full border-dashed ${isEditingParticipants ? "bg-yellow-400" : ""}`}
-					onClick={handleClickParticipantsForm}
-					disabled={isArchived}
+					className={`w-full border-dashed ${isEditingParticipants ? "bg-yellow-400" : ""} ${isArchived ? "opacity-50" : ""}`} onClick={handleClickParticipantsForm}
 				>
 					{isEditingParticipants ? (
 						<>
