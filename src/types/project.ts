@@ -5,7 +5,7 @@ export default interface IProject {
 	description?: string;
 	isArchived: boolean;
 	projectParticipants: IProjectParticipants[];
-	budget: IBudget;
+	budget: IBudget | null;
 	type: ProjectType;
 }
 
@@ -42,6 +42,7 @@ export type UpdateProjectPayload = {
 		limitCriteria?: number;
 	};
 	participants?: IParticipant[];
+	deleteBudget?: boolean
 };
 
 export type UpdateProjectResponse = {

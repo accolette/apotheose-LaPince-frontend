@@ -14,6 +14,11 @@ import type IProject from "@/types/project";
 import { getAvatarColor } from "@/utils/avatarColors";
 import { recalculateOperationState } from "@/utils/recalculateOperationState";
 
+type OperationTabProps = {
+	initialFilter: number | null;
+	onOperationMutated: () => void;
+};
+
 export function buildDialogParticipants(
 	project: IProject,
 	operation?: IOperation,
@@ -43,19 +48,36 @@ export function buildDialogParticipants(
 	});
 }
 
-export function OperationTab() {
+export function OperationTab({
+	initialFilter,
+	onOperationMutated,
+}: OperationTabProps) {
 	const { project } = useProject();
 	const { categories } = useCategories();
+	const isArchived = project?.isArchived ?? false;
 
 	const [operations, setOperations] = useState<IOperation[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
-	const [activeFilter, setActiveFilter] = useState<number | null>(null);
+	const [activeFilter, setActiveFilter] = useState<number | null>(
+		initialFilter,
+	);
+
+	useEffect(() => {
+		setActiveFilter(initialFilter);
+	}, [initialFilter]);
 
 	const [selectedOperation, setSelectedOperation] = useState<IOperation | null>(
 		null,
 	);
+
+	const categoriesWithCount = categories
+		.map((cat) => ({
+			...cat,
+			count: operations.filter((op) => op.categoryId === cat.id).length,
+		}))
+		.filter((cat) => cat.count > 0); // ← exclure les catégories vides
 
 	const [operationDialogState, setOperationDialogState] =
 		useState<IOperationDialogState | null>(null);
@@ -70,7 +92,6 @@ export function OperationTab() {
 		setError(null);
 		try {
 			const data = await apiGetOperations(project.id);
-			console.log("operations rechargées", data);
 			setOperations(data);
 		} catch (error) {
 			console.error("Erreur apiGetOperations:", error);
@@ -132,7 +153,7 @@ export function OperationTab() {
 		setIsOperationDialogOpen(true);
 	}
 
-	// ── Filtre (préparation future) ───────────────────────────
+	// ── Filtre ───────────────────────────────────────────────
 
 	const filteredOperations = activeFilter
 		? operations.filter((operation) => operation.categoryId === activeFilter)
@@ -141,10 +162,11 @@ export function OperationTab() {
 	return (
 		<div className="space-y-4">
 			<TableFilters
-				options={categories}
+				operations={filteredOperations}
+				options={categoriesWithCount}
 				activeValue={activeFilter}
 				onValueChange={setActiveFilter}
-				onActionClick={openCreateOperationDialog}
+				onActionClick={isArchived ? undefined : openCreateOperationDialog}
 			/>
 
 			<OperationsTable
@@ -160,7 +182,10 @@ export function OperationTab() {
 				onOpenChange={setIsOperationDialogOpen}
 				operationDialogState={operationDialogState}
 				setOperationDialogState={setOperationDialogState}
-				onOperationChanged={loadOperations}
+				onOperationChanged={async () => {
+					await loadOperations();
+					onOperationMutated();
+				}}
 			/>
 		</div>
 	);
