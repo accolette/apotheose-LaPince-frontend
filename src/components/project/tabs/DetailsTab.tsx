@@ -45,10 +45,11 @@ export function DetailsTab() {
 		IParticipant[]
 	>([]);
 
-	// To replace useEffect([project]), and initialize it only at first loading
-	const [isInitialized, setIsInitialized] = useState(false);
+	// Synchronize formData with project context on every project change.
+	// This ensures the form always reflects the latest server state,
+	// including after a budget deletion (project.budget becomes null → formData.budget becomes undefined).
 	useEffect(() => {
-		if (!project || isInitialized) return;
+		if (!project) return;
 
 		// Synchronize project details from API/context into local form state
 		// This allows controlled inputs to display current values
@@ -73,14 +74,21 @@ export function DetailsTab() {
 			.filter((p): p is IParticipant => p !== undefined);
 
 		setParticipantsFormData(participants);
-		setIsInitialized(true);
-	}, [project, isInitialized]); // Runs every time project changes, or isInitialized is true
+	}, [project]); // Re-runs whenever project context changes (e.g. after save, budget deletion)
 
 	function handleClickDetailsForm() {
-		// If user is already editing and clicks again,
-		// save the modified data before leaving edit mode
+		// Build the payload from current form state.
+		// If the project had a budget and the user disabled the switch (formData.budget is now undefined),
+		// add deleteBudget: true to signal the backend to remove it.
 		if (isEditingDetails) {
-			updateProjectById(projectId, formData);
+			const hadBudget = !!project?.budget;
+			const nowHasBudget = !!formData.budget;
+
+			const payload: UpdateProjectPayload = { ...formData };
+			if (hadBudget && !nowHasBudget) {
+				payload.deleteBudget = true;
+			}
+			updateProjectById(projectId, payload);
 		}
 
 		// Toggle edit mode on/off
