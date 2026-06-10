@@ -14,6 +14,11 @@ import type IProject from "@/types/project";
 import { getAvatarColor } from "@/utils/avatarColors";
 import { recalculateOperationState } from "@/utils/recalculateOperationState";
 
+type OperationTabProps = {
+	initialFilter: number | null;
+	onOperationMutated: () => void;
+};
+
 export function buildDialogParticipants(
 	project: IProject,
 	operation?: IOperation,
@@ -43,7 +48,10 @@ export function buildDialogParticipants(
 	});
 }
 
-export function OperationTab() {
+export function OperationTab({
+	initialFilter,
+	onOperationMutated,
+}: OperationTabProps) {
 	const { project } = useProject();
 	const { categories } = useCategories();
 
@@ -51,7 +59,13 @@ export function OperationTab() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
-	const [activeFilter, setActiveFilter] = useState<number | null>(null);
+	const [activeFilter, setActiveFilter] = useState<number | null>(
+		initialFilter,
+	);
+
+	useEffect(() => {
+		setActiveFilter(initialFilter);
+	}, [initialFilter]);
 
 	const [selectedOperation, setSelectedOperation] = useState<IOperation | null>(
 		null,
@@ -77,7 +91,6 @@ export function OperationTab() {
 		setError(null);
 		try {
 			const data = await apiGetOperations(project.id);
-			console.log("operations rechargées", data);
 			setOperations(data);
 		} catch (error) {
 			console.error("Erreur apiGetOperations:", error);
@@ -139,7 +152,7 @@ export function OperationTab() {
 		setIsOperationDialogOpen(true);
 	}
 
-	// ── Filtre (préparation future) ───────────────────────────
+	// ── Filtre ───────────────────────────────────────────────
 
 	const filteredOperations = activeFilter
 		? operations.filter((operation) => operation.categoryId === activeFilter)
@@ -168,7 +181,10 @@ export function OperationTab() {
 				onOpenChange={setIsOperationDialogOpen}
 				operationDialogState={operationDialogState}
 				setOperationDialogState={setOperationDialogState}
-				onOperationChanged={loadOperations}
+				onOperationChanged={async () => {
+					await loadOperations();
+					onOperationMutated();
+				}}
 			/>
 		</div>
 	);
