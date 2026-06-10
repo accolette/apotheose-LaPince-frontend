@@ -43,13 +43,15 @@ export function ProjectTabs({ projectId }: ProjectTabsProps) {
 		setCategoryFilter(categoryId);
 		setActiveTab("expenses");
 	}
+	function handleTabChange(value: string) {
+		if (value !== "expenses") {
+			setCategoryFilter(null);
+		}
+		setActiveTab(value as TabValue);
+	}
 
 	return (
-		<Tabs
-			value={activeTab}
-			onValueChange={(v) => setActiveTab(v as TabValue)}
-			className="pb-6"
-		>
+		<Tabs value={activeTab} onValueChange={handleTabChange} className="pb-6">
 			<div className="mb-4 border-b">
 				<TabsList variant="line">
 					<TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
