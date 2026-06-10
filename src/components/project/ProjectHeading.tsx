@@ -1,5 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router";
+
 import { Switch } from "@/components/ui/switch";
 import { useProject } from "@/context/ProjectContext";
 import type IProject from "@/types/project";

@@ -71,6 +71,13 @@ export function OperationTab({
 		null,
 	);
 
+	const categoriesWithCount = categories
+		.map((cat) => ({
+			...cat,
+			count: operations.filter((op) => op.categoryId === cat.id).length,
+		}))
+		.filter((cat) => cat.count > 0); // ← exclure les catégories vides
+
 	const [operationDialogState, setOperationDialogState] =
 		useState<IOperationDialogState | null>(null);
 
@@ -154,7 +161,8 @@ export function OperationTab({
 	return (
 		<div className="space-y-4">
 			<TableFilters
-				options={categories}
+				operations={filteredOperations}
+				options={categoriesWithCount}
 				activeValue={activeFilter}
 				onValueChange={setActiveFilter}
 				onActionClick={openCreateOperationDialog}

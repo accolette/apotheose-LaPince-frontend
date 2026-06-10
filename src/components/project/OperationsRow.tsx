@@ -79,7 +79,7 @@ export function OperationsRow({
 			<TableCell className="hidden md:table-cell">
 				<div className="flex items-center gap-2">
 					<span
-						className={`flex size-6 items-center justify-center rounded-full text-[10px] font-medium text-white ${getAvatarColor(payerParticipantName ?? "")}`}
+						className={`flex size-6 items-center justify-center rounded-full text-[11px] font-medium text-white ${getAvatarColor(payerParticipantName ?? "")}`}
 					>
 						{payerParticipantName?.slice(0, 2).toUpperCase()}
 					</span>
