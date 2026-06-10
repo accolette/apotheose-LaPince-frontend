@@ -29,6 +29,16 @@ export function OperationsTable({
 		(total, op) => total + Number(op.amount),
 		0,
 	);
+	const formattedTotalAmount = totalAmount.toLocaleString("fr-FR", {
+		style: "currency",
+		currency: "EUR",
+	});
+
+	const footerRows = [
+		{ className: "sm:hidden", colSpan: undefined },
+		{ className: "hidden sm:table-row md:hidden", colSpan: 3 },
+		{ className: "hidden md:table-row", colSpan: 4 },
+	];
 
 	if (isLoading) return <div>Loading...</div>;
 
@@ -60,51 +70,16 @@ export function OperationsTable({
 				</TableBody>
 
 				<TableFooter>
-					<TableRow className="sm:hidden">
-						<TableCell className="text-right">Total</TableCell>
-						<TableCell className="text-right">
-							{totalAmount.toLocaleString("fr-FR", {
-								style: "currency",
-								currency: "EUR",
-							})}
-						</TableCell>
-					</TableRow>
-
-					<TableRow className="hidden sm:table-row md:hidden">
-						<TableCell colSpan={3} className="text-right">
-							Total
-						</TableCell>
-						<TableCell className="text-right">
-							{totalAmount.toLocaleString("fr-FR", {
-								style: "currency",
-								currency: "EUR",
-							})}
-						</TableCell>
-					</TableRow>
-
-					<TableRow className="hidden md:table-row lg:hidden">
-						<TableCell colSpan={4} className="text-right">
-							Total
-						</TableCell>
-						<TableCell className="text-right">
-							{totalAmount.toLocaleString("fr-FR", {
-								style: "currency",
-								currency: "EUR",
-							})}
-						</TableCell>
-					</TableRow>
-
-					<TableRow className="hidden lg:table-row">
-						<TableCell colSpan={4} className="text-right">
-							Total
-						</TableCell>
-						<TableCell className="text-right">
-							{totalAmount.toLocaleString("fr-FR", {
-								style: "currency",
-								currency: "EUR",
-							})}
-						</TableCell>
-					</TableRow>
+					{footerRows.map((row) => (
+						<TableRow key={row.className} className={row.className}>
+							<TableCell colSpan={row.colSpan} className="text-right">
+								Total
+							</TableCell>
+							<TableCell className="text-right">
+								{formattedTotalAmount}
+							</TableCell>
+						</TableRow>
+					))}
 				</TableFooter>
 			</Table>
 		</section>
