@@ -14,6 +14,7 @@ type OperationsTableProps = {
 	operations: IOperation[];
 	isLoading: boolean;
 	error: string | null;
+	isArchived?: boolean;
 	setSelectedOperation: (operation: IOperation | null) => void;
 	setIsOperationDialogOpen: (open: boolean) => void;
 };
@@ -22,6 +23,7 @@ export function OperationsTable({
 	operations,
 	isLoading,
 	error,
+	isArchived,
 	setSelectedOperation,
 	setIsOperationDialogOpen,
 }: OperationsTableProps) {
@@ -57,6 +59,7 @@ export function OperationsTable({
 							<OperationsRow
 								key={operation.id}
 								operation={operation}
+								isArchived={isArchived}
 								setSelectedOperation={setSelectedOperation}
 								setIsOperationDialogOpen={setIsOperationDialogOpen}
 							/>

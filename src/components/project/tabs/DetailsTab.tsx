@@ -47,10 +47,10 @@ export function DetailsTab() {
 			type: project.type,
 			budget: project.budget
 				? {
-					id: project.budget.id,
-					amount: Number(project.budget.amount),
-					limitCriteria: Number(project.budget.limitCriteria),
-				}
+						id: project.budget.id,
+						amount: Number(project.budget.amount),
+						limitCriteria: Number(project.budget.limitCriteria),
+					}
 				: undefined,
 		});
 

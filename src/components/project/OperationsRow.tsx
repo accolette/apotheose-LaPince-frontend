@@ -14,6 +14,7 @@ import { getAvatarColor } from "@/utils/avatarColors";
 
 type OperationsRowProps = {
 	operation: IOperation;
+	isArchived?: boolean;
 	setSelectedOperation: (operation: IOperation | null) => void;
 	setIsOperationDialogOpen: (open: boolean) => void;
 };
@@ -29,6 +30,7 @@ const icons = [
 
 export function OperationsRow({
 	operation,
+	isArchived,
 	setSelectedOperation,
 	setIsOperationDialogOpen,
 }: OperationsRowProps) {
@@ -55,7 +57,10 @@ export function OperationsRow({
 	}
 
 	return (
-		<TableRow className="hover:bg-muted/50" onClick={openOperationDialog}>
+		<TableRow
+			className={`hover:bg-muted/50 ${isArchived ? "opacity-50 cursor-default" : "cursor-pointer"}`}
+			onClick={isArchived ? undefined : openOperationDialog}
+		>
 			<TableCell>
 				<div className="flex items-center gap-3">
 					<span
