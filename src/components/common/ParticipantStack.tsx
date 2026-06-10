@@ -19,7 +19,7 @@ export function ParticipantStack({
 	const remaining = participants.length - visibleParticipants.length;
 
 	const sizeClasses = {
-		sm: "size-6 text-[11px] flex items-center justify-center rounded-full border-2 border-background font-medium text-foreground",
+		sm: "size-6 text-[10px] flex items-center justify-center rounded-full border-2 border-background font-medium text-foreground",
 		md: "size-9 text-xs flex items-center justify-center rounded-full border-2 border-background font-medium text-foreground",
 	};
 
