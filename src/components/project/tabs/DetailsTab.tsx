@@ -19,7 +19,11 @@ import type { IParticipant, UpdateProjectPayload } from "@/types/project";
 import { ParticipantsCard } from "../ParticipantsCard";
 import { ProjectDetailsForm } from "../ProjectDetailsForm";
 
-export function DetailsTab() {
+type DetailsTabProps = {
+	onBudgetUpdated: () => void;
+};
+
+export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 	const params = useParams();
 	const projectId = Number(params.id);
 	const navigate = useNavigate();
@@ -61,10 +65,10 @@ export function DetailsTab() {
 			type: project.type,
 			budget: project.budget
 				? {
-					id: project.budget.id,
-					amount: Number(project.budget.amount),
-					limitCriteria: Number(project.budget.limitCriteria),
-				}
+						id: project.budget.id,
+						amount: Number(project.budget.amount),
+						limitCriteria: Number(project.budget.limitCriteria),
+					}
 				: undefined,
 		});
 
@@ -78,7 +82,7 @@ export function DetailsTab() {
 		setParticipantsFormData(participants);
 	}, [project]); // Re-runs whenever project context changes (e.g. after save, budget deletion)
 
-	function handleClickDetailsForm() {
+	async function handleClickDetailsForm() {
 		// Build the payload from current form state.
 		// If the project had a budget and the user disabled the switch (formData.budget is now undefined),
 		// add deleteBudget: true to signal the backend to remove it.
@@ -90,7 +94,8 @@ export function DetailsTab() {
 			if (hadBudget && !nowHasBudget) {
 				payload.deleteBudget = true;
 			}
-			updateProjectById(projectId, payload);
+			await updateProjectById(projectId, payload);
+			onBudgetUpdated();
 		}
 
 		// Toggle edit mode on/off
