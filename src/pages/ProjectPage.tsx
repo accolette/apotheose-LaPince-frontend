@@ -38,11 +38,11 @@ export function ProjectPage() {
 	}
 
 	if (errorCode === 403) {
-		return <div>403 : Accés refusé</div>;
+		return <Navigate to="/forbidden" replace />;
 	}
 
 	if (errorCode === 404) {
-		return <div>404 : Projet introuvable</div>;
+		return <Navigate to="/not-found" replace />;
 	}
 
 	if (isProjectLoading || !project) {
