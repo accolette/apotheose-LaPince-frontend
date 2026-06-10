@@ -173,6 +173,7 @@ export function OperationTab({
 				operations={filteredOperations}
 				isLoading={isLoading}
 				error={error}
+				isArchived={isArchived}
 				setSelectedOperation={setSelectedOperation}
 				setIsOperationDialogOpen={setIsOperationDialogOpen}
 			/>
