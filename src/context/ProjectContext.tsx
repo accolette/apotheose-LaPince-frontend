@@ -106,10 +106,13 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 		async (projectId: number, data: UpdateProjectPayload) => {
 			try {
 				const response = await apiUpdateProject(projectId, data);
+				// Update project in context with the response data.
+				// If deleteBudget was requested, explicitly set budget to null
+				// so the Overview tab re-renders without the budget immediately.
 				setProject((prev) => ({
 					...prev,
 					...response.projectUpdate.project,
-					budget: response.projectUpdate.budget,
+					budget: data.deleteBudget ? null : response.projectUpdate.budget,
 				}));
 				return response;
 			} catch (error) {
