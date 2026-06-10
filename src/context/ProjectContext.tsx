@@ -26,7 +26,10 @@ type ProjectContextType = {
 	budgetSummary: BudgetSummary | null;
 	reimbursements: Reimbursement[];
 	getProjectById: (projectId: number) => void;
-	updateProjectById: (projectId: number, data: UpdateProjectPayload) => void;
+	updateProjectById: (
+		projectId: number,
+		data: UpdateProjectPayload,
+	) => Promise<void>;
 	updateProjectParticipantsById: (
 		projectId: number,
 		data: IParticipant[],
@@ -114,7 +117,6 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 					...response.projectUpdate.project,
 					budget: data.deleteBudget ? null : response.projectUpdate.budget,
 				}));
-				return response;
 			} catch (error) {
 				console.error(error);
 				throw error;

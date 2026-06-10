@@ -19,7 +19,11 @@ import type { IParticipant, UpdateProjectPayload } from "@/types/project";
 import { ParticipantsCard } from "../ParticipantsCard";
 import { ProjectDetailsForm } from "../ProjectDetailsForm";
 
-export function DetailsTab() {
+type DetailsTabProps = {
+	onBudgetUpdated: () => void;
+};
+
+export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 	const params = useParams();
 	const projectId = Number(params.id);
 	const navigate = useNavigate();
@@ -77,9 +81,9 @@ export function DetailsTab() {
 
 		setParticipantsFormData(participants);
 	}, [project]); // Re-runs whenever project context changes (e.g. after save, budget deletion)
-
-	function handleClickDetailsForm() {
-		if (isArchived) {
+		
+	async function handleClickDetailsForm() {
+    if (isArchived) {
 			toast.warning("Veuillez dé-archiver le projet pour pouvoir le modifier");
 			return;
 		}
@@ -94,7 +98,8 @@ export function DetailsTab() {
 			if (hadBudget && !nowHasBudget) {
 				payload.deleteBudget = true;
 			}
-			updateProjectById(projectId, payload);
+			await updateProjectById(projectId, payload);
+			onBudgetUpdated();
 		}
 
 		// Toggle edit mode on/off
