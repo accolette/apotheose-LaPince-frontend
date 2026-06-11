@@ -107,6 +107,10 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 			// Checks if form is valide before go further
 			const errors = validateProjectDetails(formData);
 			setDetailsFormErrors(errors);
+			// Stop before go further if error
+			if (Object.keys(errors).length > 0) {
+				return;
+			}
 
 			const payload: UpdateProjectPayload = { ...formData };
 			if (hadBudget && !nowHasBudget) {
