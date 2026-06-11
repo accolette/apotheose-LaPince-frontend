@@ -309,6 +309,24 @@ export function OperationDialog({
 					<div className="space-y-2">
 						<div className="flex items-baseline justify-between">
 							<Label>Participants actifs</Label>
+							<label className="flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
+								<input
+									type="checkbox"
+									className="size-4"
+									checked={operationDialogState?.participants.every((p) => p.isSelected) ?? false}
+									onChange={(event) =>
+										updateOperationDialogState({
+											participants: operationDialogState!.participants.map((p) => ({
+												...p,
+												isSelected: event.target.checked,
+												repartitionAmount: "",
+												isRepartitionAmountCalculated: true,
+											})),
+										})
+									}
+								/>
+								Tout sélectionner
+							</label>
 						</div>
 
 						<ul className="overflow-hidden rounded-md border border-border">
