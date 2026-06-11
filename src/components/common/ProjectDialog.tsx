@@ -88,7 +88,12 @@ export function ProjectDialog({
 		e.preventDefault();
 
 		if (alertEnabled && !budgetAmount) {
-			setBudgetError("Veuillez renseigner un montant de budget");
+			toast.warning("Veuillez entrer un montant de budget");
+			return;
+		}
+
+		if (Number(budgetAmount) >= 100_000_000) {
+			toast.warning("Le montant du budget ne peut pas dépasser 8 chiffres");
 			return;
 		}
 
