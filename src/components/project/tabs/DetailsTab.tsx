@@ -81,9 +81,9 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 
 		setParticipantsFormData(participants);
 	}, [project]); // Re-runs whenever project context changes (e.g. after save, budget deletion)
-		
+
 	async function handleClickDetailsForm() {
-    if (isArchived) {
+		if (isArchived) {
 			toast.warning("Veuillez dé-archiver le projet pour pouvoir le modifier");
 			return;
 		}
