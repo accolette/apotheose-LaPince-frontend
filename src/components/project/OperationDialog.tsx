@@ -1,4 +1,5 @@
 import { Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -91,8 +92,8 @@ export function OperationDialog({
 			await onOperationChanged();
 			onOpenChange(false);
 			setOperationDialogState(null);
-		} catch (error) {
-			console.error("Failed to save operation:", error);
+		} catch {
+			toast.error("Impossible de sauvegarder l'opération");
 		}
 	}
 
