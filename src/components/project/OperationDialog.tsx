@@ -69,13 +69,17 @@ export function OperationDialog({
 		) {
 			return;
 		}
-		await apiDeleteOperation(
-			operationDialogState.operationId,
-			operationDialogState.projectId,
-		);
-		await onOperationChanged();
-		onOpenChange(false);
-		setOperationDialogState(null);
+		try {
+			await apiDeleteOperation(
+				operationDialogState.operationId,
+				operationDialogState.projectId,
+			);
+			await onOperationChanged();
+			onOpenChange(false);
+			setOperationDialogState(null);
+		} catch {
+			toast.error("Impossible de supprimer l'opération");
+		}
 	}
 
 	async function handleSubmit(event: React.SyntheticEvent) {
