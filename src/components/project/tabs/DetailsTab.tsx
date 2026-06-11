@@ -72,7 +72,7 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 		// This allows controlled inputs to display current values
 		setFormData({
 			name: project.name,
-			description: project.description,
+			description: project.description ?? undefined, // car lorsque lon creait un projet sans description s'il on modifiait dans detail sans ajouter de sdescription le patch ne passait pas 
 			type: project.type,
 			budget: project.budget
 				? {
@@ -116,8 +116,13 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 			if (hadBudget && !nowHasBudget) {
 				payload.deleteBudget = true;
 			}
-			await updateProjectById(projectId, payload);
-			onBudgetUpdated();
+			try {
+				await updateProjectById(projectId, payload);
+				onBudgetUpdated();
+			} catch {
+				toast.error("Impossible de sauvegarder les modifications");
+				return;
+			}
 		}
 
 		// Toggle edit mode on/off

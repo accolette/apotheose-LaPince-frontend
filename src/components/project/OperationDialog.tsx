@@ -1,4 +1,5 @@
 import { Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -74,13 +75,17 @@ export function OperationDialog({
 		) {
 			return;
 		}
-		await apiDeleteOperation(
-			operationDialogState.operationId,
-			operationDialogState.projectId,
-		);
-		await onOperationChanged();
-		onOpenChange(false);
-		setOperationDialogState(null);
+		try {
+			await apiDeleteOperation(
+				operationDialogState.operationId,
+				operationDialogState.projectId,
+			);
+			await onOperationChanged();
+			onOpenChange(false);
+			setOperationDialogState(null);
+		} catch {
+			toast.error("Impossible de supprimer l'opération");
+		}
 	}
 
 	async function handleSubmit(event: React.SyntheticEvent) {
@@ -97,8 +102,8 @@ export function OperationDialog({
 			await onOperationChanged();
 			onOpenChange(false);
 			setOperationDialogState(null);
-		} catch (error) {
-			console.error("Failed to save operation:", error);
+		} catch {
+			toast.error("Impossible de sauvegarder l'opération");
 		}
 	}
 
