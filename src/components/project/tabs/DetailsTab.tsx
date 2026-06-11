@@ -16,7 +16,10 @@ import {
 import { useProject } from "@/context/ProjectContext";
 import { apiDeleteProject } from "@/services/api";
 import type { IParticipant, UpdateProjectPayload } from "@/types/project";
-import { validateProjectDetails } from "@/validation/project.validation";
+import {
+	validateProjectDetails,
+	validateProjectParticipants,
+} from "@/validation/project.validation";
 import { ParticipantsCard } from "../ParticipantsCard";
 import { ProjectDetailsForm } from "../ProjectDetailsForm";
 
@@ -131,6 +134,11 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 				.map((pp) => pp.participant)
 				.filter((p): p is IParticipant => p !== undefined);
 
+			// Front check inputs
+			const errors = validateProjectParticipants(participantsFormData);
+			setParticipantFormErrors(errors);
+
+			if (Object.keys(errors).length > 0) return;
 			try {
 				const response = await updateProjectParticipantsById(
 					projectId,
@@ -142,10 +150,13 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 
 				setParticipantsFormData(updated);
 			} catch (err) {
-				toast.error(
-					"Impossible de supprimer le participant s'il a des opérations liées",
-				);
 				console.error("Error PATCH participants :", err);
+				// Handle backen error inline if project particpant add operations
+				setParticipantFormErrors({
+					global:
+						"Impossible de supprimer un participant ayant des opérations liées.",
+				});
+
 				// Restaure l'état serveur, pas l'état local édité
 				setParticipantsFormData(snapshot);
 				return;
@@ -215,6 +226,7 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 					setParticipantsFormData={setParticipantsFormData}
 					// Enables/disables participant inputs
 					isEditingParticipants={isEditingParticipants}
+					participantFormErrors={participantFormErrors}
 				/>
 
 				<Button

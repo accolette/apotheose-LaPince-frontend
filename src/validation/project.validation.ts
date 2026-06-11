@@ -1,4 +1,4 @@
-import type { UpdateProjectPayload } from "@/types/project";
+import type { IParticipant, UpdateProjectPayload } from "@/types/project";
 
 export function validateProjectDetails(formData: UpdateProjectPayload) {
 	const errors: Record<string, string> = {};
@@ -67,6 +67,27 @@ export function validateProjectDetails(formData: UpdateProjectPayload) {
 				"Le seuil d’alerte doit être compris entre 0 et 100";
 		}
 	}
+
+	return errors;
+}
+
+export function validateProjectParticipants(participants: IParticipant[]) {
+	const errors: Record<string, string> = {};
+
+	participants.forEach((p, index) => {
+		const name = p.name?.trim();
+
+		if (!name || name.length === 0) {
+			errors[`name-${index}`] =
+				"Au moins deux lettres doivent être renseignées.";
+		} else if (name.length < 2) {
+			errors[`name-${index}`] =
+				"Au moins deux lettres doivent être renseignées.";
+		} else if (name.length > 100) {
+			errors[`name-${index}`] =
+				"Le nom du participant ne peut pas dépasser 100 caractères.";
+		}
+	});
 
 	return errors;
 }
