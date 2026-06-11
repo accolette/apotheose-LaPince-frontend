@@ -98,8 +98,13 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 			if (hadBudget && !nowHasBudget) {
 				payload.deleteBudget = true;
 			}
-			await updateProjectById(projectId, payload);
-			onBudgetUpdated();
+			try {
+				await updateProjectById(projectId, payload);
+				onBudgetUpdated();
+			} catch {
+				toast.error("Impossible de sauvegarder les modifications");
+				return;
+			}
 		}
 
 		// Toggle edit mode on/off
