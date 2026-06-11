@@ -16,6 +16,7 @@ import {
 import { useProject } from "@/context/ProjectContext";
 import { apiDeleteProject } from "@/services/api";
 import type { IParticipant, UpdateProjectPayload } from "@/types/project";
+import { validateProjectDetails } from "@/validation/project.validation";
 import { ParticipantsCard } from "../ParticipantsCard";
 import { ProjectDetailsForm } from "../ProjectDetailsForm";
 
@@ -31,6 +32,13 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 	// Controls to check if inputs are editable
 	const [isEditingDetails, setIsEditingDetails] = useState(false);
 	const [isEditingParticipants, setIsEditingParticipants] = useState(false);
+	// Controls to check if inputs are in a false format
+	const [detailsFormErrors, setDetailsFormErrors] = useState<
+		Record<string, string>
+	>({});
+	const [participantFormErrors, setParticipantFormErrors] = useState<
+		Record<string, string>
+	>({});
 
 	// Access current project data and update function from context
 	const { updateProjectById, updateProjectParticipantsById, project } =
@@ -81,9 +89,9 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 
 		setParticipantsFormData(participants);
 	}, [project]); // Re-runs whenever project context changes (e.g. after save, budget deletion)
-		
+
 	async function handleClickDetailsForm() {
-    if (isArchived) {
+		if (isArchived) {
 			toast.warning("Veuillez dé-archiver le projet pour pouvoir le modifier");
 			return;
 		}
@@ -93,6 +101,9 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 		if (isEditingDetails) {
 			const hadBudget = !!project?.budget;
 			const nowHasBudget = !!formData.budget;
+			// Checks if form is valide before go further
+			const errors = validateProjectDetails(formData);
+			setDetailsFormErrors(errors);
 
 			const payload: UpdateProjectPayload = { ...formData };
 			if (hadBudget && !nowHasBudget) {
@@ -170,6 +181,7 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 					setFormData={setFormData}
 					// Enables/disables inputs
 					isEditingDetails={isEditingDetails}
+					detailsFormErrors={detailsFormErrors}
 				/>
 
 				<Button
