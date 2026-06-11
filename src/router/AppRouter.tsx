@@ -9,6 +9,7 @@ import { LegalsPage } from "@/pages/LegalsPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import { ProjectPage } from "@/pages/ProjectPage";
 import { ProjectsPage } from "@/pages/ProjectsPage";
+import { ServerErrorPage } from "@/pages/ServerErrorPage";
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
 	const { user, isLoading } = useAuth();
@@ -70,6 +71,7 @@ export function AppRouter() {
 					<Route path="/privacy-policy" element={<LegalsPage />} />
 					<Route path="/contact" element={<ContactPage />} />
 					<Route path="/forbidden" element={<ForbiddenPage />} />
+					<Route path="/server-error" element={<ServerErrorPage />} />
 					<Route path="*" element={<NotFoundPage />} />
 				</Routes>
 			</BrowserRouter>
