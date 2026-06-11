@@ -7,7 +7,6 @@ import App from "./App.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
 import CategoriesProvider from "./context/CategoriesContext.tsx";
 import { ProjectProvider } from "./context/ProjectContext.tsx";
-import ProjectsProvider from "./context/ProjectsContext.tsx";
 import { ThemeProvider } from "./context/ThemesContext.tsx";
 
 const queryClient = new QueryClient();
@@ -24,11 +23,9 @@ createRoot(rootElement).render(
 			<QueryClientProvider client={queryClient}>
 				<AuthProvider>
 					<CategoriesProvider>
-						<ProjectsProvider>
-							<ProjectProvider>
-								<App />
-							</ProjectProvider>
-						</ProjectsProvider>
+						<ProjectProvider>
+							<App />
+						</ProjectProvider>
 					</CategoriesProvider>
 				</AuthProvider>
 			</QueryClientProvider>
