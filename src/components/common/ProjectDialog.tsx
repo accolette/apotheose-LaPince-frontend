@@ -275,16 +275,6 @@ export function ProjectDialog({
 											handleParticipantChange(index, e.target.value)
 										}
 									/>
-									{/* <div className="relative w-32 shrink-0">
-										<Input
-											type="number"
-											placeholder="Montant"
-											className="pr-7 text-right tabular-nums"
-										/>
-										<span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-											€
-										</span>
-									</div> */}
 									<Button
 										type="button"
 										variant="ghost"
