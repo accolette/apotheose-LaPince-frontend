@@ -16,6 +16,7 @@ type ProjectTabsProps = {
 export function ProjectTabs({ projectId }: ProjectTabsProps) {
 	const [activeTab, setActiveTab] = useState<TabValue>("overview");
 	const [categoryFilter, setCategoryFilter] = useState<number | null>(null);
+	const [autoOpenDialog, setAutoOpenDialog] = useState(false);
 
 	const [alerts, setAlerts] = useState<Alert[]>([]);
 
@@ -43,13 +44,20 @@ export function ProjectTabs({ projectId }: ProjectTabsProps) {
 		setCategoryFilter(categoryId);
 		setActiveTab("expenses");
 	}
+	function handleTabChange(value: string) {
+		if (value !== "expenses") {
+			setCategoryFilter(null);
+		}
+		setActiveTab(value as TabValue);
+	}
+
+	function handleNewOperation() {
+		setActiveTab("expenses");
+		setAutoOpenDialog(true);
+	}
 
 	return (
-		<Tabs
-			value={activeTab}
-			onValueChange={(v) => setActiveTab(v as TabValue)}
-			className="pb-6"
-		>
+		<Tabs value={activeTab} onValueChange={handleTabChange} className="pb-6">
 			<div className="mb-4 border-b">
 				<TabsList variant="line">
 					<TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
@@ -66,13 +74,21 @@ export function ProjectTabs({ projectId }: ProjectTabsProps) {
 				</TabsList>
 			</div>
 			<TabsContent value="overview">
-				<OverviewTab onCategoryClick={handleCategoryClick} />
+				<OverviewTab
+					onCategoryClick={handleCategoryClick}
+					onNewOperation={handleNewOperation}
+				/>
 			</TabsContent>
 			<TabsContent value="details">
-				<DetailsTab />
+				<DetailsTab onBudgetUpdated={fetchAlerts} />
 			</TabsContent>
 			<TabsContent value="expenses">
-				<OperationTab initialFilter={categoryFilter} onOperationMutated={fetchAlerts} />
+				<OperationTab
+					initialFilter={categoryFilter}
+					onOperationMutated={fetchAlerts}
+					autoOpen={autoOpenDialog}
+					onAutoOpenHandled={() => setAutoOpenDialog(false)}
+				/>
 			</TabsContent>
 			<TabsContent value="alerts">
 				<AlertTab alerts={alerts} onAlertRead={handleAlertRead} />

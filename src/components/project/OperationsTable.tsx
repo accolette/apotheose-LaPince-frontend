@@ -1,3 +1,4 @@
+import { Loader2 } from "lucide-react";
 import { OperationsRow } from "@/components/project/OperationsRow";
 import {
 	Table,
@@ -14,6 +15,7 @@ type OperationsTableProps = {
 	operations: IOperation[];
 	isLoading: boolean;
 	error: string | null;
+	isArchived?: boolean;
 	setSelectedOperation: (operation: IOperation | null) => void;
 	setIsOperationDialogOpen: (open: boolean) => void;
 };
@@ -22,6 +24,7 @@ export function OperationsTable({
 	operations,
 	isLoading,
 	error,
+	isArchived,
 	setSelectedOperation,
 	setIsOperationDialogOpen,
 }: OperationsTableProps) {
@@ -29,8 +32,23 @@ export function OperationsTable({
 		(total, op) => total + Number(op.amount),
 		0,
 	);
+	const formattedTotalAmount = totalAmount.toLocaleString("fr-FR", {
+		style: "currency",
+		currency: "EUR",
+	});
 
-	if (isLoading) return <div>Loading...</div>;
+	const footerRows = [
+		{ className: "sm:hidden", colSpan: undefined },
+		{ className: "hidden sm:table-row md:hidden", colSpan: 3 },
+		{ className: "hidden md:table-row", colSpan: 4 },
+	];
+
+	if (isLoading)
+		return (
+			<div className="flex justify-center py-8">
+				<Loader2 className="size-6 animate-spin text-muted-foreground" />
+			</div>
+		);
 
 	if (error) return <div>{error}</div>;
 	return (
@@ -53,6 +71,7 @@ export function OperationsTable({
 						<OperationsRow
 							key={operation.id}
 							operation={operation}
+							isArchived={isArchived}
 							setSelectedOperation={setSelectedOperation}
 							setIsOperationDialogOpen={setIsOperationDialogOpen}
 						/>
@@ -60,51 +79,16 @@ export function OperationsTable({
 				</TableBody>
 
 				<TableFooter>
-					<TableRow className="sm:hidden">
-						<TableCell className="text-right">Total</TableCell>
-						<TableCell className="text-right">
-							{totalAmount.toLocaleString("fr-FR", {
-								style: "currency",
-								currency: "EUR",
-							})}
-						</TableCell>
-					</TableRow>
-
-					<TableRow className="hidden sm:table-row md:hidden">
-						<TableCell colSpan={3} className="text-right">
-							Total
-						</TableCell>
-						<TableCell className="text-right">
-							{totalAmount.toLocaleString("fr-FR", {
-								style: "currency",
-								currency: "EUR",
-							})}
-						</TableCell>
-					</TableRow>
-
-					<TableRow className="hidden md:table-row lg:hidden">
-						<TableCell colSpan={4} className="text-right">
-							Total
-						</TableCell>
-						<TableCell className="text-right">
-							{totalAmount.toLocaleString("fr-FR", {
-								style: "currency",
-								currency: "EUR",
-							})}
-						</TableCell>
-					</TableRow>
-
-					<TableRow className="hidden lg:table-row">
-						<TableCell colSpan={4} className="text-right">
-							Total
-						</TableCell>
-						<TableCell className="text-right">
-							{totalAmount.toLocaleString("fr-FR", {
-								style: "currency",
-								currency: "EUR",
-							})}
-						</TableCell>
-					</TableRow>
+					{footerRows.map((row) => (
+						<TableRow key={row.className} className={row.className}>
+							<TableCell colSpan={row.colSpan} className="text-right">
+								Total
+							</TableCell>
+							<TableCell className="text-right">
+								{formattedTotalAmount}
+							</TableCell>
+						</TableRow>
+					))}
 				</TableFooter>
 			</Table>
 		</section>

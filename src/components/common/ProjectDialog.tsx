@@ -1,5 +1,6 @@
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -46,6 +47,7 @@ export function ProjectDialog({
 	const [description, setDescription] = useState("");
 	const [type, setType] = useState("Voyage");
 	const [budgetAmount, setBudgetAmount] = useState("");
+	const [budgetError, setBudgetError] = useState("");
 	const [alertEnabled, setAlertEnabled] = useState(false);
 	const [limitCriteria, setLimitCriteria] = useState(80);
 	const [includeMe, setIncludeMe] = useState(true);
@@ -57,6 +59,7 @@ export function ProjectDialog({
 		setDescription("");
 		setType("Voyage");
 		setBudgetAmount("");
+		setBudgetError("");
 		setAlertEnabled(false);
 		setLimitCriteria(80);
 		setIncludeMe(true);
@@ -84,6 +87,16 @@ export function ProjectDialog({
 	function handleSubmit(e: React.SubmitEvent) {
 		e.preventDefault();
 
+		if (alertEnabled && !budgetAmount) {
+			toast.warning("Veuillez entrer un montant de budget");
+			return;
+		}
+
+		if (Number(budgetAmount) >= 100_000_000) {
+			toast.warning("Le montant du budget ne peut pas dépasser 8 chiffres");
+			return;
+		}
+
 		createProject(
 			{
 				name,
@@ -106,6 +119,9 @@ export function ProjectDialog({
 				onSuccess: () => {
 					resetForm();
 					onOpenChange(false);
+				},
+				onError: () => {
+					toast.error("Impossible de créer le projet");
 				},
 			},
 		);
@@ -189,12 +205,18 @@ export function ProjectDialog({
 											placeholder="1000"
 											className="pr-8"
 											value={budgetAmount}
-											onChange={(e) => setBudgetAmount(e.target.value)}
+											onChange={(e) => {
+												setBudgetAmount(e.target.value);
+												setBudgetError("");
+											}}
 										/>
 										<span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
 											€
 										</span>
 									</div>
+									{budgetError && (
+										<p className="text-sm text-destructive">{budgetError}</p>
+									)}
 								</div>
 
 								<div className="flex items-center gap-3">
@@ -253,16 +275,6 @@ export function ProjectDialog({
 											handleParticipantChange(index, e.target.value)
 										}
 									/>
-									{/* <div className="relative w-32 shrink-0">
-										<Input
-											type="number"
-											placeholder="Montant"
-											className="pr-7 text-right tabular-nums"
-										/>
-										<span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-											€
-										</span>
-									</div> */}
 									<Button
 										type="button"
 										variant="ghost"

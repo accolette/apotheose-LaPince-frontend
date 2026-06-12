@@ -1,3 +1,4 @@
+import { Loader2 } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,17 +20,23 @@ type ProjectDetailsFormProps = {
 	formData: UpdateProjectPayload;
 	setFormData: Dispatch<SetStateAction<UpdateProjectPayload>>;
 	isEditingDetails: boolean;
+	detailsFormErrors: Record<string, string>;
 };
 export function ProjectDetailsForm({
 	formData,
 	setFormData,
 	isEditingDetails,
+	detailsFormErrors,
 }: ProjectDetailsFormProps) {
 	const { isLoading: isProjectLoading, project } = useProject();
 
 	// Wait until project data is available before rendering the form
 	if (isProjectLoading || !project) {
-		return <div>Loading...</div>;
+		return (
+			<div className="flex h-screen items-center justify-center">
+				<Loader2 className="size-8 animate-spin text-muted-foreground" />
+			</div>
+		);
 	}
 
 	return (
@@ -52,6 +59,9 @@ export function ProjectDetailsForm({
 					}
 					disabled={!isEditingDetails}
 				/>
+				{detailsFormErrors.name && (
+					<p className="text-sm text-red-500">{detailsFormErrors.name}</p>
+				)}
 			</div>
 
 			<div className="space-y-2">
@@ -69,6 +79,11 @@ export function ProjectDetailsForm({
 					}
 					disabled={!isEditingDetails}
 				/>
+				{detailsFormErrors.description && (
+					<p className="text-sm text-red-500">
+						{detailsFormErrors.description}
+					</p>
+				)}
 			</div>
 
 			<div className="space-y-2">
@@ -158,6 +173,11 @@ export function ProjectDetailsForm({
 									€
 								</span>
 							</div>
+							{detailsFormErrors.amount && (
+								<p className="text-sm text-red-500">
+									{detailsFormErrors.amount}
+								</p>
+							)}
 						</div>
 
 						<div className="flex items-center gap-3">

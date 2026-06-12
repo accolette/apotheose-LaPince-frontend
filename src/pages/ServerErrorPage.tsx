@@ -7,7 +7,7 @@ import { PublicHeader } from "@/components/landingPage/PublicHeader";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemesContext";
 
-export function ForbiddenPage() {
+export function ServerErrorPage() {
 	const { theme } = useTheme();
 	const { user } = useAuth();
 	const isDark =
@@ -15,7 +15,7 @@ export function ForbiddenPage() {
 		(theme === "system" &&
 			window.matchMedia("(prefers-color-scheme: dark)").matches);
 	useEffect(() => {
-		document.title = "La Pince – Accès refusé";
+		document.title = "La Pince – Page introuvable";
 	}, []);
 	return (
 		<div className="min-h-screen w-full">
@@ -30,12 +30,11 @@ export function ForbiddenPage() {
 						{user ? "Retour aux projets" : "Retour à l'accueil"}
 					</Link>
 					<h2 className="text-3xl font-semibold tracking-tight">
-						Accès refusé <br />
-						La Pince est désolée. <br />
-						Pas de pince, pas de surimi.
+						Oups une erreur 500 <br />
+						s'est invitée
 					</h2>
 					<img
-						src={isDark ? "/lapince403dark.png" : "/lapince403.png"}
+						src={isDark ? "/lapince500dark.png" : "/lapince500.png"}
 						alt="La Pince a fouillé partout, mais cette page est introuvable"
 						className="mx-auto mt-8 w-64 md:w-80 lg:w-96 h-auto"
 					/>

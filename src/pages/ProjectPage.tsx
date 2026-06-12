@@ -1,3 +1,4 @@
+import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { Navigate, useParams } from "react-router";
 import { ConnectedHeader } from "@/components/common/ConnectedHeader";
@@ -30,7 +31,11 @@ export function ProjectPage() {
 	}, [project]);
 
 	if (isAuthLoading) {
-		return <div>Loading...</div>;
+		return (
+			<div className="flex h-screen items-center justify-center">
+				<Loader2 className="size-8 animate-spin text-muted-foreground" />
+			</div>
+		);
 	}
 
 	if (!user) {
@@ -45,8 +50,16 @@ export function ProjectPage() {
 		return <Navigate to="/not-found" replace />;
 	}
 
+	if (errorCode === 500) {
+		return <Navigate to="/server-error" replace />;
+	}
+
 	if (isProjectLoading || !project) {
-		return <div>Loading...</div>;
+		return (
+			<div className="flex h-screen items-center justify-center">
+				<Loader2 className="size-8 animate-spin text-muted-foreground" />
+			</div>
+		);
 	}
 
 	return (

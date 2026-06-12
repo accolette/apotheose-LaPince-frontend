@@ -16,10 +16,18 @@ import {
 import { useProject } from "@/context/ProjectContext";
 import { apiDeleteProject } from "@/services/api";
 import type { IParticipant, UpdateProjectPayload } from "@/types/project";
+import {
+	validateProjectDetails,
+	validateProjectParticipants,
+} from "@/validation/project.validation";
 import { ParticipantsCard } from "../ParticipantsCard";
 import { ProjectDetailsForm } from "../ProjectDetailsForm";
 
-export function DetailsTab() {
+type DetailsTabProps = {
+	onBudgetUpdated: () => void;
+};
+
+export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 	const params = useParams();
 	const projectId = Number(params.id);
 	const navigate = useNavigate();
@@ -27,6 +35,13 @@ export function DetailsTab() {
 	// Controls to check if inputs are editable
 	const [isEditingDetails, setIsEditingDetails] = useState(false);
 	const [isEditingParticipants, setIsEditingParticipants] = useState(false);
+	// Controls to check if inputs are in a false format
+	const [detailsFormErrors, setDetailsFormErrors] = useState<
+		Record<string, string>
+	>({});
+	const [participantFormErrors, setParticipantFormErrors] = useState<
+		Record<string, string>
+	>({});
 
 	// Access current project data and update function from context
 	const { updateProjectById, updateProjectParticipantsById, project } =
@@ -57,14 +72,14 @@ export function DetailsTab() {
 		// This allows controlled inputs to display current values
 		setFormData({
 			name: project.name,
-			description: project.description,
+			description: project.description ?? undefined, // car lorsque lon creait un projet sans description s'il on modifiait dans detail sans ajouter de sdescription le patch ne passait pas
 			type: project.type,
 			budget: project.budget
 				? {
-					id: project.budget.id,
-					amount: Number(project.budget.amount),
-					limitCriteria: Number(project.budget.limitCriteria),
-				}
+						id: project.budget.id,
+						amount: Number(project.budget.amount),
+						limitCriteria: Number(project.budget.limitCriteria),
+					}
 				: undefined,
 		});
 
@@ -78,19 +93,37 @@ export function DetailsTab() {
 		setParticipantsFormData(participants);
 	}, [project]); // Re-runs whenever project context changes (e.g. after save, budget deletion)
 
-	function handleClickDetailsForm() {
+	async function handleClickDetailsForm() {
+		if (isArchived) {
+			toast.warning("Veuillez dé-archiver le projet pour pouvoir le modifier");
+			return;
+		}
 		// Build the payload from current form state.
 		// If the project had a budget and the user disabled the switch (formData.budget is now undefined),
 		// add deleteBudget: true to signal the backend to remove it.
 		if (isEditingDetails) {
 			const hadBudget = !!project?.budget;
 			const nowHasBudget = !!formData.budget;
+			// Checks if form is valide before go further
+			const errors = validateProjectDetails(formData);
+			setDetailsFormErrors(errors);
+			// Stop before go further if error
+			if (Object.keys(errors).length > 0) {
+				return;
+			}
 
 			const payload: UpdateProjectPayload = { ...formData };
 			if (hadBudget && !nowHasBudget) {
 				payload.deleteBudget = true;
 			}
-			updateProjectById(projectId, payload);
+			try {
+				await updateProjectById(projectId, payload);
+				onBudgetUpdated();
+				toast.success("Modifications enregistrées");
+			} catch {
+				toast.error("Impossible de sauvegarder les modifications");
+				return;
+			}
 		}
 
 		// Toggle edit mode on/off
@@ -98,6 +131,10 @@ export function DetailsTab() {
 	}
 
 	async function handleClickParticipantsForm() {
+		if (isArchived) {
+			toast.warning("Veuillez dé-archiver le projet pour pouvoir le modifier");
+			return;
+		}
 		if (isEditingParticipants) {
 			if (!project) {
 				return;
@@ -107,6 +144,11 @@ export function DetailsTab() {
 				.map((pp) => pp.participant)
 				.filter((p): p is IParticipant => p !== undefined);
 
+			// Front check inputs
+			const errors = validateProjectParticipants(participantsFormData);
+			setParticipantFormErrors(errors);
+
+			if (Object.keys(errors).length > 0) return;
 			try {
 				const response = await updateProjectParticipantsById(
 					projectId,
@@ -117,11 +159,14 @@ export function DetailsTab() {
 					.filter((p): p is IParticipant => p !== undefined);
 
 				setParticipantsFormData(updated);
+				toast.success("Modifications enregistrées");
 			} catch (err) {
-				toast.error(
-					"Impossible de supprimer le participant s'il a des opérations liées",
-				);
-				console.error("Error PATCH participants :", err);
+				// Handle backen error inline if project particpant add operations
+				setParticipantFormErrors({
+					global:
+						"Impossible de supprimer un participant ayant des opérations liées.",
+				});
+
 				// Restaure l'état serveur, pas l'état local édité
 				setParticipantsFormData(snapshot);
 				return;
@@ -137,9 +182,8 @@ export function DetailsTab() {
 				toast.success("Projet supprimé");
 				navigate("/projects");
 			}
-		} catch (err) {
+		} catch {
 			toast.error("Erreur : Impossible de supprimer le projet");
-			console.error("Error DELETE project :", err);
 			return;
 		}
 	}
@@ -157,14 +201,14 @@ export function DetailsTab() {
 					setFormData={setFormData}
 					// Enables/disables inputs
 					isEditingDetails={isEditingDetails}
+					detailsFormErrors={detailsFormErrors}
 				/>
 
 				<Button
 					type="button"
 					variant="outline"
-					className={`w-full border-dashed ${isEditingDetails ? "bg-yellow-400" : ""}`}
+					className={`w-full border-dashed ${isEditingDetails ? "bg-yellow-400" : ""} ${isArchived ? "opacity-50" : ""}`}
 					onClick={handleClickDetailsForm}
-					disabled={isArchived}
 				>
 					{isEditingDetails ? (
 						<>
@@ -191,14 +235,14 @@ export function DetailsTab() {
 					setParticipantsFormData={setParticipantsFormData}
 					// Enables/disables participant inputs
 					isEditingParticipants={isEditingParticipants}
+					participantFormErrors={participantFormErrors}
 				/>
 
 				<Button
 					type="button"
 					variant="outline"
-					className={`w-full border-dashed ${isEditingParticipants ? "bg-yellow-400" : ""}`}
+					className={`w-full border-dashed ${isEditingParticipants ? "bg-yellow-400" : ""} ${isArchived ? "opacity-50" : ""}`}
 					onClick={handleClickParticipantsForm}
-					disabled={isArchived}
 				>
 					{isEditingParticipants ? (
 						<>
