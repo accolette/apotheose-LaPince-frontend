@@ -72,7 +72,7 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 		// This allows controlled inputs to display current values
 		setFormData({
 			name: project.name,
-			description: project.description ?? undefined, // car lorsque lon creait un projet sans description s'il on modifiait dans detail sans ajouter de sdescription le patch ne passait pas 
+			description: project.description ?? undefined, // car lorsque lon creait un projet sans description s'il on modifiait dans detail sans ajouter de sdescription le patch ne passait pas
 			type: project.type,
 			budget: project.budget
 				? {
