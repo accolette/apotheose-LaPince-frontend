@@ -93,8 +93,7 @@ export function OperationTab({
 		try {
 			const data = await apiGetOperations(project.id);
 			setOperations(data);
-		} catch (error) {
-			console.error("Erreur apiGetOperations:", error);
+		} catch {
 			setError("Impossible de charger les opérations");
 		} finally {
 			setIsLoading(false);
