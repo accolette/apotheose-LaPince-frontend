@@ -1,4 +1,3 @@
-import { Plus } from "lucide-react";
 import { useEffect } from "react";
 import { useParams } from "react-router";
 import { BudgetOverview } from "@/components/project/BudgetOverview";
@@ -28,7 +27,6 @@ export function OverviewTab({
 		<div className="space-y-4">
 			<div className="flex justify-end">
 				<Button onClick={onNewOperation}>
-					<Plus className="size-4" />
 					Nouvelle opération
 				</Button>
 			</div>
