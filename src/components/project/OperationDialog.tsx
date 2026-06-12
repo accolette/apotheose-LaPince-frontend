@@ -318,15 +318,21 @@ export function OperationDialog({
 								<input
 									type="checkbox"
 									className="size-4"
-									checked={operationDialogState?.participants.every((p) => p.isSelected) ?? false}
+									checked={
+										operationDialogState?.participants.every(
+											(p) => p.isSelected,
+										) ?? false
+									}
 									onChange={(event) =>
 										updateOperationDialogState({
-											participants: operationDialogState!.participants.map((p) => ({
-												...p,
-												isSelected: event.target.checked,
-												repartitionAmount: "",
-												isRepartitionAmountCalculated: true,
-											})),
+											participants: operationDialogState!.participants.map(
+												(p) => ({
+													...p,
+													isSelected: event.target.checked,
+													repartitionAmount: "",
+													isRepartitionAmountCalculated: true,
+												}),
+											),
 										})
 									}
 								/>
