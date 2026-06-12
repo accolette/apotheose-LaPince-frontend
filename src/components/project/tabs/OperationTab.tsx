@@ -92,6 +92,7 @@ export function OperationTab({
 
 	const loadOperations = useCallback(async () => {
 		if (!project?.id) return;
+
 		setIsLoading(true);
 		setError(null);
 		try {
@@ -112,7 +113,7 @@ export function OperationTab({
 
 	useEffect(() => {
 		if (!selectedOperation || !project) return;
-
+		const participants = buildDialogParticipants(project, selectedOperation);
 		setOperationDialogState(
 			recalculateOperationState({
 				mode: "edit",
@@ -124,9 +125,9 @@ export function OperationTab({
 				categoryId: selectedOperation.categoryId,
 				date: selectedOperation.date.slice(0, 10),
 				isBalancedAmount: true,
-				hasNegativeDistribution: false,
+				hasSelectedParticipant: participants.some((p) => p.isSelected),
 				payerParticipantId: selectedOperation.payerParticipantId,
-				participants: buildDialogParticipants(project, selectedOperation),
+				participants: participants,
 			}),
 		);
 	}, [selectedOperation, project]);
@@ -147,7 +148,7 @@ export function OperationTab({
 			isAmountCalculated: true,
 			categoryId: undefined,
 			isBalancedAmount: true,
-			hasNegativeDistribution: false,
+			hasSelectedParticipant: false,
 			date: new Date().toISOString().slice(0, 10),
 			payerParticipantId: undefined,
 			participants: buildDialogParticipants(project),
