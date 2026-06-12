@@ -119,6 +119,7 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 			try {
 				await updateProjectById(projectId, payload);
 				onBudgetUpdated();
+				toast.success("Modifications enregistrées");
 			} catch {
 				toast.error("Impossible de sauvegarder les modifications");
 				return;
@@ -158,6 +159,7 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 					.filter((p): p is IParticipant => p !== undefined);
 
 				setParticipantsFormData(updated);
+				toast.success("Modifications enregistrées");
 			} catch (err) {
 				console.error("Error PATCH participants :", err);
 				// Handle backen error inline if project particpant add operations
