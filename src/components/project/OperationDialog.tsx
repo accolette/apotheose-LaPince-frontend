@@ -155,7 +155,7 @@ export function OperationDialog({
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent className="max-h-[90vh] overflow-visible sm:max-w-lg">
+			<DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
 				<DialogHeader>
 					<DialogTitle>
 						{dialogMode === "edit"
@@ -217,8 +217,8 @@ export function OperationDialog({
 						</div>
 					</div>
 
-					<div className="grid grid-cols-10 gap-3">
-						<div className="col-span-7 space-y-2">
+					<div className="grid gap-3 min-[430px]:grid-cols-10">
+						<div className="min-[430px]:col-span-7 space-y-2">
 							<Label>Catégorie</Label>
 
 							<Select
@@ -245,7 +245,7 @@ export function OperationDialog({
 							</Select>
 						</div>
 
-						<div className="col-span-3 space-y-2">
+						<div className="min-[430px]:col-span-3 space-y-2">
 							<Label htmlFor="operation-date">Date</Label>
 							<Popover>
 								<PopoverTrigger
