@@ -14,6 +14,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemesContext";
 
@@ -32,6 +33,7 @@ export function ConnectedHeader() {
 
 	async function handleLogout() {
 		await logout();
+		toast.success("Vous êtes déconnecté");
 		navigate("/login");
 	}
 	return (

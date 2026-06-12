@@ -161,7 +161,6 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 				setParticipantsFormData(updated);
 				toast.success("Modifications enregistrées");
 			} catch (err) {
-				console.error("Error PATCH participants :", err);
 				// Handle backen error inline if project particpant add operations
 				setParticipantFormErrors({
 					global:
@@ -183,9 +182,8 @@ export function DetailsTab({ onBudgetUpdated }: DetailsTabProps) {
 				toast.success("Projet supprimé");
 				navigate("/projects");
 			}
-		} catch (err) {
+		} catch {
 			toast.error("Erreur : Impossible de supprimer le projet");
-			console.error("Error DELETE project :", err);
 			return;
 		}
 	}
