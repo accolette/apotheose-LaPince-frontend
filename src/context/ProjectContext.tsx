@@ -123,7 +123,6 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 					budget: data.deleteBudget ? null : response.projectUpdate.budget,
 				}));
 			} catch (error) {
-				console.error(error);
 				throw error;
 			}
 		},
