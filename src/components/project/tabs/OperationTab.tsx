@@ -17,6 +17,8 @@ import { recalculateOperationState } from "@/utils/recalculateOperationState";
 type OperationTabProps = {
 	initialFilter: number | null;
 	onOperationMutated: () => void;
+	autoOpen?: boolean;
+	onAutoOpenHandled?: () => void;
 };
 
 export function buildDialogParticipants(
@@ -51,6 +53,8 @@ export function buildDialogParticipants(
 export function OperationTab({
 	initialFilter,
 	onOperationMutated,
+	autoOpen,
+	onAutoOpenHandled,
 }: OperationTabProps) {
 	const { project } = useProject();
 	const { categories } = useCategories();
@@ -130,7 +134,7 @@ export function OperationTab({
 
 	// ── Ouverture création ────────────────────────────────────
 
-	function openCreateOperationDialog() {
+	const openCreateOperationDialog = useCallback(() => {
 		if (!project) return;
 
 		setSelectedOperation(null);
@@ -151,7 +155,14 @@ export function OperationTab({
 		});
 
 		setIsOperationDialogOpen(true);
-	}
+	}, [project]);
+
+	useEffect(() => {
+		if (autoOpen) {
+			openCreateOperationDialog();
+			onAutoOpenHandled?.();
+		}
+	}, [autoOpen, onAutoOpenHandled, openCreateOperationDialog]);
 
 	// ── Filtre ───────────────────────────────────────────────
 
