@@ -81,7 +81,7 @@ src/
 └── types/         → types TypeScript partagés
 ```
 
-> 📄 Détail complet des choix d'architecture dans le dossier du back : [`docs/architecture.md`](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend/blob/main/docs/s0.conception/cahier.des.charges/choix.architecture.md)
+> 📄 Détail complet des choix d'architecture dans le dossier du back : [`docs/architecture.md`](https://github.com/accolette/apotheose-LaPince-backend/tree/main/docs/s0.conception/cahier.des.charges/choix.architecture.md)
 
 ---
 
@@ -100,7 +100,7 @@ src/
 | Husky        | -       | Hooks Git pre-commit                              |
 | Vitest       | 4       | Tests unitaires et d'intégration                  |
 
-> 📄 Justification complète des choix techniques dans le dossier du back : [`docs/specifications-techniques.md`](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend/blob/main/docs/s0.conception/cahier.des.charges/listes.technos.utilisees.md)
+> 📄 Justification complète des choix techniques dans le dossier du back : [`docs/specifications-techniques.md`](https://github.com/accolette/apotheose-LaPince-backend/tree/main/docs/s0.conception/cahier.des.charges/listes.technos.utilisees.md)
 
 ---
 
@@ -121,8 +121,8 @@ Avant de démarrer, assurez-vous d'avoir installé :
 ### 1. Cloner le repository
 
 ```bash
-git clone https://github.com/accolette/apotheose-LaPince-backend.git
-cd apotheose-LaPince-backend
+git clone https://github.com/accolette/apotheose-LaPince-frontend.git
+cd apotheose-LaPince-frontend
 ```
 
 ### 2. Installer les dépendances
@@ -216,7 +216,7 @@ projet-cda-LaPince-frontend/
 └── vite.config.ts
 ```
 
-> 📄 Schéma visuel de l'arborescence dans le repo du back : [`docs/arborescence.png`](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend/blob/main/docs/s0.conception/conception/arborescence_front_end.PNG)
+> 📄 Schéma visuel de l'arborescence dans le repo du back : [`docs/arborescence.png`](https://github.com/accolette/apotheose-LaPince-backend/blob/main/docs/s0.conception/conception/arborescence_front_end.PNG)
 
 ---
 
@@ -226,18 +226,19 @@ L'application est une SPA — la navigation est gérée par **React Router 7**.
 
 | Route | Page | Accès |
 |---|---|---|
-| `/` | Redirection vers `/dashboard` ou `/login` | Public |
+| `/` | Page d'accueil (landing page) | Public |
 | `/login` | Connexion | Public |
 | `/register` | Inscription | Public |
-| `/projects` | Vue d'ensemble, lite des projets et KPIs | Authentifié |
-| `/projects/:id` | Détail d'un projet | Authentifié |
-| `/projects/:id/operations` | Opérations du projet | Authentifié |
-| `/projects/:id/budgets` | Budgets du projet | Authentifié |
-| `/projects/:id/reimbursements` | Remboursements suggérés | Authentifié |
-| `/alerts` | Alertes de l'utilisateur | Authentifié |
-| `/profile` | Profil et paramètres | Authentifié |
+| `/projects` | Vue d'ensemble, liste des projets et KPIs | Authentifié |
+| `/project/:id` | Détail d'un projet | Authentifié |
+| `/privacy-policy` | Politique de confidentialité | Public |
+| `/contact` | Contact | Public |
+| `/forbidden` | Page 403 — accès refusé | — |
+| `/server-error` | Page 500 — erreur serveur | — |
+| `*` | Page 404 — route inconnue | — |
 
-> Les routes authentifiées redirigent vers `/login` si aucun token JWT valide n'est présent.
+> Les routes publiques (`/`, `/login`, `/register`) redirigent automatiquement vers `/projects` si l'utilisateur est déjà authentifié.
+> Les routes authentifiées (`/projects`, `/project/:id`) redirigent vers `/login` si aucun utilisateur n'est connecté.
 
 ---
 
@@ -324,11 +325,11 @@ Tous les élements sont dans le repo du back :
 
 | Document | Description | Lien |
 |---|---|---|
-| Architecture & choix techniques | Justification des technologies et de l'architecture | [`docs/architecture.md`](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend/blob/main/docs/s0.conception/cahier.des.charges/choix.architecture.md) |
-| Spécifications techniques | Stack complète avec versions et justifications | [`docs/specifications-techniques.md`](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend/blob/main/docs/s0.conception/cahier.des.charges/listes.technos.utilisees.md) |
-| Charte graphique & maquettes | Éléments visuels du projet | [`docs/design/`](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend/tree/main/docs/s0.conception/elements.graphiques) |
-| Dictionnaire de données | Description de chaque champ de chaque table | [`docs/dictionnaire-de-donnees.md`](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend/blob/main/docs/s0.conception/conception/dictionnaire.donnes.md) |
-| Algorithme de répartition | Logique de calcul des balances et remboursements | [`docs/algorithme-repartition.md`](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend/blob/main/docs/s0.conception/conception/algorithme.glouton/algorithme.repartition.depenses.md) |
+| Architecture & choix techniques | Justification des technologies et de l'architecture | [`docs/architecture.md`](https://github.com/accolette/apotheose-LaPince-backend/blob/main/docs/s0.conception/cahier.des.charges/choix.architecture.md) |
+| Spécifications techniques | Stack complète avec versions et justifications | [`docs/specifications-techniques.md`](https://github.com/accolette/apotheose-LaPince-backend/blob/main/docs/s0.conception/cahier.des.charges/listes.technos.utilisees.md) |
+| Charte graphique & maquettes | Éléments visuels du projet | [`docs/design/`](https://github.com/accolette/apotheose-LaPince-backend/blob/main/docs/s0.conception/elements.graphiques) |
+| Dictionnaire de données | Description de chaque champ de chaque table | [`docs/dictionnaire-de-donnees.md`](https://github.com/accolette/apotheose-LaPince-backend/blob/main/docs/s0.conception/conception/dictionnaire.donnes.md) |
+| Algorithme de répartition | Logique de calcul des balances et remboursements | [`docs/algorithme-repartition.md`](https://github.com/accolette/apotheose-LaPince-backend/blob/main/docs/s0.conception/conception/algorithme.glouton/algorithme.repartition.depenses.md) |
 
 ---
 
@@ -344,12 +345,10 @@ Le projet applique des principes de base de conformité RGPD et de sécurité de
 
 > Voir le dossier du back `docs/rgpd/` pour plus de détails :
 
-- [`politique-confidentialite.md`](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend/tree/main/docs/s1.mise.en.place/rgdp/politique.confidentialite.md)
-- [`gestion-des-donnees.md`](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend/tree/main/docs/s1.mise.en.place/rgdp/gestion.des.donnes.md)
-- [`securite.md`](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend/tree/main/docs/s1.mise.en.place/rgdp/securite.md)
-- [`duree-conservation.md`](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend/tree/main/docs/s1.mise.en.place/rgdp/duree.conservation.md)
-
----
+- [`politique-confidentialite.md`](https://github.com/accolette/apotheose-LaPince-backend/tree/main/docs/s1.mise.en.place/rgpd/politique.confidentialite.md)
+- [`gestion-des-donnees.md`](https://github.com/accolette/apotheose-LaPince-backend/tree/main/docs/s1.mise.en.place/rgpd/gestion.des.donnes.md)
+- [`securite.md`](https://github.com/accolette/apotheose-LaPince-backend/tree/main/docs/s1.mise.en.place/rgpd/securite.md)
+- [`duree-conservation.md`](https://github.com/accolette/apotheose-LaPince-backend/tree/main/docs/s1.mise.en.place/rgpd/duree.conservation.md)
 
 ---
 
@@ -413,8 +412,8 @@ src/
 ## Setup
 
 ```bash
-git clone https://github.com/accolette/apotheose-LaPince-backend.git
-cd apotheose-LaPince-backend
+git clone https://github.com/accolette/apotheose-LaPince-frontend.git
+cd apotheose-LaPince-frontend
 npm install
 cp .env.example .env
 npm run dev
@@ -455,12 +454,16 @@ http://localhost:5173
 
 | Route | Page | Access |
 |---|---|---|
+| `/` | Landing page | Public |
 | `/login` | Login | Public |
 | `/register` | Register | Public |
-| `/projects` | Overview, KPIs & Project list | Auth required |
-| `/projects/:id` | Project detail | Auth required |
-| `/alerts` | User alerts | Auth required |
-| `/profile` | Profile settings | Auth required |
+| `/projects` | Overview, project list & KPIs | Auth required |
+| `/project/:id` | Project detail | Auth required |
+| `/privacy-policy` | Privacy policy | Public |
+| `/contact` | Contact | Public |
+| `/forbidden` | 403 — access denied | — |
+| `/server-error` | 500 — server error | — |
+| `*` | 404 — not found | — |
 
 ---
 
