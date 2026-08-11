@@ -404,6 +404,8 @@ src/
 - Tailwind CSS 4
 - React Router 7
 - shadcn/ui (Base UI)
+- TanStack Query
+- Sonner
 - Biome 2
 - Vitest 4
 
