@@ -53,7 +53,7 @@
 - Calculer automatiquement les remboursements entre participants
 
 Ce repository contient exclusivement la **couche front-end** : interface utilisateur, navigation, appels API.
-Le repository back-end est disponible ici : [`la-pince.backend`](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend)
+Le repository back-end est disponible ici : [`apotheose-LaPince-backend`](https://github.com/accolette/apotheose-LaPince-backend)
 
 ---
 
@@ -110,9 +110,9 @@ Avant de démarrer, assurez-vous d'avoir installé :
 
 - [Node.js 24 LTS](https://nodejs.org/)
 - [npm](https://www.npmjs.com/)
-- Le **back-end** doit être lancé et accessible — voir [`la-pince.server`](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend)
+- Le **back-end** doit être lancé et accessible — voir [`apotheose-LaPince-backend`](https://github.com/accolette/apotheose-LaPince-backend)
 
-> Pas de Docker côté front-end — le HTML et le CSS sont bien supportés sans conteneurisation dans le cadre du projet.
+> Pas de Docker côté front-end — une SPA React/Vite est bien supportée sans conteneurisation dans le cadre du projet.
 
 ---
 
@@ -121,8 +121,8 @@ Avant de démarrer, assurez-vous d'avoir installé :
 ### 1. Cloner le repository
 
 ```bash
-git clone https://github.com/O-clock-Helsinki/projet-cda-LaPince-frontend.git
-cd projet-cda-LaPince-frontend
+git clone https://github.com/accolette/apotheose-LaPince-backend.git
+cd apotheose-LaPince-backend
 ```
 
 ### 2. Installer les dépendances
