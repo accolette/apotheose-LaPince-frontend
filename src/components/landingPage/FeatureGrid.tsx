@@ -1,6 +1,7 @@
 import { TargetIcon, TrendingUpIcon, UsersIcon } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
+import { ComingSoonBadge } from "./ComingSoonBadge";
 
 export function FeatureGrid() {
 	return (
@@ -22,13 +23,14 @@ export function FeatureGrid() {
 							</h3>
 
 							<p className="mt-2 text-sm text-muted-foreground">
-								Catégorisez chaque dépense automatiquement. Visualisez où part
-								votre argent chaque mois.
+								Catégorisez chaque dépense en quelques secondes. Visualisez où
+								part votre argent chaque mois.
 							</p>
 						</CardContent>
 					</Card>
 
-					<Card>
+					<Card className="relative">
+						<ComingSoonBadge />
 						<CardContent className="p-6">
 							<span className="mb-4 inline-flex size-10 items-center justify-center rounded-md bg-accent text-accent-foreground">
 								<TargetIcon className="size-5" />
@@ -45,7 +47,8 @@ export function FeatureGrid() {
 						</CardContent>
 					</Card>
 
-					<Card>
+					<Card className="relative">
+						<ComingSoonBadge />
 						<CardContent className="p-6">
 							<span className="mb-4 inline-flex size-10 items-center justify-center rounded-md bg-accent text-accent-foreground">
 								<UsersIcon className="size-5" />

@@ -18,8 +18,8 @@ export function Hero() {
 					</h1>
 
 					<p className="mt-6 text-lg text-muted-foreground">
-						Suivez vos dépenses, planifiez vos objectifs et partagez les comptes
-						avec toute la famille et vos amis — en temps réel.
+						Suivez vos dépenses, fixez des budgets et laissez La Pince calculer
+						qui doit quoi.
 					</p>
 
 					<div className="mt-8 flex flex-wrap items-center gap-4">

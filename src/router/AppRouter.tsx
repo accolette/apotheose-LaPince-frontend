@@ -36,53 +36,53 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
 export function AppRouter() {
 	return (
 		<BrowserRouter>
-				<Routes>
-					<Route
-						path="/"
-						element={
-							<PublicRoute>
-								<HomePage />
-							</PublicRoute>
-						}
-					/>
-					<Route
-						path="/login"
-						element={
-							<PublicRoute>
-								<AuthPage defaultMode="login" />
-							</PublicRoute>
-						}
-					/>
-					<Route
-						path="/register"
-						element={
-							<PublicRoute>
-								<AuthPage defaultMode="register" />
-							</PublicRoute>
-						}
-					/>
-					<Route
-						path="/projects"
-						element={
-							<PrivateRoute>
-								<ProjectsPage />
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path="/project/:id"
-						element={
-							<PrivateRoute>
-								<ProjectPage />
-							</PrivateRoute>
-						}
-					/>
-					<Route path="/privacy-policy" element={<LegalsPage />} />
-					<Route path="/contact" element={<ContactPage />} />
-					<Route path="/forbidden" element={<ForbiddenPage />} />
-					<Route path="/server-error" element={<ServerErrorPage />} />
-					<Route path="*" element={<NotFoundPage />} />
-				</Routes>
+			<Routes>
+				<Route
+					path="/"
+					element={
+						<PublicRoute>
+							<HomePage />
+						</PublicRoute>
+					}
+				/>
+				<Route
+					path="/login"
+					element={
+						<PublicRoute>
+							<AuthPage defaultMode="login" />
+						</PublicRoute>
+					}
+				/>
+				<Route
+					path="/register"
+					element={
+						<PublicRoute>
+							<AuthPage defaultMode="register" />
+						</PublicRoute>
+					}
+				/>
+				<Route
+					path="/projects"
+					element={
+						<PrivateRoute>
+							<ProjectsPage />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path="/project/:id"
+					element={
+						<PrivateRoute>
+							<ProjectPage />
+						</PrivateRoute>
+					}
+				/>
+				<Route path="/privacy-policy" element={<LegalsPage />} />
+				<Route path="/contact" element={<ContactPage />} />
+				<Route path="/forbidden" element={<ForbiddenPage />} />
+				<Route path="/server-error" element={<ServerErrorPage />} />
+				<Route path="*" element={<NotFoundPage />} />
+			</Routes>
 		</BrowserRouter>
 	);
 }
