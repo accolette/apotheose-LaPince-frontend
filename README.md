@@ -95,7 +95,9 @@ src/
 | Tailwind CSS | 4       | Styling utilitaire — rendu professionnel rapide   |
 | React Router | 7       | Navigation entre les pages (SPA)                  |
 | shadcn/ui    | latest  | Composants UI accessibles basés sur Base UI       |
-| lucide-react    | latest  | Bibliothèque d’icônes open source légère et moderne, compatible React       |
+| TanStack Query | latest | Gestion du cache serveur et des requêtes asynchrones (data fetching, invalidation, pagination infinie) |
+| Sonner       | latest  | Notifications toast — feedback visuel des actions utilisateur et des erreurs API |
+| lucide-react | latest  | Bibliothèque d'icônes open source légère et moderne, compatible React |
 | Biome        | 2       | Linter + formatter unifié                         |
 | Husky        | -       | Hooks Git pre-commit                              |
 | Vitest       | 4       | Tests unitaires et d'intégration                  |
