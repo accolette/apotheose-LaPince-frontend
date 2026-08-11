@@ -243,6 +243,8 @@ L'application est une SPA — la navigation est gérée par **React Router 7**.
 
 ## Tests
 
+> ⚠️ **Pas encore mis en place** — aucun test n'a été écrit côté front pour le moment. Les scripts ci-dessous existent dans le `package.json` mais ne trouveront aucun fichier à exécuter.
+
 ```bash
 # Tests unitaires
 npm run test:unit
@@ -251,9 +253,8 @@ npm run test:unit
 npm run test:integration
 ```
 
-Les tests utilisent **Vitest 4**.
+Les tests utiliseront **Vitest 4** une fois mis en place. Couverture prévue :
 
-Les tests couvrent notamment :
 - Les composants critiques (formulaires, dashboard, alertes)
 - Les hooks personnalisés (useAuth, useProject...)
 - La logique de calcul des balances côté front
@@ -368,7 +369,7 @@ This frontend provides the user interface for:
 - Budget tracking and alerts
 - Viewing automatic reimbursement suggestions
 
-[Backend repo](https://github.com/O-clock-Helsinki/projet-cda-LaPince-backend)
+[Backend repo](https://github.com/accolette/apotheose-LaPince-backend.git)
 
 ---
 
@@ -412,8 +413,8 @@ src/
 ## Setup
 
 ```bash
-git clone https://github.com/O-clock-Helsinki/projet-cda-LaPince-frontend.git
-cd projet-cda-LaPince-frontend
+git clone https://github.com/accolette/apotheose-LaPince-backend.git
+cd apotheose-LaPince-backend
 npm install
 cp .env.example .env
 npm run dev
@@ -465,8 +466,12 @@ http://localhost:5173
 
 ## Tests
 
-- Unit tests: components, hooks, business logic
-- Integration tests: user flows
+> ⚠️ **Not implemented yet** — no tests have been written on the front-end so far. The scripts below exist in `package.json` but will find no files to run.
+
+Planned coverage, once in place:
+- Critical components (forms, dashboard, alerts)
+- Custom hooks (useAuth, useProject...)
+- Front-end balance calculation logic
 
 ---
 
