@@ -194,28 +194,31 @@ projet-cda-LaPince-frontend/
 ├── public/
 │   └── favicon.ico
 ├── src/
-│   ├── assets/                  ← images, fonts, icônes statiques
+│   ├── assets/                  ← images, icônes statiques
 │   ├── components/
 │   │   ├── ui/                  ← composants shadcn/ui générés
-│   │   └── shared/              ← composants métier partagés
-│   ├── hooks/                   ← hooks personnalisés (useAuth, useProject...)
-│   ├── lib/                     ← utilitaires, helpers, constantes
-│   ├── pages/                   ← pages React Router
-│   │   ├── AuthPage/            ← inscription, connexion
-│   │   ├── HomePage/            ← vue d'ensemble et KPIs
-│   │   ├── ProjectsPage/        ← gestion des projets
-│   ├── services/                ← appels API (fetch)
-│   ├── types/                   ← types TypeScript partagés
-│   ├── app.tsx                  ← configuration des routes et providers
-│   └── main.tsx                 ← point d'entrée de l'application
-├── .env
+│   │   ├── common/               ← composants partagés (ex. ConnectedHeader)
+│   │   ├── landingPage/           ← Hero, FeatureGrid, CtaSection, ComingSoonBadge
+│   │   ├── project/                ← composants de la page détail projet (onglets, formulaires)
+│   │   └── projects/               ← composants de la liste des projets
+│   ├── context/                  ← AuthContext, ThemesContext, ProjectContext, CategoriesContext
+│   ├── router/                    ← AppRouter, PrivateRoute, PublicRoute
+│   ├── hooks/                     ← hooks personnalisés (useAuth, useProject...)
+│   ├── lib/                       ← api.ts, useProjectsQuery.ts, utils/
+│   ├── pages/                     ← HomePage, AuthPage, ProjectsPage, ProjectPage, CategoriesPage, LegalsPage (fichiers .tsx)
+│   ├── services/                  ← appels API centralisés (api.ts)
+│   ├── types/                     ← types TypeScript partagés
+│   ├── validation/                ← validation front (miroir des schémas Zod du back)
+│   └── main.tsx                   ← point d'entrée, providers
 ├── .env.example
 ├── .gitignore
 ├── biome.json
 ├── index.html
 ├── package.json
 ├── tsconfig.json
-└── vite.config.ts
+├── vite.config.ts
+├── vercel.json
+└── .github/workflows/ci.yml
 ```
 
 > 📄 Schéma visuel de l'arborescence dans le repo du back : [`docs/arborescence.png`](https://github.com/accolette/apotheose-LaPince-backend/blob/main/docs/s0.conception/conception/arborescence_front_end.PNG)
@@ -386,12 +389,15 @@ Frontend structure:
 
 ```
 src/
-├── components   → reusable React components
-├── pages        → React Router pages
-├── services     → API calls
-├── hooks        → custom hooks
-├── lib          → utilities and helpers
-└── types        → shared TypeScript types
+├── components   (ui, common, landingPage, project, projects)
+├── context      (Auth, Themes, Project, Categories)
+├── router       (AppRouter, PrivateRoute, PublicRoute)
+├── pages        (flat .tsx files, not subfolders)
+├── services     (api.ts)
+├── hooks
+├── lib
+├── types
+└── validation   (front-side mirror of the back's Zod schemas)
 ```
 
 ---
